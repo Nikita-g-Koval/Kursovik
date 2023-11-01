@@ -25,4 +25,4 @@ class DiagnosesStorage:
                 result = self.Diagnoses[4]
             case item if item > 80:
                 result = self.Diagnoses[5]
-        return  result;
+        return result
