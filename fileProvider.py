@@ -6,7 +6,7 @@ class FileProvider:
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
 
-    def SaveTestResult(self, user : User):
+    def SaveTestResult(self, user: User):
         json_data = {'users': []}
 
         if os.path.exists(self.resultsFileName):

@@ -1,12 +1,18 @@
-from random import random
+from random import randint
+from question import Question
 
 
 class QuestionStorage:
     questions = []
-    questionsCount = questions.count()
 
-    def __init__(self, questions):
-        self.questions = questions
+    def __init__(self):
+        self.questions = [
+            Question("Сколько будет два плюс два умноженное на два?", 6),
+            Question("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?", 9),
+            Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
+            Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?", 60),
+            Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 5)
+        ]
 
     def AddQuestion(self, question):
         self.questions.Append(question)
@@ -14,13 +20,13 @@ class QuestionStorage:
     def RemoveQuestion(self, id):
         del self.questions[id - 1]
 
-    def Shuffle(self, questions):
-        result = questions[:]
+
+    def Shuffle(self):
+        result = self.questions
         list_length = len(result)
         for i in range(list_length):
-            index_aleatory = random.randint(0, list_length - 1)
+            index_aleatory = randint(0, list_length - 1)
             temp = result[i]
             result[i] = result[index_aleatory]
             result[index_aleatory] = temp
-        # Возвращаем список
         return result

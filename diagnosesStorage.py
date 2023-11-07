@@ -1,15 +1,15 @@
-import diagnosis
+from diagnosis import Diagnosis
 
 
 class DiagnosesStorage:
     def __init__(self):
         self.Diagnoses = [
-            diagnosis("Кретин"),
-            diagnosis("Идиот"),
-            diagnosis("Дурак"),
-            diagnosis("Нормальный"),
-            diagnosis("Талант"),
-            diagnosis("Гений")
+            Diagnosis("Кретин"),
+            Diagnosis("Идиот"),
+            Diagnosis("Дурак"),
+            Diagnosis("Нормальный"),
+            Diagnosis("Талант"),
+            Diagnosis("Гений")
         ]
     def CalculateDiagnose(self, questionsCount, rightAnswersCount):
         rightAnswersPercentage = rightAnswersCount * 100 / questionsCount
