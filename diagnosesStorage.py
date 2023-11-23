@@ -11,10 +11,11 @@ class DiagnosesStorage:
             Diagnosis("Талант"),
             Diagnosis("Гений")
         ]
-    def CalculateDiagnose(self, questionsCount, rightAnswersCount):
-        rightAnswersPercentage = rightAnswersCount * 100 / questionsCount
+        
+    def calculate_diagnose(self, questions_count, right_answers_count):
+        right_answers_percentage = right_answers_count * 100 / questions_count
         result = self.Diagnoses[0]
-        match rightAnswersPercentage:
+        match right_answers_percentage:
             case item if item > 0 and item <= 20:
                 result = self.Diagnoses[1]
             case item if item > 20 and item <= 40:

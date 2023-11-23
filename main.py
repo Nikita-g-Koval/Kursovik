@@ -5,8 +5,9 @@ from tkinter import *
 from tkinter import messagebox
 from validation import Validation
 from user import User
-from questionsStrorage import QuestionStorage
+from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
+from question import Question
 
 
 main_window = Tk()
@@ -22,6 +23,51 @@ header_padding = {'padx': 10, 'pady': 12}
 
 user: User
 
+class menuWindow:
+    def __init__(self):
+        self.menu_window = Tk()
+        self.menu_window.title("Меню")
+        self.menu_window.geometry('400x300')
+        self.menu_window.resizable(False,False)
+
+        self.addQuestion_btn = Button(self.menu_window, text='Добавить вопрос', command=self.addQuestion_btn_clicked)
+        self.addQuestion_btn.pack(**base_padding)
+
+        self.menu_window.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def addQuestion_button_clicked(self):
+
+class addQuestionWindow:
+    def __init__(self):
+        self.addQuestion_window = Tk()
+        self.addQuestion_window.title('Добавиление вопроса')
+        self.addQuestion_window.geometry('500x400')
+        self.addQuestion_window.resizable(False, False)
+
+        self.questionText_entry = Entry(self.addQuestion_window, bg='#fff', fg='#444', font=font_entry)
+        self.questionText_entry.pack()
+
+        self.answer_entry = Entry(self.addQuestion_window, bg='#fff', fg='#444', font=font_entry)
+        self.answer_entry.pack()
+
+        self.saveChanges_btn = Button(self.addQuestion_window,text='Сохранить изменения',command=self.saveChanges_btn_click)
+        self.saveChanges_btn.pack()
+
+    def saveChanges_btn_click(self):
+        questionText = self.questionText_entry.get()
+        answer = self.answer_entry.get()
+
+        if (not Validation.ValidateQuestion(questionText)):
+            messagebox.showwarning(title="Предупреждение", message="Введены некорректные данные! Введите текст вопроса.")
+        else:
+            self.question_text = questionText
+
+        if (not Validation.ValidateAnswer(answer)):
+            messagebox.showwarning(title="Предупреждение", message="Введены некорректные данные! Введите целочисленный ответ на вопрос." )
+
+
+
+
 
 
 class testWindow:
@@ -33,8 +79,8 @@ class testWindow:
         self.testWindow.resizable(False, False)
 
         self.diagnoses = DiagnosesStorage()
-        self.qs = QuestionStorage()
-        self.questions = self.qs.Shuffle()
+        self.qs = QuestionsStorage()
+        self.questions = self.qs.shuffle()
         self.questionId = 0
 
         self.test_label = Label(self.testWindow, text="Вопрос №{0}:".format(self.questionId+1) + self.questions[self.questionId].text, font=font_entry, justify=CENTER, **header_padding)
@@ -56,7 +102,7 @@ class testWindow:
         if int(inputAnswer) == self.questions[self.questionId].answer:
             self.user.rightAnswersCount += 1
         if self.questionId >= len(self.questions)-1:
-            diagnosis = self.diagnoses.CalculateDiagnose(len(self.questions), self.user.rightAnswersCount)
+            diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.user.rightAnswersCount)
             messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name, diagnosis.grade))
             return
         self.questionId += 1
@@ -64,9 +110,6 @@ class testWindow:
 
     def showNextQuestion(self):
         self.test_label.config(text="Вопрос №{0}:".format(self.questionId+1) + self.questions[self.questionId].text)
-
-
-
 
     def on_closing(self):
         exit()

@@ -2,9 +2,7 @@ from random import randint
 from question import Question
 
 
-class QuestionStorage:
-    questions = []
-
+class QuestionsStorage:
     def __init__(self):
         self.questions = [
             Question("Сколько будет два плюс два умноженное на два?", 6),
@@ -14,14 +12,13 @@ class QuestionStorage:
             Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 5)
         ]
 
-    def AddQuestion(self, question):
-        self.questions.Append(question)
+    def add_question(self, question):
+        self.questions.append(question)
 
-    def RemoveQuestion(self, id):
+    def remove_question(self, id):
         del self.questions[id - 1]
 
-
-    def Shuffle(self):
+    def shuffle(self):
         result = self.questions
         list_length = len(result)
         for i in range(list_length):
