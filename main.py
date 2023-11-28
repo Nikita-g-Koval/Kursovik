@@ -23,24 +23,25 @@ lable_font = ('Arial',  11)
 base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
 
-user: User
 
 class menuWindow:
-    def __init__(self):
+    def __init__(self, user: User):
+        self.user = user
         self.menu_window = Tk()
         self.menu_window.title("Меню")
         self.menu_window.geometry('400x300')
-        self.menu_window.resizable(False,False)
+        self.menu_window.resizable(False, False)
 
         self.addQuestion_btn = Button(self.menu_window, text='Добавить вопрос', command=self.add_question_btn_clicked)
         self.addQuestion_btn.pack(**base_padding)
 
-        self.deleteQuestion_btn = Button(self.menu_window, text='Удалить вопрос', command=self.delete_question_btn_clicked)
-        self.deleteQuestion_btn.pack(**base_padding)
-
         self.deleteQuestion_btn = Button(self.menu_window, text='Удалить вопрос',
                                          command=self.delete_question_btn_clicked)
         self.deleteQuestion_btn.pack(**base_padding)
+
+        self.test_btn = Button(self.menu_window, text='Начать тест',
+                                         command=self.test_menu_btn_clicked)
+        self.test_btn.pack(**base_padding)
 
         self.menu_window.protocol("WM_DELETE_WINDOW", on_closing)
 
@@ -51,6 +52,10 @@ class menuWindow:
     def delete_question_btn_clicked(self):
         self.menu_window.withdraw()
         DeleteQuestionWindow()
+
+    def test_menu_btn_clicked(self):
+        self.menu_window.withdraw()
+        testWindow(self.user)
 
 
 def on_closing():
@@ -74,10 +79,12 @@ class addQuestionWindow:
         self.answer_entry = Entry(self.addQuestion_window, width=30)
         self.answer_entry.grid(row=1, column=1, sticky=EW)
 
-        self.add_question_btn = Button(self.addQuestion_window, text='Добавить вопрос', command=self.add_question_btn_click)
+        self.add_question_btn = Button(self.addQuestion_window, text='Добавить вопрос',
+                                       command=self.add_question_btn_click)
         self.add_question_btn.grid(row=2, sticky=W+E)
 
-        self.save_changes_btn = Button(self.addQuestion_window, text='Сохранить изменения', command=self.save_changes_btn_click)
+        self.save_changes_btn = Button(self.addQuestion_window, text='Сохранить изменения',
+                                       command=self.save_changes_btn_click)
         self.save_changes_btn.grid(row=3, sticky=W+E)
 
         self.addQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
@@ -87,11 +94,13 @@ class addQuestionWindow:
         answer = self.answer_entry.get()
 
         if not Validation.ValidateQuestion(question_text):
-            messagebox.showwarning(title="Предупреждение", message="Введены некорректные данные! Введите текст вопроса.")
+            messagebox.showwarning(title="Предупреждение",
+                                   message="Введены некорректные данные! Введите текст вопроса.")
             return
 
         if not Validation.ValidateAnswer(answer):
-            messagebox.showwarning(title="Предупреждение", message="Введены некорректные данные! Введите целочисленный ответ на вопрос." )
+            messagebox.showwarning(title="Предупреждение",
+                                   message="Введены некорректные данные! Введите целочисленный ответ на вопрос." )
             return
 
         self.new_question = Question(question_text, answer)
@@ -120,10 +129,12 @@ class DeleteQuestionWindow:
         self.questionNumber_entry = Entry(self.deleteQuestion_window, bg='#fff', fg='#444', font=font_entry)
         self.questionNumber_entry.pack()
 
-        self.delete_question_btn = Button(self.deleteQuestion_window, text='Удалить вопрос', command=self.delete_question_btn_click)
+        self.delete_question_btn = Button(self.deleteQuestion_window,
+                                          text='Удалить вопрос', command=self.delete_question_btn_click)
         self.delete_question_btn.pack()
 
-        self.save_changes_btn = Button(self.deleteQuestion_window, text='Сохранить изменения', command=self.save_changes_btn_click)
+        self.save_changes_btn = Button(self.deleteQuestion_window,
+                                       text='Сохранить изменения', command=self.save_changes_btn_click)
         self.save_changes_btn.pack()
 
         self.deleteQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
@@ -136,7 +147,8 @@ class DeleteQuestionWindow:
         number = int(question_number)
 
         if number < 1 or number >= self.count:
-            messagebox.showwarning(title="Предупреждение", message="Номер вопроса выходит за границу количества вопросов.")
+            messagebox.showwarning(title="Предупреждение",
+                                   message="Номер вопроса выходит за границу количества вопросов.")
             return
 
         self.questions_storage.remove_question(number)
@@ -169,7 +181,9 @@ class testWindow:
         self.questions = self.qs.shuffle()
         self.questionId = 0
 
-        self.test_label = Label(self.test_window, text="Вопрос №{0}:".format(self.questionId + 1) + self.questions[self.questionId].text, font=font_entry, justify=CENTER, **header_padding)
+        self.test_label = Label(self.test_window, text="Вопрос №{0}:".format(self.questionId + 1)
+                                                       + self.questions[self.questionId].text, font=font_entry,
+                                justify=CENTER, **header_padding)
         self.test_label.pack()
 
         self.userAnswer_entry = Entry(self.test_window, bg='#fff', fg='#444', font=font_entry)
@@ -183,13 +197,16 @@ class testWindow:
     def accept_answer_btn_clicked(self):
         input_answer = self.userAnswer_entry.get()
         if not Validation.ValidateAnswer(input_answer):
-            messagebox.showwarning(title="Предупреждение", message="Введены некорректные данные! Введите целочисленное число в разумных пределах.")
+            messagebox.showwarning(
+                title="Предупреждение",
+                message="Введены некорректные данные! Введите целочисленное число в разумных пределах.")
             return
         if int(input_answer) == self.questions[self.questionId].answer:
             self.user.rightAnswersCount += 1
         if self.questionId >= len(self.questions)-1:
             diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.user.rightAnswersCount)
-            messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name, diagnosis.grade))
+            messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name,
+                                                                                              diagnosis.grade))
             return
         self.userAnswer_entry.delete(0, END)
         self.questionId += 1
@@ -202,11 +219,13 @@ class testWindow:
 def clicked():
     inputname = username_entry.get()
     if not Validation.ValidateUserName(username=inputname):
-        messagebox.showwarning(title="Предупреждение", message="Введённое имя некорректно! Длина имени не меньше 2 символов. Разрешены только буквы.")
+        messagebox.showwarning(
+            title="Предупреждение",
+            message="Введённое имя некорректно! Длина имени не меньше 2 символов. Разрешены только буквы.")
         return
     user = User(inputname)
     main_window.withdraw()
-    menuWindow()
+    menuWindow(user)
 
 
 main_label = Label(main_window, text='Авторизация', font=font_header, justify=CENTER, **header_padding)
