@@ -24,9 +24,10 @@ base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
 
 
-class menuWindow:
+class Menuwindow:
     def __init__(self, user: User):
         self.user = user
+        self.questions_storage = QuestionsStorage()
         self.menu_window = Tk()
         self.menu_window.title("Меню")
         self.menu_window.geometry('400x300')
@@ -46,16 +47,13 @@ class menuWindow:
         self.menu_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     def add_question_btn_clicked(self):
-        self.menu_window.withdraw()
-        addQuestionWindow()
+        addQuestionWindow(self.questions_storage)
 
     def delete_question_btn_clicked(self):
-        self.menu_window.withdraw()
-        DeleteQuestionWindow()
+        DeleteQuestionWindow(self.questions_storage)
 
     def test_menu_btn_clicked(self):
-        self.menu_window.withdraw()
-        testWindow(self.user)
+        testWindow(self.user, self.questions_storage)
 
 
 def on_closing():
@@ -63,9 +61,9 @@ def on_closing():
 
 
 class addQuestionWindow:
-    def __init__(self):
+    def __init__(self, questions_storage: QuestionsStorage):
         self.new_question = None
-        self.questions_storage = QuestionsStorage()
+        self.questions_storage = questions_storage
         self.addQuestion_window = Tk()
         self.addQuestion_window.title('Добавление вопроса')
         self.addQuestion_window.geometry('400x100')
@@ -87,7 +85,7 @@ class addQuestionWindow:
                                        command=self.save_changes_btn_click)
         self.save_changes_btn.grid(row=3, sticky=W+E)
 
-        self.addQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
+        #self.addQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     def add_question_btn_click(self):
         question_text = self.questionText_entry.get()
@@ -112,10 +110,9 @@ class addQuestionWindow:
         messagebox.showinfo(title="Успешно", message="Изменения сохранены.")
 
 
-# доделать
 class DeleteQuestionWindow:
-    def __init__(self):
-        self.questions_storage = QuestionsStorage()
+    def __init__(self, questions_storage: QuestionsStorage):
+        self.questions_storage = questions_storage
         self.deleteQuestion_window = Tk()
         self.deleteQuestion_window.title('Удаление вопроса')
         self.deleteQuestion_window.geometry('600x700')
@@ -137,7 +134,7 @@ class DeleteQuestionWindow:
                                        text='Сохранить изменения', command=self.save_changes_btn_click)
         self.save_changes_btn.pack()
 
-        self.deleteQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
+        #self.deleteQuestion_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     def delete_question_btn_click(self):
         question_number = self.questionNumber_entry.get()
@@ -169,8 +166,9 @@ class DeleteQuestionWindow:
             self.count += 1
 
 class testWindow:
-    def __init__(self, user: User):
+    def __init__(self, user: User, questions_storage: QuestionsStorage):
         self.user = user
+        self.questions_storage = questions_storage
         self.test_window = Tk()
         self.test_window.title("Тест")
         self.test_window.geometry('800x300')
@@ -192,7 +190,7 @@ class testWindow:
         self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self.accept_answer_btn_clicked)
         self.acceptAnswer_btn.pack(**base_padding)
 
-        self.test_window.protocol("WM_DELETE_WINDOW", on_closing)
+        #self.test_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     def accept_answer_btn_clicked(self):
         input_answer = self.userAnswer_entry.get()
@@ -225,7 +223,7 @@ def clicked():
         return
     user = User(inputname)
     main_window.withdraw()
-    menuWindow(user)
+    Menuwindow(user)
 
 
 main_label = Label(main_window, text='Авторизация', font=font_header, justify=CENTER, **header_padding)

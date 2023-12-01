@@ -41,6 +41,7 @@ class QuestionsStorage:
         if not os.path.exists(FileProvider.questionsFileName):
             return
 
+        self.questions.clear()
         questions = FileProvider.get_questions()
 
         for q in questions['questions']:
