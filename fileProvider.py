@@ -39,9 +39,11 @@ class FileProvider:
         json_data = {'questions': []}
 
         for question in questions:
+            json_answers = json.dumps(question.answers)
+
             json_data['questions'].append({
                 'question_text': question.text,
-                'answer': question.answer
+                'answers': json_answers
             })
 
         with open(FileProvider.questionsFileName, 'w') as outfile:
