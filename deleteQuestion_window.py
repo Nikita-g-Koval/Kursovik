@@ -5,6 +5,13 @@ from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
 
 
+font_header = ('Arial', 15)
+font_entry = ('Arial', 12)
+lable_font = ('Arial', 11)
+base_padding = {'padx': 10, 'pady': 8}
+header_padding = {'padx': 10, 'pady': 12}
+
+
 class DeleteQuestionWindow:
     def __init__(self, questions_storage: QuestionsStorage):
         self.questions_storage = questions_storage

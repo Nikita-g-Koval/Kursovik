@@ -1,4 +1,6 @@
 import os
+import json
+from typing import List
 from random import randint
 from question import Question
 from answer import Answer
@@ -49,8 +51,11 @@ class QuestionsStorage:
         self.questions.clear()
         questions = FileProvider.get_questions()
 
-        for q in questions['questions']:
-            self.questions.append(Question(q["question_text"], q["answer"]))
+        for q in questions:
+            answers = []
+            for answer in q['answers']:
+                answers.append(Answer(answer['text'], answer['is_correct']))
+            self.questions.append(Question(q['text'], answers))
 
 
 

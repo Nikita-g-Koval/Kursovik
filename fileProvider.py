@@ -36,18 +36,18 @@ class FileProvider:
 
     @staticmethod
     def save_questions(questions):
-        json_data = {'questions': []}
+        json_data = json.dumps(questions, default=class_to_dict, indent=4)
 
-        for question in questions:
-            json_answers = json.dumps(question.answers)
-
-            json_data['questions'].append({
-                'question_text': question.text,
-                'answers': json_answers
-            })
+        # for question in questions:
+        #     json_answers = json.dumps(question.answers, default=class_to_dict)
+        #
+        #     json_data['questions'].append({
+        #         'question_text': question.text,
+        #         'answers': json_answers
+        #     })
 
         with open(FileProvider.questionsFileName, 'w') as outfile:
-            json.dump(json_data, outfile, indent=4)
+            json.dump(questions, outfile, indent=4, default=class_to_dict)
 
     @staticmethod
     def get_questions():
@@ -58,3 +58,7 @@ class FileProvider:
             json_data = json.load(f)
 
         return json_data
+
+
+def class_to_dict(obj):
+    return obj.__dict__
