@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from validation import Validation
+from answer import Answer
 from user import User
 from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
@@ -12,7 +12,7 @@ font_entry = ('Arial', 12)
 lable_font = ('Arial', 11)
 base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
-position = {"padx":6, "pady":6, "anchor":NW}
+position = {'anchor': S}
 
 
 class TestWindow:
@@ -26,28 +26,34 @@ class TestWindow:
 
         self.diagnoses = DiagnosesStorage()
         self.qs = QuestionsStorage()
-        self.questions = self.qs.shuffle()
+
+        questions = self.qs.questions
+        self.questions = self.qs.shuffle(questions)
         self.questionId = 0
+
+        answers = self.questions[self.questionId].answers
+        self.answers = self.qs.shuffle(answers)
 
         self.test_label = Label(self.test_window, text="Вопрос №{0}:".format(self.questionId + 1)
                                                        + self.questions[self.questionId].text, font=font_entry,
                                 justify=CENTER, **header_padding)
         self.test_label.pack()
 
-        answers = self.questions[self.questionId].answers
-        self.selected_answer = BooleanVar()
-        self.radiobuttons = []
-        for answer in answers:
-            answer_btn = ttk.Radiobutton(self.test_window, text=answer.text, value=answer.is_correct,
-                                         variable=self.selected_answer)
-            answer_btn.pack(**base_padding)
-            self.radiobuttons.append(answer_btn)
+        self.selected_id = IntVar(self.test_window)
+
+        self.radio_buttons = []
+
+        self.init_radiobuttons()
 
         self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self.accept_answer_btn_clicked)
-        self.acceptAnswer_btn.pack(**base_padding)
+        self.acceptAnswer_btn.pack(pady=10, side=BOTTOM)
+
+    def get_answer(self):
+        answer: Answer = self.answers[self.selected_id.get()]
+        return answer
 
     def accept_answer_btn_clicked(self):
-        if self.selected_answer:
+        if self.get_answer().is_correct:
             self.user.rightAnswersCount += 1
         if self.questionId >= len(self.questions)-1:
             diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.user.rightAnswersCount)
@@ -59,5 +65,22 @@ class TestWindow:
 
     def show_next_question(self):
         self.test_label.config(text="Вопрос №{0}:".format(self.questionId+1) + self.questions[self.questionId].text)
-        for btn in self.radiobuttons:
+        self.clear_radiobuttons()
+        self.init_radiobuttons()
+
+    def init_radiobuttons(self):
+        answers = self.questions[self.questionId].answers
+        self.answers = self.qs.shuffle(answers)
+
+        self.selected_id.set(0)
+
+        for i in range(len(self.answers)):
+            answer_btn = ttk.Radiobutton(self.test_window, text=self.answers[i].text, value=i,
+                                         variable=self.selected_id)
+            answer_btn.pack(**base_padding)
+            self.radio_buttons.append(answer_btn)
+
+    def clear_radiobuttons(self):
+        for btn in self.radio_buttons:
             btn.destroy()
+        self.radio_buttons.clear()

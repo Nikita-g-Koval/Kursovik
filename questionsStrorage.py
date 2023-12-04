@@ -23,7 +23,7 @@ class QuestionsStorage:
             Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?",
                      [Answer('10', False), Answer('25', True), Answer('50', False), Answer('15', False)]),
             Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?",
-                     [Answer('5', False), Answer('9', True), Answer('10', False), Answer('11', False)]),
+                     [Answer('30', False), Answer('60', True), Answer('90', False), Answer('45', False)]),
             Question("Пять свечей горело, две потухли. Сколько свечей осталось?",
                      [Answer('2', False), Answer('5', True), Answer('0', False), Answer('3', False)])
         ]
@@ -34,8 +34,9 @@ class QuestionsStorage:
     def remove_question(self, id):
         del self.questions[id - 1]
 
-    def shuffle(self):
-        result = self.questions
+    @staticmethod
+    def shuffle(mas: []):
+        result = mas
         list_length = len(result)
         for i in range(list_length):
             index_aleatory = randint(0, list_length - 1)
