@@ -33,20 +33,7 @@ class AddQuestionWindow:
         self.answer_is_correct_entry = Entry(self.addQuestion_window, width=30)
         self.answer_is_correct_entry.grid(row=1, column=3)
 
-        self.addAnswer_btn = Button(self.addQuestion_window, text='Добавить ответ', command=self.add_answer_btn_click)
-        self.addAnswer_btn.grid(padx=40, row=1, column=4, sticky=EW)
-
-        self.removeAnswer_btn = Button(self.addQuestion_window, text="Удалить выбранный ответ",
-                                       command=self.remove_answer_btn_click)
-        self.removeAnswer_btn.grid(padx=40, row=2, column=4, sticky=EW)
-
-        self.add_question_btn = Button(self.addQuestion_window, text='Добавить вопрос',
-                                       command=self.add_question_btn_click)
-        self.add_question_btn.grid(row=2, sticky=W+E)
-
-        self.save_changes_btn = Button(self.addQuestion_window, text='Сохранить изменения',
-                                       command=self.save_changes_btn_click)
-        self.save_changes_btn.grid(row=3, sticky=W+E)
+        self.add_base
 
     def add_answer_btn_click(self):
         if len(self.answers) >= 6:
@@ -63,7 +50,7 @@ class AddQuestionWindow:
             messagebox.showwarning(title="Предупреждение", message="Укажите верность ответа True или False")
             return
 
-        answer = Answer(input_answer, input_correctness == 'True')
+        answer = Answer(input_answer, input_correctness.lower() == 'true')
         self.answers.append(answer)
         self.init_radiobuttons()
 

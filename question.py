@@ -1,8 +1,7 @@
 from answer import Answer
-from typing import List
 
 
 class Question:
-    def __init__(self, text: str, answers: List[Answer]):
+    def __init__(self, text: str, answer: Answer):
         self.text = text
-        self.answers = answers
+        self.answer = answer
