@@ -1,6 +1,7 @@
 from question import Question
 from answer import Answer
 from typing import List
+from question_type import QuestionType
 
 
 class QuestionRadioButton(Question):
@@ -10,6 +11,9 @@ class QuestionRadioButton(Question):
         Question.__init__(text, None)
         self.text = text
         self.answers = answers
+
+    def get_type(self):
+        return QuestionType.radio_button
 
     @property
     def answers(self):

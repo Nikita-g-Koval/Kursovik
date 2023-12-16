@@ -34,6 +34,7 @@ class DeleteQuestionWindow:
 
         self.save_changes_btn = Button(self.deleteQuestion_window,
                                        text='Сохранить изменения', command=self.save_changes_btn_click)
+        self.save_changes_btn.pack()
 
     def delete_question_btn_click(self):
         question_number = self.questionNumber_entry.get()
@@ -50,7 +51,6 @@ class DeleteQuestionWindow:
         self.questions_storage.remove_question(number)
         self.print_questions()
         messagebox.showinfo(title="Уведомление", message="Вопрос успешно удалён. Сохраните изменения.")
-
 
     def save_changes_btn_click(self):
         FileProvider.save_questions(self.questions)

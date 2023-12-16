@@ -7,35 +7,50 @@ from validation import Validation
 from fileProvider import FileProvider
 from question import Question
 from answer import Answer
-from add_baseQuestion_window import AddBaseQuestionWindow
-from add_radioButtonQuestion_window import AddRadioButtonQuestion
+from question_radioButton import QuestionRadioButton
 
 
-class AddQuestionWindow:
+class AddRadioButtonQuestion:
+    new_question: Question
+
     def __init__(self, questions_storage: QuestionsStorage):
-        self.new_question: Question = None
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
-        self.addQuestion_window = Tk()
-        self.addQuestion_window.title('Добавление вопроса')
-        self.addQuestion_window.geometry('900x200')
-        self.addQuestion_window.resizable(False, True)
-        self.selected_id = IntVar(self.addQuestion_window)
+        self.add_radioButtonQuestion_window = Tk()
+        self.add_radioButtonQuestion_window.title('Добавление вопроса с выбором')
+        self.add_radioButtonQuestion_window.geometry('900x200')
+        self.add_radioButtonQuestion_window.resizable(False, True)
+        self.selected_id = IntVar(self.add_radioButtonQuestion_window)
         self.radio_buttons = []
 
-        self.add_baseQuestion_btn = Button(self.addQuestion_window, text="Добавить базовый вопрос",
-                                           command=self.add_base_question_btn_click)
-        self.add_baseQuestion_btn.grid(row=2, column=0)
+        Label(self.add_radioButtonQuestion_window, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
+        self.questionText_entry = Entry(self.add_radioButtonQuestion_window, width=30)
+        self.questionText_entry.grid(row=0, column=1, sticky=EW)
 
-        self.add_radioButtonQuestion_btn = Button(self.addQuestion_window, text="Добавить вопрос с выбором",
-                                                  command=self.add_radiobutton_question_btn_click)
-        self.add_radioButtonQuestion_btn.grid(row=2, column=1)
+        Label(self.add_radioButtonQuestion_window, text="Ответ на вопрос:",
+              justify=LEFT).grid(row=1, column=0, sticky=W)
+        self.answer_entry = Entry(self.add_radioButtonQuestion_window, width=30)
+        self.answer_entry.grid(row=1, column=1, sticky=EW)
 
-    def add_base_question_btn_click(self):
-        AddBaseQuestionWindow(self.questions_storage)
+        Label(self.add_radioButtonQuestion_window, text="Ответ правильный? (True/False):").grid(row=1, column=2)
+        self.answer_is_correct_entry = Entry(self.add_radioButtonQuestion_window, width=30)
+        self.answer_is_correct_entry.grid(row=1, column=3)
 
-    def add_radiobutton_question_btn_click(self):
-        AddRadioButtonQuestion(self.questions_storage)
+        self.add_answer_btn = Button(self.add_radioButtonQuestion_window, text="Добавить ответ",
+                                     command=self.add_answer_btn_click)
+        self.add_answer_btn.grid(row=2, column=0)
+
+        self.remove_answer_btn = Button(self.add_radioButtonQuestion_window, text="Удалить ответ",
+                                        command=self.remove_answer_btn_click)
+        self.remove_answer_btn.grid(row=2, column=1)
+
+        self.add_question_btn = Button(self.add_radioButtonQuestion_window, text="Добавить вопрос",
+                                       command=self.add_question_btn_click)
+        self.remove_answer_btn.grid(row=3, column=0)
+
+        self.save_changes_btn = Button(self.add_radioButtonQuestion_window, text="Сохранить изменения",
+                                       command=self.save_changes_btn_click)
+        self.save_changes_btn.grid(row=3, column=1)
 
     def add_answer_btn_click(self):
         if len(self.answers) >= 6:
@@ -80,7 +95,7 @@ class AddQuestionWindow:
                                    message="Хотя бы один вопрос должен быть правильным!")
             return
 
-        self.new_question = Question(question_text, self.answers)
+        self.new_question = QuestionRadioButton(question_text, self.answers)
         self.questions_storage.add_question(self.new_question)
         messagebox.showinfo(title="Успешно", message="Вопрос добавлен.")
 
@@ -91,7 +106,7 @@ class AddQuestionWindow:
     def init_radiobuttons(self):
         self.clear_radiobuttons()
         for i in range(len(self.answers)):
-            answer_btn = ttk.Radiobutton(self.addQuestion_window, text=self.answers[i].text, value=i,
+            answer_btn = ttk.Radiobutton(self.add_radioButtonQuestion_window, text=self.answers[i].text, value=i,
                                          variable=self.selected_id)
             answer_btn.grid(row=i+2, column=3)
             self.radio_buttons.append(answer_btn)
