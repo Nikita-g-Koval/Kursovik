@@ -48,13 +48,7 @@ class QuestionsStorage:
             return
 
         self.questions.clear()
-        questions = FileProvider.get_questions()
-
-        for q in questions:
-            answers = []
-            for answer in q['answers']:
-                answers.append(Answer(answer['text'], answer['is_correct']))
-            self.questions.append(Question(q['text'], answers))
+        self.questions = FileProvider.get_questions()
 
 
 

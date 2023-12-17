@@ -43,8 +43,8 @@ class AddBaseQuestionWindow:
             messagebox.showwarning(title="Предупреждение", message="Не был введён ответ.")
             return
 
-        answer = Answer(input_answer, True)
-        question = Question(input_question, answer)
+        answers = [Answer(input_answer, True)]
+        question = Question(input_question, answers)
 
         self.questions_storage.add_question(question)
         messagebox.showinfo(title="Оповещение", message="Вопрос успешно добавлен. Сохраните изменения.")

@@ -7,7 +7,7 @@ from validation import Validation
 from fileProvider import FileProvider
 from question import Question
 from answer import Answer
-from question_checkButton import QuestionRadioButton
+from question_checkButton import QuestionCheckButton
 
 
 class AddCheckButtonQuestion:
@@ -100,7 +100,7 @@ class AddCheckButtonQuestion:
                                    message="Количество вопросов должно быть не менее двух!")
             return
 
-        self.new_question = QuestionRadioButton(question_text, self.answers)
+        self.new_question = QuestionCheckButton(question_text, self.answers)
         self.questions_storage.add_question(self.new_question)
         messagebox.showinfo(title="Успешно", message="Вопрос добавлен.")
 

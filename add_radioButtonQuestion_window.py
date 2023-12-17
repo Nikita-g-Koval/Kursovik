@@ -46,7 +46,7 @@ class AddRadioButtonQuestion:
 
         self.add_question_btn = Button(self.add_radioButtonQuestion_window, text="Добавить вопрос",
                                        command=self.add_question_btn_click)
-        self.remove_answer_btn.grid(row=3, column=0)
+        self.add_question_btn.grid(row=3, column=0)
 
         self.save_changes_btn = Button(self.add_radioButtonQuestion_window, text="Сохранить изменения",
                                        command=self.save_changes_btn_click)
