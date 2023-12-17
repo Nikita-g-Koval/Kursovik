@@ -78,7 +78,6 @@ class AddRadioButtonQuestion:
 
     def add_question_btn_click(self):
         question_text = self.questionText_entry.get()
-        answer = self.answer_entry.get()
 
         if not Validation.ValidateQuestion(question_text):
             messagebox.showwarning(title="Предупреждение",

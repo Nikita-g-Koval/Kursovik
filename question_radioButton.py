@@ -5,21 +5,16 @@ from question_type import QuestionType
 
 
 class QuestionRadioButton(Question):
-    _answers: List[Answer]
-
     def __init__(self, text: str, answers: List[Answer]):
-        Question.__init__(text, None)
+        Question.__init__(self, text, answers)
         self.text = text
         self.answers = answers
 
+    @property
     def get_type(self):
         return QuestionType.radio_button
 
-    @property
-    def answers(self):
-        return self._answers
-
-    @answers.setter
+    @Question.answers.setter
     def answers(self, answers: List[Answer]):
         for answer in answers:
             count_of_correct_ones = 0

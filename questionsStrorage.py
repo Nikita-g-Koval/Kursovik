@@ -3,6 +3,8 @@ import json
 from typing import List
 from random import randint
 from question import Question
+from question_radioButton import QuestionRadioButton
+from question_checkButton import QuestionCheckButton
 from answer import Answer
 from fileProvider import FileProvider
 
@@ -17,15 +19,11 @@ class QuestionsStorage:
 
         self.questions = [
             Question("Сколько будет два плюс два умноженное на два?",
-                     [Answer('8', False), Answer('6', True), Answer('12', False)]),
-            Question("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?",
-                     [Answer('5', False), Answer('9', True), Answer('10', False), Answer('11', False)]),
-            Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?",
-                     [Answer('10', False), Answer('25', True), Answer('50', False), Answer('15', False)]),
-            Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?",
-                     [Answer('30', False), Answer('60', True), Answer('90', False), Answer('45', False)]),
-            Question("Пять свечей горело, две потухли. Сколько свечей осталось?",
-                     [Answer('2', False), Answer('5', True), Answer('0', False), Answer('3', False)])
+                     [Answer('6', True)]),
+            QuestionRadioButton("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?",
+                                [Answer('5', False), Answer('9', True), Answer('10', False), Answer('11', False)]),
+            QuestionCheckButton("На двух руках 10 пальцев. Сколько пальцев на 5 руках?",
+                                [Answer('10', False), Answer('25', True), Answer('50', False), Answer('15', False)]),
         ]
 
     def add_question(self, question):

@@ -36,8 +36,26 @@ class FileProvider:
 
     @staticmethod
     def save_questions(questions):
+        data = {
+            'questions': []
+        }
+
+        for question in questions:
+            answers = []
+            for answer in question.answers:
+                answers.append({
+                    'text': answer.text,
+                    'is_correct': answer.is_correct
+                })
+
+            data['questions'].append({
+                'type': int(question.get_type),
+                'text': question.text,
+                'answers': answers
+            })
+
         with open(FileProvider.questionsFileName, 'w') as outfile:
-            json.dump(questions, outfile, indent=4, default=class_to_dict)
+            json.dump(data, outfile, indent=4)
 
     @staticmethod
     def get_questions():

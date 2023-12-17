@@ -5,8 +5,10 @@ from question_type import QuestionType
 
 
 class QuestionCheckButton(QuestionRadioButton):
+    @property
     def get_type(self):
         return QuestionType.check_button
+
     @QuestionRadioButton.answers.setter
     def answers(self, answers: List[Answer]):
         self._answers = answers
