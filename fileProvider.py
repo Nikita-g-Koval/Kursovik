@@ -4,6 +4,9 @@ from question_radioButton import QuestionRadioButton
 from question_checkButton import QuestionCheckButton
 from question_type import QuestionType
 from answer import Answer
+from diagnosis import Diagnosis
+from test_result import TestResult
+from datetime import datetime
 import os
 import json
 
@@ -13,15 +16,24 @@ class FileProvider:
     questionsFileName = "questions.json"
 
     @staticmethod
-    def save_test_result(user: User):
-        json_data = {'users': []}
+    def save_test_result(test_result: TestResult):
+        json_data = {'results': []}
 
         if os.path.exists(FileProvider.resultsFileName):
-            json_data = FileProvider.get_results()
+            results = FileProvider.get_results()
+            for result in results:
+                json_data['results'].append({
+                    'name': result.user.name,
+                    'rightAnswersCount': result.right_answers_count,
+                    'diagnose': result.diagnose.grade,
+                    'completion_time': result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
+                })
 
-        json_data['users'].append({
-            'name': user.name,
-            'rightAnswersCount': user.rightAnswersCount
+        json_data['results'].append({
+            'name': test_result.user.name,
+            'rightAnswersCount': test_result.right_answers_count,
+            'diagnose': test_result.diagnose.grade,
+            'completion_time': test_result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
         })
 
         with open(FileProvider.resultsFileName, 'w') as outfile:
@@ -29,10 +41,22 @@ class FileProvider:
 
     @staticmethod
     def get_results():
-        if not os.path.exists(FileProvider.resultsFileName):
+        if os.path.exists(FileProvider.resultsFileName):
             with open(FileProvider.resultsFileName) as json_file:
                 json_data = json.load(json_file)
-            return json_data
+
+            test_results = []
+
+            for result in json_data['results']:
+                user = User(result['name'])
+                test_results.append(TestResult(
+                    user=user,
+                    right_answers_count=result['rightAnswersCount'],
+                    diagnose=Diagnosis(result['diagnose']),
+                    completion_time=datetime.strptime(result['completion_time'], '%Y-%m-%d %H:%M:%S')
+                ))
+
+        return test_results
 
     @staticmethod
     def clear_test_results():

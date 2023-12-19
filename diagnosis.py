@@ -1,3 +1,3 @@
 class Diagnosis:
-    def __init__(self, grade):
+    def __init__(self, grade: str):
         self.grade = grade

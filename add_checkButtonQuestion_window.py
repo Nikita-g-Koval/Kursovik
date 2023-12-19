@@ -21,7 +21,10 @@ class AddCheckButtonQuestion:
         self.add_checkButtonQuestion_window.geometry('900x200')
         self.add_checkButtonQuestion_window.resizable(False, True)
         self.check_buttons = []
-        self.selections : List[IntVar] = []
+        self.selections: List[IntVar] = []
+
+        self.selected_true = BooleanVar(self.add_checkButtonQuestion_window)
+        self.selected_true.set(False)
 
         Label(self.add_checkButtonQuestion_window, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
         self.questionText_entry = Entry(self.add_checkButtonQuestion_window, width=30)
@@ -32,9 +35,10 @@ class AddCheckButtonQuestion:
         self.answer_entry = Entry(self.add_checkButtonQuestion_window, width=30)
         self.answer_entry.grid(row=1, column=1, sticky=EW)
 
-        Label(self.add_checkButtonQuestion_window, text="Ответ правильный? (True/False):").grid(row=1, column=2)
-        self.answer_is_correct_entry = Entry(self.add_checkButtonQuestion_window, width=30)
-        self.answer_is_correct_entry.grid(row=1, column=3)
+        self.answer_is_correct_checkBtn = Checkbutton(self.add_checkButtonQuestion_window,
+                                                      text="Ответ верный",
+                                                      variable=self.selected_true)
+        self.answer_is_correct_checkBtn.grid(row=1, column=2)
 
         self.add_answer_btn = Button(self.add_checkButtonQuestion_window, text="Добавить ответ",
                                      command=self.add_answer_btn_click)
@@ -63,12 +67,9 @@ class AddCheckButtonQuestion:
             messagebox.showwarning(title="Предупреждение", message="Данные не были введены!")
             return
 
-        input_correctness = self.answer_is_correct_entry.get()
-        if not (input_correctness.lower() == 't' or input_correctness.lower() == 'f'):
-            messagebox.showwarning(title="Предупреждение", message="Укажите верность ответа T/F")
-            return
+        correctness = self.selected_true.get()
+        answer = Answer(input_answer, correctness)
 
-        answer = Answer(input_answer, input_correctness.lower() == 't')
         self.answers.append(answer)
         self.init_checkbuttons()
 
@@ -116,10 +117,14 @@ class AddCheckButtonQuestion:
             selected_id.set(len(self.answers) + 1)
             self.selections.append(selected_id)
 
-            answer_btn = ttk.Checkbutton(self.add_checkButtonQuestion_window, text=self.answers[i].text,
-                                         offvalue=len(self.answers) + 1,
-                                         onvalue=i,
-                                         variable=selected_id)
+            answer_btn = Checkbutton(self.add_checkButtonQuestion_window, text=self.answers[i].text,
+                                     offvalue=len(self.answers) + 1,
+                                     onvalue=i,
+                                     variable=selected_id)
+
+            if self.answers[i].is_correct:
+                answer_btn["fg"] = "green"
+
             answer_btn.grid(row=i+2, column=2)
             self.check_buttons.append(answer_btn)
 

@@ -1,13 +1,12 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from typing import List
+from datetime import datetime
 from question_type import QuestionType
-from question import Question
-from question_radioButton import QuestionRadioButton
-from question_checkButton import QuestionCheckButton
+from test_result import TestResult
 from answer import Answer
 from user import User
+from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
 
@@ -23,7 +22,8 @@ position = {'anchor': S}
 class TestWindow:
     def __init__(self, user: User, questions_storage: QuestionsStorage):
         self.user = user
-        self.user.rightAnswersCount = 0
+        self.rightAnswersCount = 0
+        self.test_result = None
 
         self.questions_storage = questions_storage
         self.test_window = Tk()
@@ -50,10 +50,22 @@ class TestWindow:
         self.check_buttons = []
         self.selected_buttons = []
 
+        self.save_results_btn = Button(self.test_window, text='Сохранить результаты',
+                                       command=self.save_results_btn_click)
+        self.save_results_btn.pack(pady=10, side=BOTTOM)
+
         self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self.accept_answer_btn_clicked)
-        self.acceptAnswer_btn.pack(pady=10, side=BOTTOM)
+        self.acceptAnswer_btn.pack(side=BOTTOM)
 
         self.show_next_question()
+
+    def save_results_btn_click(self):
+        if self.test_result is None:
+            messagebox.showwarning(title="Предупреждение", message="Сначала пройдите тест!")
+            return
+
+        FileProvider.save_test_result(self.test_result)
+        messagebox.showinfo(title="Сообщение", message="Результаты успешно сохранены.")
 
     @property
     def current_question(self):
@@ -75,7 +87,7 @@ class TestWindow:
             case QuestionType.check_button:
                 self.init_checkbuttons()
 
-    def get_answer_from_radioButton(self):
+    def get_answer_from_radiobutton(self):
         answer: Answer = self.shuffled_answers[self.selected_id.get()]
         return answer
 
@@ -83,10 +95,10 @@ class TestWindow:
         match self.current_question.get_type:
             case QuestionType.base:
                 if self.answer_entry.get() == self.current_answers[0].text:
-                    self.user.rightAnswersCount += 1
+                    self.rightAnswersCount += 1
             case QuestionType.radio_button:
-                if self.get_answer_from_radioButton().is_correct:
-                    self.user.rightAnswersCount += 1
+                if self.get_answer_from_radiobutton().is_correct:
+                    self.rightAnswersCount += 1
             case QuestionType.check_button:
                 attempts = 0
                 successful_attempts = 0
@@ -101,13 +113,16 @@ class TestWindow:
                 successful_percentage = successful_attempts/attempts * 100
 
                 if successful_percentage > 50:
-                    self.user.rightAnswersCount += 1
+                    self.rightAnswersCount += 1
 
         if self.questionId >= len(self.questions)-1:
-            diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.user.rightAnswersCount)
+            diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.rightAnswersCount)
+            self.test_result = TestResult(self.user, self.rightAnswersCount, diagnosis, datetime.now())
+            self.acceptAnswer_btn.config(state=DISABLED)
             messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name,
                                                                                               diagnosis.grade))
             return
+
         self.questionId += 1
         self.show_next_question()
 

@@ -23,6 +23,9 @@ class AddRadioButtonQuestion:
         self.selected_id = IntVar(self.add_radioButtonQuestion_window)
         self.radio_buttons = []
 
+        self.selected_true = BooleanVar(self.add_radioButtonQuestion_window)
+        self.selected_true.set(False)
+
         Label(self.add_radioButtonQuestion_window, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
         self.questionText_entry = Entry(self.add_radioButtonQuestion_window, width=30)
         self.questionText_entry.grid(row=0, column=1, sticky=EW)
@@ -32,9 +35,10 @@ class AddRadioButtonQuestion:
         self.answer_entry = Entry(self.add_radioButtonQuestion_window, width=30)
         self.answer_entry.grid(row=1, column=1, sticky=EW)
 
-        Label(self.add_radioButtonQuestion_window, text="Ответ правильный? (True/False):").grid(row=1, column=2)
-        self.answer_is_correct_entry = Entry(self.add_radioButtonQuestion_window, width=30)
-        self.answer_is_correct_entry.grid(row=1, column=3)
+        self.answer_is_correct_checkBtn = Checkbutton(self.add_radioButtonQuestion_window,
+                                                      text="Ответ верный",
+                                                      variable=self.selected_true)
+        self.answer_is_correct_checkBtn.grid(row=1, column=2)
 
         self.add_answer_btn = Button(self.add_radioButtonQuestion_window, text="Добавить ответ",
                                      command=self.add_answer_btn_click)
@@ -62,12 +66,14 @@ class AddRadioButtonQuestion:
             messagebox.showwarning(title="Предупреждение", message="Данные не были введены!")
             return
 
-        input_correctness = self.answer_is_correct_entry.get()
-        if not (input_correctness.lower() == 'false' or input_correctness.lower() == 'true'):
-            messagebox.showwarning(title="Предупреждение", message="Укажите верность ответа True или False")
+        correctness = self.selected_true.get()
+
+        if self.had_correct_answer() and correctness:
+            messagebox.showwarning(title="Предупреждение",
+                                   message="В данном типе вопроса может быть только один правильный ответ")
             return
 
-        answer = Answer(input_answer, input_correctness.lower() == 'true')
+        answer = Answer(input_answer, correctness)
         self.answers.append(answer)
         self.init_radiobuttons()
 
@@ -105,9 +111,13 @@ class AddRadioButtonQuestion:
     def init_radiobuttons(self):
         self.clear_radiobuttons()
         for i in range(len(self.answers)):
-            answer_btn = ttk.Radiobutton(self.add_radioButtonQuestion_window, text=self.answers[i].text, value=i,
-                                         variable=self.selected_id)
-            answer_btn.grid(row=i+2, column=3)
+            answer_btn = Radiobutton(self.add_radioButtonQuestion_window, text=self.answers[i].text, value=i,
+                                     variable=self.selected_id)
+
+            if self.answers[i].is_correct:
+                answer_btn["fg"] = "green"
+
+            answer_btn.grid(row=i+2, column=2)
             self.radio_buttons.append(answer_btn)
 
     def clear_radiobuttons(self):

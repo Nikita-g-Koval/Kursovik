@@ -4,6 +4,7 @@ from questionsStrorage import QuestionsStorage
 from addQuestion_window import AddQuestionWindow
 from deleteQuestion_window import DeleteQuestionWindow
 from test_window import TestWindow
+from results_window import ResultsWindow
 
 
 font_header = ('Arial', 15)
@@ -30,10 +31,17 @@ class MenuWindow:
         self.deleteQuestion_btn.pack(**base_padding)
 
         self.test_btn = Button(self.menu_window, text='Начать тест',
-                                         command=self.test_menu_btn_clicked)
+                               command=self.test_menu_btn_clicked)
         self.test_btn.pack(**base_padding)
 
+        self.show_results_btn = Button(self.menu_window, text="Результаты", command=self.show_results_btn_click)
+        self.show_results_btn.pack(**base_padding)
+
         self.menu_window.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    @staticmethod
+    def show_results_btn_click():
+        ResultsWindow()
 
     def add_question_btn_clicked(self):
         AddQuestionWindow(self.questions_storage)
