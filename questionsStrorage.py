@@ -13,9 +13,7 @@ class QuestionsStorage:
     questions = []
 
     def __init__(self):
-        if os.path.exists(FileProvider.questionsFileName):
-            self.update_questions()
-            return
+        self.test_path: str = None
 
         self.questions = [
             Question("Сколько будет два плюс два умноженное на два?",
@@ -29,8 +27,8 @@ class QuestionsStorage:
     def add_question(self, question):
         self.questions.append(question)
 
-    def remove_question(self, id):
-        del self.questions[id - 1]
+    def remove_question(self, question_number):
+        del self.questions[question_number - 1]
 
     @staticmethod
     def shuffle(mas: []):
@@ -43,12 +41,14 @@ class QuestionsStorage:
             result[index_aleatory] = temp
         return result
 
-    def update_questions(self):
-        if not os.path.exists(FileProvider.questionsFileName):
-            return
-
+    def update_questions(self, test_path: str):
         self.questions.clear()
-        self.questions = FileProvider.get_questions()
+        self.questions = FileProvider.get_questions(test_path)
+        self.test_path = test_path
 
+    @property
+    def test_name(self):
+        if self.test_path is None:
+            return None
 
-
+        return os.path.basename(self.test_path).split('.', 1)[0]

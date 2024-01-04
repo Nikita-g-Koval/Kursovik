@@ -105,7 +105,7 @@ class AddRadioButtonQuestion:
         messagebox.showinfo(title="Успешно", message="Вопрос добавлен.")
 
     def save_changes_btn_click(self):
-        FileProvider.save_questions(self.questions_storage.questions)
+        FileProvider.save_questions(self.questions_storage.questions, self.questions_storage.test_name)
         messagebox.showinfo(title="Успешно", message="Изменения сохранены.")
 
     def init_radiobuttons(self):

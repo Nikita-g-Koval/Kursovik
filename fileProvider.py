@@ -7,13 +7,16 @@ from answer import Answer
 from diagnosis import Diagnosis
 from test_result import TestResult
 from datetime import datetime
+from typing import List
 import os
+from os import walk
 import json
 
 
 class FileProvider:
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
+    tests_path = os.path.abspath("Tests")
 
     @staticmethod
     def save_test_result(test_result: TestResult):
@@ -64,7 +67,7 @@ class FileProvider:
             os.remove(FileProvider.resultsFileName)
 
     @staticmethod
-    def save_questions(questions):
+    def save_questions(questions, test_name: str):
         data = {
             'questions': []
         }
@@ -83,15 +86,17 @@ class FileProvider:
                 'answers': answers
             })
 
-        with open(FileProvider.questionsFileName, 'w') as outfile:
+        path = FileProvider.tests_path + f'\\{test_name}.json'
+
+        with open(path, 'w') as outfile:
             json.dump(data, outfile, indent=4)
 
     @staticmethod
-    def get_questions():
-        if not os.path.exists(FileProvider.questionsFileName):
+    def get_questions(test_path: str):
+        if not os.path.exists(test_path):
             return
 
-        with open(FileProvider.questionsFileName, 'r', encoding='utf-8') as f:
+        with open(test_path, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
 
         questions = []
@@ -127,6 +132,11 @@ class FileProvider:
 
         return questions
 
+    @staticmethod
+    def get_tests():
+        tests: List[str] = []
+        for (dirpath, dirnames, filenames) in walk(FileProvider.tests_path):
+            tests.extend(filenames)
+            break
 
-def class_to_dict(obj):
-    return obj.__dict__
+        return tests

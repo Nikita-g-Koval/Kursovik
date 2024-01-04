@@ -9,6 +9,7 @@ from user import User
 from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
+import os
 
 
 font_header = ('Arial', 15)
@@ -20,19 +21,18 @@ position = {'anchor': S}
 
 
 class TestWindow:
-    def __init__(self, user: User, questions_storage: QuestionsStorage):
+    def __init__(self, user: User, questions_storage: QuestionsStorage, test_name: str):
         self.user = user
         self.rightAnswersCount = 0
         self.test_result = None
 
-        self.questions_storage = questions_storage
+        self.qs = questions_storage
         self.test_window = Tk()
         self.test_window.title("Тест")
         self.test_window.geometry('800x300')
         self.test_window.resizable(True, True)
 
         self.diagnoses = DiagnosesStorage()
-        self.qs = QuestionsStorage()
 
         questions = self.qs.questions
         self.questions = self.qs.shuffle(questions)
