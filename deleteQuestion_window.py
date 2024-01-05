@@ -53,7 +53,7 @@ class DeleteQuestionWindow:
         messagebox.showinfo(title="Уведомление", message="Вопрос успешно удалён. Сохраните изменения.")
 
     def save_changes_btn_click(self):
-        FileProvider.save_questions(self.questions)
+        FileProvider.save_test(self.questions)
         messagebox.showinfo(title="Уведомление", message="Изменения сохранены.")
 
     def print_questions(self):

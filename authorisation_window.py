@@ -3,6 +3,7 @@ from tkinter import messagebox
 from validation import Validation
 from user import User
 from menu_window import MenuWindow
+import os
 
 font_header = ('Arial', 15)
 font_entry = ('Arial', 12)
@@ -13,6 +14,8 @@ header_padding = {'padx': 10, 'pady': 12}
 
 class AuthorisationWindow:
     def __init__(self):
+        self.create_tests_folder()
+
         self.main_window = Tk()
         self.main_window.title("Авторизация")
         self.main_window.geometry('450x230')
@@ -38,6 +41,10 @@ class AuthorisationWindow:
         self.main_window.withdraw()
         MenuWindow(user)
 
+    @staticmethod
+    def create_tests_folder():
+        if os.path.exists('Tests'):
+            return
 
-
+        os.mkdir('Tests')
 

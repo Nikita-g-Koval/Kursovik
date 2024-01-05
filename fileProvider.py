@@ -67,7 +67,7 @@ class FileProvider:
             os.remove(FileProvider.resultsFileName)
 
     @staticmethod
-    def save_questions(questions, test_name: str):
+    def save_test(questions, test_name: str):
         data = {
             'questions': []
         }
@@ -98,6 +98,9 @@ class FileProvider:
 
         with open(test_path, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
+
+        if len(json_data) == 0:
+            return []
 
         questions = []
 
