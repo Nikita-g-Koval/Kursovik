@@ -7,7 +7,7 @@ class ResultsWindow:
     def __init__(self):
         self.results_window = Tk()
         self.results_window.title = "Результаты тестов"
-        self.results_window.geometry("430x200")
+        self.results_window.geometry("510x200")
         self.results_window.resizable(True, True)
 
         test_results = FileProvider.get_results()
@@ -34,7 +34,7 @@ class ResultsWindow:
         self.results_tree.heading("completion_time", text="Время завершения", anchor=W)
 
         self.results_tree.column("#1", stretch=NO, width=120)
-        self.results_tree.column("#2", stretch=NO, width=70)
+        self.results_tree.column("#2", stretch=NO, width=170)
         self.results_tree.column("#3", stretch=NO, width=100)
         self.results_tree.column("#4", stretch=NO, width=140)
 

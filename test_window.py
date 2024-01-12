@@ -110,7 +110,10 @@ class TestWindow:
                     if self.shuffled_answers[btn.get()].is_correct:
                         successful_attempts += 1
 
-                successful_percentage = successful_attempts/attempts * 100
+                if attempts == 0:
+                    successful_percentage = 0
+                else:
+                    successful_percentage = successful_attempts/attempts * 100
 
                 if successful_percentage > 50:
                     self.rightAnswersCount += 1
