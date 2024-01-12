@@ -1,18 +1,11 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 from typing import List
 from question import Question
 from user import User
 from questionsStrorage import QuestionsStorage
-from addQuestion_window import AddQuestionWindow
-from deleteQuestion_window import DeleteQuestionWindow
-from test_window import TestWindow
-from results_window import ResultsWindow
 from fileProvider import FileProvider
 import menu_window
-import os
-import json
 
 
 class CreateNewTestWindow:
@@ -36,13 +29,13 @@ class CreateNewTestWindow:
                                          command=self.create_newtest_btn_click)
         self.create_newtest_btn.pack()
 
-        self.back_to_menu_btn = Button(self.create_newtest_window, text='Вернуться в меню',
-                                       command=self.back_to_menu_btn_click)
-        self.back_to_menu_btn.pack()
-
         self.create_base_test_btn = Button(self.create_newtest_window, text='Создать базовый тест',
                                            command=self.create_base_test_btn_click)
         self.create_base_test_btn.pack()
+
+        self.back_to_menu_btn = Button(self.create_newtest_window, text='Вернуться в меню',
+                                       command=self.back_to_menu_btn_click)
+        self.back_to_menu_btn.pack()
 
         self.create_newtest_window.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -54,6 +47,7 @@ class CreateNewTestWindow:
             return
 
         self._create_test(self.qs.base_questions, testname)
+        messagebox.showinfo(title="Уведомление", message="Тест успешно создан")
 
     def create_newtest_btn_click(self):
         testname = self.testname_entry.get()
@@ -63,6 +57,7 @@ class CreateNewTestWindow:
             return
 
         self._create_test([], testname)
+        messagebox.showinfo(title="Уведомление", message="Тест успешно создан")
 
     @staticmethod
     def _create_test(questions: List[Question], test_name: str):

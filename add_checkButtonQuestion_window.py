@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 from typing import List
 from questionsStrorage import QuestionsStorage
 from validation import Validation

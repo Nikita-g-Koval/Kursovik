@@ -26,7 +26,7 @@ class MenuWindow:
         self.questions_storage = QuestionsStorage()
         self.menu_window = Tk()
         self.menu_window.title("Меню")
-        self.menu_window.geometry('600x600')
+        self.menu_window.geometry('400x300')
         self.menu_window.resizable(False, False)
 
         self.tests = FileProvider.get_tests()
