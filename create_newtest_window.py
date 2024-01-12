@@ -7,6 +7,7 @@ from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
 import menu_window
 
+base_padding = {'padx': 10, 'pady': 8}
 
 class CreateNewTestWindow:
     path = None
@@ -16,26 +17,26 @@ class CreateNewTestWindow:
 
         self.create_newtest_window = Tk()
         self.create_newtest_window.title("Меню")
-        self.create_newtest_window.geometry('200x150')
+        self.create_newtest_window.geometry('200x250')
         self.create_newtest_window.resizable(False, False)
 
         self.testname_label = Label(self.create_newtest_window, text='Название теста')
-        self.testname_label.pack()
+        self.testname_label.pack(**base_padding)
 
         self.testname_entry = Entry(self.create_newtest_window, width=30)
-        self.testname_entry.pack()
+        self.testname_entry.pack(**base_padding)
 
         self.create_newtest_btn = Button(self.create_newtest_window, text='Создать тест',
-                                         command=self.create_newtest_btn_click)
-        self.create_newtest_btn.pack()
+                                         command=self.create_newtest_btn_click, width=20)
+        self.create_newtest_btn.pack(**base_padding)
 
         self.create_base_test_btn = Button(self.create_newtest_window, text='Создать базовый тест',
-                                           command=self.create_base_test_btn_click)
-        self.create_base_test_btn.pack()
+                                           command=self.create_base_test_btn_click, width=20)
+        self.create_base_test_btn.pack(**base_padding)
 
         self.back_to_menu_btn = Button(self.create_newtest_window, text='Вернуться в меню',
-                                       command=self.back_to_menu_btn_click)
-        self.back_to_menu_btn.pack()
+                                       command=self.back_to_menu_btn_click, width=20)
+        self.back_to_menu_btn.pack(**base_padding)
 
         self.create_newtest_window.protocol("WM_DELETE_WINDOW", self.on_closing)
 
