@@ -1,0 +1,40 @@
+{
+    "results": [
+        {
+            "name": "\u041f\u0435\u0442\u0440\u043e\u0432",
+            "rightAnswersCount": 3,
+            "diagnose": "\u0413\u0435\u043d\u0438\u0439",
+            "completion_time": "2023-12-20 14:58:20"
+        },
+        {
+            "name": "\u0418\u0432\u0430\u043d\u043e\u0432",
+            "rightAnswersCount": 2,
+            "diagnose": "\u0422\u0430\u043b\u0430\u043d\u0442",
+            "completion_time": "2023-12-20 14:58:47"
+        },
+        {
+            "name": "\u041d\u0438\u043a\u0438\u0442\u0430",
+            "rightAnswersCount": 0,
+            "diagnose": "\u041a\u0440\u0435\u0442\u0438\u043d",
+            "completion_time": "2023-12-20 14:59:27"
+        },
+        {
+            "name": "\u0444\u0432\u044b\u0430",
+            "rightAnswersCount": 6,
+            "diagnose": "\u0413\u0435\u043d\u0438\u0439",
+            "completion_time": "2023-12-20 15:47:10"
+        },
+        {
+            "name": "\u041d\u0438\u043a\u0438\u0442\u0430",
+            "rightAnswersCount": 4,
+            "diagnose": "\u0422\u0430\u043b\u0430\u043d\u0442",
+            "completion_time": "2023-12-20 16:02:38"
+        },
+        {
+            "name": "\u041d\u0438\u043a\u0438\u0442\u0430",
+            "rightAnswersCount": 2,
+            "diagnose": "\u0414\u0443\u0440\u0430\u043a",
+            "completion_time": "2023-12-20 16:04:26"
+        }
+    ]
+}
