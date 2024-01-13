@@ -2,7 +2,9 @@ from diagnosis import Diagnosis
 
 
 class DiagnosesStorage:
+    """Класс DiagnosesStorage описывает хранилище диагнозов."""
     def __init__(self):
+        """Устанавливает все необходимые атрибуты для объекта DiagnosesStorage."""
         self.Diagnoses = [
             Diagnosis("Кретин"),
             Diagnosis("Идиот"),
@@ -13,6 +15,7 @@ class DiagnosesStorage:
         ]
         
     def calculate_diagnose(self, questions_count, right_answers_count):
+        """Расчитывает диагноз по отношению правильных ответов к количеству вопросов, возвращает диагноз."""
         right_answers_percentage = right_answers_count * 100 / questions_count
         result = self.Diagnoses[0]
         match right_answers_percentage:

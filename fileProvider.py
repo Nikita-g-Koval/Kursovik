@@ -14,12 +14,14 @@ import json
 
 
 class FileProvider:
+    """Класс FileProvider служит для работы с файловой системой."""
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
     tests_path = os.path.abspath("Tests")
 
     @staticmethod
     def save_test_result(test_result: TestResult):
+        """Сохраняет переданный результат теста, ничего не возвращает."""
         json_data = {'results': []}
 
         if os.path.exists(FileProvider.resultsFileName):
@@ -44,6 +46,7 @@ class FileProvider:
 
     @staticmethod
     def get_results():
+        """Получает результаты тестов из файла, возвращает список результатов."""
         if os.path.exists(FileProvider.resultsFileName):
             with open(FileProvider.resultsFileName) as json_file:
                 json_data = json.load(json_file)
@@ -63,11 +66,13 @@ class FileProvider:
 
     @staticmethod
     def clear_test_results():
+        """Удаляет все результаты тестов."""
         if os.path.exists(FileProvider.resultsFileName):
             os.remove(FileProvider.resultsFileName)
 
     @staticmethod
     def save_test(questions, test_name: str):
+        """Сохраняет переданные вопросы под переданным именем. Ничего не возвращает."""
         data = {
             'questions': []
         }
@@ -93,6 +98,7 @@ class FileProvider:
 
     @staticmethod
     def get_questions(test_path: str):
+        """Получает вопросы по переданному пути, возвращает полученные вопросы."""
         if not os.path.exists(test_path):
             return
 
@@ -137,6 +143,7 @@ class FileProvider:
 
     @staticmethod
     def get_tests():
+        """Получает все сохранённые тесты, возвращает список названий тестов."""
         tests: List[str] = []
         for (dirpath, dirnames, filenames) in walk(FileProvider.tests_path):
             tests.extend(filenames)

@@ -13,8 +13,10 @@ header_padding = {'padx': 10, 'pady': 12}
 
 
 class AuthorisationWindow:
+    """Класс AuthorisationWindow - инициализирует окно авторизации пользователя."""
     def __init__(self):
-        self.create_tests_folder()
+        """Устанавливает все необходимые атрибуты для объекта AuthorisationWindow."""
+        self._create_tests_folder()
 
         self.main_window = Tk()
         self.main_window.title("Авторизация")
@@ -26,13 +28,14 @@ class AuthorisationWindow:
         self.username_entry = Entry(self.main_window, bg='#fff', fg='#444', font=font_entry)
         self.username_entry.pack()
 
-        self.send_btn = Button(self.main_window, text='Перейти в меню', command=self.clicked)
+        self.send_btn = Button(self.main_window, text='Перейти в меню', command=self._send_btn_click)
         self.send_btn.pack(**base_padding)
         self.main_window.mainloop()
 
-    def clicked(self):
+    def _send_btn_click(self):
+        """Обработчик нажатия кнопки send_btn - проверяет имя пользователя, если оно корректно, запускает окно Меню."""
         input_name = self.username_entry.get()
-        if not Validation.ValidateUserName(username=input_name):
+        if not Validation.validate_user_name(username=input_name):
             messagebox.showwarning(
                 title="Предупреждение",
                 message="Введённое имя некорректно! Длина имени не меньше 2 символов. Разрешены только буквы.")
@@ -42,7 +45,8 @@ class AuthorisationWindow:
         MenuWindow(user)
 
     @staticmethod
-    def create_tests_folder():
+    def _create_tests_folder():
+        """Создаёт папку Tests для хранения тестов, если таковой нет."""
         if os.path.exists('Tests'):
             return
 

@@ -20,7 +20,9 @@ header_padding = {'padx': 10, 'pady': 12}
 
 
 class MenuWindow:
+    """Класс MenuWindow - инициализирует окно меню."""
     def __init__(self, user: User):
+        """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
         self.user = user
 
         self.questions_storage = QuestionsStorage()
@@ -44,30 +46,32 @@ class MenuWindow:
                                          command=self._create_newtest_btn_click, width=15)
         self.create_newtest_btn.pack(**base_padding)
 
-        self.addQuestion_btn = Button(self.menu_window, text='Добавить вопрос', command=self.add_question_btn_clicked,
+        self.addQuestion_btn = Button(self.menu_window, text='Добавить вопрос', command=self._add_question_btn_clicked,
                                       width=15)
         self.addQuestion_btn.pack(**base_padding)
 
         self.deleteQuestion_btn = Button(self.menu_window, text='Удалить вопрос',
-                                         command=self.delete_question_btn_clicked, width=15)
+                                         command=self._delete_question_btn_clicked, width=15)
         self.deleteQuestion_btn.pack(**base_padding)
 
         self.test_btn = Button(self.menu_window, text='Начать тест',
-                               command=self.test_menu_btn_clicked, width=15)
+                               command=self._test_menu_btn_clicked, width=15)
         self.test_btn.pack(**base_padding)
 
-        self.show_results_btn = Button(self.menu_window, text="Результаты", command=self.show_results_btn_click,
+        self.show_results_btn = Button(self.menu_window, text="Результаты", command=self._show_results_btn_click,
                                        width=15)
         self.show_results_btn.pack(**base_padding)
 
         self.menu_window.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def _create_newtest_btn_click(self):
+        """Обработчик нажатия кнопки create_newtest_btn - создаёт объект класса CreateNewTestWindow."""
         self.menu_window.withdraw()
         CreateNewTestWindow(self.user, self.questions_storage)
         self.menu_window.destroy()
 
     def _selected_test(self, event):
+        """Обработчик выбранного теста, запускает выбранный тест."""
         test_name = f'{self.test_var.get()}.json'
         tests_folder_path = os.path.abspath('Tests')
         test_path = f'{tests_folder_path}\\{test_name}'
@@ -76,16 +80,20 @@ class MenuWindow:
 
 
     @staticmethod
-    def show_results_btn_click():
+    def _show_results_btn_click():
+        """Обработчик нажатия кнопки show_results_btn - создаёт объект класса ResultsWindow."""
         ResultsWindow()
 
-    def add_question_btn_clicked(self):
+    def _add_question_btn_clicked(self):
+        """Обработчик нажатия кнопки add_question_btn - создаёт объект класса AddQuestionWindow."""
         AddQuestionWindow(self.questions_storage)
 
-    def delete_question_btn_clicked(self):
+    def _delete_question_btn_clicked(self):
+        """Обработчик нажатия кнопки delete_question_btn - создаёт объект класса DeleteQuestionWindow."""
         DeleteQuestionWindow(self.questions_storage)
 
-    def test_menu_btn_clicked(self):
+    def _test_menu_btn_clicked(self):
+        """Обработчик нажатия кнопки test_menu_btn - при наличии вопросов в тесте создаёт объект класса TestWindow."""
         if len(self.questions_storage.questions) == 0:
             messagebox.showwarning(title="Предупреждение", message="В тесте нет вопросов. Сначала добавьте их.")
             return
@@ -95,4 +103,5 @@ class MenuWindow:
 
     @staticmethod
     def on_closing():
+        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
         exit()

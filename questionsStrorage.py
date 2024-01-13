@@ -8,6 +8,7 @@ from fileProvider import FileProvider
 
 
 class QuestionsStorage:
+    """Класс QuestionsStorage описывающий хранилище вопросов."""
     questions = []
 
     base_questions = [
@@ -20,22 +21,27 @@ class QuestionsStorage:
     ]
 
     def __init__(self):
+        """Устанавливает все необходимые атрибуты для объекта QuestionsStorage."""
         self.test_path: str = "Tests\\BaseQuestions.json"
 
         self.questions = self.base_questions
 
     @property
     def test_name(self):
+        """Getter свойства test_name, возвращает название теста."""
         return os.path.basename(self.test_path).split('.')[0]
 
     def add_question(self, question):
+        """Добавляет вопрос в хранилище."""
         self.questions.append(question)
 
     def remove_question(self, question_number):
+        """Удаляет вопрос по индексу из хранилища."""
         del self.questions[question_number - 1]
 
     @staticmethod
     def shuffle(mas: []):
+        """Перемешивает переданный список и возвращает его."""
         result = mas
         list_length = len(result)
         for i in range(list_length):
@@ -46,16 +52,11 @@ class QuestionsStorage:
         return result
 
     def update_questions(self, test_path: str):
+        """Обновляет вопросы хранилища по указанному пути и сохраняет путь, по которому были обновлены вопросы."""
         self.questions.clear()
         self.questions = FileProvider.get_questions(test_path)
         self.test_path = test_path
 
     def save_questions(self):
+        """Сохраняет вопросы по пути текущего теста."""
         FileProvider.save_test(self.questions, self.test_name())
-
-    @property
-    def test_name(self):
-        if self.test_path is None:
-            return None
-
-        return os.path.basename(self.test_path).split('.', 1)[0]

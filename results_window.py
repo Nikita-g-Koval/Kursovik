@@ -4,7 +4,9 @@ from fileProvider import FileProvider
 
 
 class ResultsWindow:
+    """Класс MenuWindow - инициализирует окно результатов тестов."""
     def __init__(self):
+        """Устанавливает все необходимые атрибуты для объекта ResultsWindow."""
         self.results_window = Tk()
         self.results_window.title = "Результаты тестов"
         self.results_window.geometry("510x200")

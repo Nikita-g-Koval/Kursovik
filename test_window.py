@@ -21,7 +21,9 @@ position = {'anchor': S}
 
 
 class TestWindow:
+    """Класс TestWindow - инициализирует окно теста."""
     def __init__(self, user: User, questions_storage: QuestionsStorage, test_name: str):
+        """Устанавливает все необходимые атрибуты для объекта TestWindow."""
         self.user = user
         self.rightAnswersCount = 0
         self.test_result = None
@@ -51,15 +53,16 @@ class TestWindow:
         self.selected_buttons = []
 
         self.save_results_btn = Button(self.test_window, text='Сохранить результаты',
-                                       command=self.save_results_btn_click)
+                                       command=self._save_results_btn_click)
         self.save_results_btn.pack(pady=10, side=BOTTOM)
 
-        self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self.accept_answer_btn_clicked)
+        self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self._accept_answer_btn_clicked)
         self.acceptAnswer_btn.pack(side=BOTTOM)
 
-        self.show_next_question()
+        self._show_next_question()
 
-    def save_results_btn_click(self):
+    def _save_results_btn_click(self):
+        """Обработчик нажатия кнопки save_results_btn - сохраняет результаты теста."""
         if self.test_result is None:
             messagebox.showwarning(title="Предупреждение", message="Сначала пройдите тест!")
             return
@@ -69,35 +72,40 @@ class TestWindow:
 
     @property
     def current_question(self):
+        """Getter свойства current_question возвращает текущий вопрос."""
         return self.questions[self.questionId]
 
     @property
     def current_answers(self):
+        """Getter свойства current_answers возвращает ответы на текущий вопрос."""
         return self.current_question.answers
 
-    def show_answers(self):
-        self.clear_answers()
+    def _show_answers(self):
+        """Отображает ответы на текущий вопрос."""
+        self._clear_answers()
 
         match self.current_question.get_type:
             case QuestionType.base:
                 self.answer_entry = Entry(self.test_window, bg='#fff', fg='#444', font=font_entry)
                 self.answer_entry.pack(**base_padding)
             case QuestionType.radio_button:
-                self.init_radiobuttons()
+                self._init_radiobuttons()
             case QuestionType.check_button:
-                self.init_checkbuttons()
+                self._init_checkbuttons()
 
-    def get_answer_from_radiobutton(self):
+    def _get_answer_from_radiobutton(self):
+        """Возвращает выбранный ответ из radiobuttons."""
         answer: Answer = self.shuffled_answers[self.selected_id.get()]
         return answer
 
-    def accept_answer_btn_clicked(self):
+    def _accept_answer_btn_clicked(self):
+        """Принимает ответ пользователя и начисляет ему соответствующее количество очков."""
         match self.current_question.get_type:
             case QuestionType.base:
                 if self.answer_entry.get() == self.current_answers[0].text:
                     self.rightAnswersCount += 1
             case QuestionType.radio_button:
-                if self.get_answer_from_radiobutton().is_correct:
+                if self._get_answer_from_radiobutton().is_correct:
                     self.rightAnswersCount += 1
             case QuestionType.check_button:
                 attempts = 0
@@ -127,13 +135,15 @@ class TestWindow:
             return
 
         self.questionId += 1
-        self.show_next_question()
+        self._show_next_question()
 
-    def show_next_question(self):
+    def _show_next_question(self):
+        """Отображает следующий вопрос."""
         self.test_label.config(text="Вопрос №{0}:".format(self.questionId+1) + self.current_question.text)
-        self.show_answers()
+        self._show_answers()
 
-    def init_radiobuttons(self):
+    def _init_radiobuttons(self):
+        """Инициализирует radiobuttons."""
         self.shuffled_answers = self.qs.shuffle(self.current_answers)
 
         self.selected_id.set(0)
@@ -144,7 +154,8 @@ class TestWindow:
             answer_btn.pack(**base_padding)
             self.radio_buttons.append(answer_btn)
 
-    def init_checkbuttons(self):
+    def _init_checkbuttons(self):
+        """Инициализирует checkbuttons."""
         self.shuffled_answers = self.qs.shuffle(self.current_answers)
 
         for i in range(len(self.shuffled_answers)):
@@ -159,7 +170,8 @@ class TestWindow:
             answer_btn.pack(**base_padding)
             self.check_buttons.append(answer_btn)
 
-    def clear_answers(self):
+    def _clear_answers(self):
+        """Очищает все инициализированные кнопки ответов."""
         self.answer_entry.destroy()
         for btn in self.radio_buttons:
             btn.destroy()
