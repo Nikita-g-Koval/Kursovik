@@ -5,7 +5,7 @@ from question_type import QuestionType
 
 
 class QuestionRadioButton(Question):
-    """Класс QuestionRadioButton описывающий вопрос с единственным выбором. Наследник класса Question."""
+    """Класс QuestionRadioButton, описывающий вопрос с единственным выбором. Наследник класса Question."""
     def __init__(self, text: str, answers: List[Answer]):
         Question.__init__(self, text, answers)
         self.text = text

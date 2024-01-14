@@ -5,7 +5,7 @@ from question_type import QuestionType
 
 
 class QuestionCheckButton(QuestionRadioButton):
-    """Класс QuestionCheckButton описывающий вопрос с множественным выбором. Наследник класса QuestionRadioButton."""
+    """Класс QuestionCheckButton, описывающий вопрос с множественным выбором. Наследник класса QuestionRadioButton."""
     @property
     def get_type(self):
         return QuestionType.check_button

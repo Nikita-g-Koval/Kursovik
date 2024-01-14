@@ -8,23 +8,14 @@ from fileProvider import FileProvider
 
 
 class QuestionsStorage:
-    """Класс QuestionsStorage описывающий хранилище вопросов."""
+    """Класс QuestionsStorage, описывающий хранилище вопросов."""
     questions = []
-
-    base_questions = [
-        Question("Сколько будет два плюс два умноженное на два?",
-                 [Answer('6', True)]),
-        QuestionRadioButton("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?",
-                            [Answer('5', False), Answer('9', True), Answer('10', False), Answer('11', False)]),
-        QuestionCheckButton("На двух руках 10 пальцев. Сколько пальцев на 5 руках?",
-                            [Answer('10', False), Answer('25', True), Answer('50', False), Answer('15', False)]),
-    ]
 
     def __init__(self):
         """Устанавливает все необходимые атрибуты для объекта QuestionsStorage."""
-        self.test_path: str = "Tests\\BaseQuestions.json"
+        self.test_path: str = "Tests\\base_questions.json"
 
-        self.questions = self.base_questions
+        self.questions = FileProvider.get_questions(self.test_path)
 
     @property
     def test_name(self):
