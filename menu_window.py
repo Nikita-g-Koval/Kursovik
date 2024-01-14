@@ -25,7 +25,7 @@ class MenuWindow:
         """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
         self.user = user
 
-        self.questions_storage = QuestionsStorage()
+        self.questions_storage = QuestionsStorage("Tests\\base_questions.json")
         self.menu_window = Tk()
         self.menu_window.title("Меню")
         self.menu_window.geometry('400x300')
@@ -35,7 +35,7 @@ class MenuWindow:
         for i in range(0, len(self.tests)):
             self.tests[i] = self.tests[i].replace('.json', '')
 
-        self.test_var = StringVar(self.menu_window)
+        self.test_var = StringVar(self.menu_window, value="base_questions")
 
         self.tests_combobox = ttk.Combobox(self.menu_window, textvariable=self.test_var, values=self.tests,
                                            state="readonly")

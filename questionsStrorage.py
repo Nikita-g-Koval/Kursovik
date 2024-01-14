@@ -11,9 +11,9 @@ class QuestionsStorage:
     """Класс QuestionsStorage, описывающий хранилище вопросов."""
     questions = []
 
-    def __init__(self):
+    def __init__(self, test_path: str):
         """Устанавливает все необходимые атрибуты для объекта QuestionsStorage."""
-        self.test_path: str = "Tests\\base_questions.json"
+        self.test_path: str = test_path
 
         self.questions = FileProvider.get_questions(self.test_path)
 
