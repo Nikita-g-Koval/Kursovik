@@ -3,6 +3,7 @@ from tkinter import messagebox
 from typing import List
 from question import Question
 from user import User
+from test import Test
 from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
 import menu_window
@@ -53,7 +54,7 @@ class CreateNewTestWindow:
             messagebox.showwarning(message='Введите название теста!', title='Предупреждение')
             return
 
-        self._create_test(self.qs.base_questions, testname)
+        self._create_test(self.qs.test.questions, testname)
         messagebox.showinfo(title="Уведомление", message="Тест успешно создан")
 
     def create_newtest_btn_click(self):
@@ -70,7 +71,8 @@ class CreateNewTestWindow:
     @staticmethod
     def _create_test(questions: List[Question], test_name: str):
         """Создаёт тест с указанными вопросами и именем."""
-        FileProvider.save_test(questions, test_name)
+        test = Test(test_name, questions)
+        FileProvider.save_test(test)
 
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""

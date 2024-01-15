@@ -1,5 +1,6 @@
 from user import User
 from question import Question
+from test import Test
 from question_radioButton import QuestionRadioButton
 from question_checkButton import QuestionCheckButton
 from question_type import QuestionType
@@ -71,13 +72,14 @@ class FileProvider:
             os.remove(FileProvider.resultsFileName)
 
     @staticmethod
-    def save_test(questions, test_name: str):
+    def save_test(test: Test):
         """Сохраняет переданные вопросы под переданным именем. Ничего не возвращает."""
         data = {
+            'test_name': test.name,
             'questions': []
         }
 
-        for question in questions:
+        for question in test.questions:
             answers = []
             for answer in question.answers:
                 answers.append({
@@ -91,14 +93,14 @@ class FileProvider:
                 'answers': answers
             })
 
-        path = FileProvider.tests_path + f'\\{test_name}.json'
+        path = FileProvider.tests_path + f'\\{test.name}.json'
 
         with open(path, 'w') as outfile:
             json.dump(data, outfile, indent=4)
 
     @staticmethod
-    def get_questions(test_path: str):
-        """Получает вопросы по переданному пути, возвращает полученные вопросы."""
+    def get_test(test_path: str):
+        """Получает тест по переданному пути, возвращает полученный тест."""
         if not os.path.exists(test_path):
             return
 
@@ -108,6 +110,7 @@ class FileProvider:
         if len(json_data) == 0:
             return []
 
+        test_name = json_data['test_name']
         questions = []
 
         for question in json_data['questions']:
@@ -139,14 +142,63 @@ class FileProvider:
 
             questions.append(current_question)
 
-        return questions
+        test = Test(test_name, questions)
+
+        return test
 
     @staticmethod
-    def get_tests():
+    def save_test_changes(test: Test, test_path: str):
+        """Сохраняет переданные вопросы под переданным именем. Ничего не возвращает."""
+        data = {
+            'test_name': test.name,
+            'questions': []
+        }
+
+        for question in test.questions:
+            answers = []
+            for answer in question.answers:
+                answers.append({
+                    'text': answer.text,
+                    'is_correct': answer.is_correct
+                })
+
+            data['questions'].append({
+                'type': int(question.get_type),
+                'text': question.text,
+                'answers': answers
+            })
+
+        with open(test_path, 'w') as outfile:
+            json.dump(data, outfile, indent=4)
+
+    @staticmethod
+    def get_test_names():
         """Получает все сохранённые тесты, возвращает список названий тестов."""
-        tests: List[str] = []
+        test_names: List[str] = []
         for (dirpath, dirnames, filenames) in walk(FileProvider.tests_path):
-            tests.extend(filenames)
+            for filename in filenames:
+                test_path = f"{FileProvider.tests_path}\\{filename}"
+
+                with open(test_path, 'r', encoding='utf-8') as f:
+                    json_data = json.load(f)
+
+                test_name = json_data['test_name']
+                test_names.append(test_name)
             break
 
-        return tests
+        return test_names
+
+    @staticmethod
+    def find_test_path(wanted_test_name: str):
+        for (dirpath, dirnames, filenames) in walk(FileProvider.tests_path):
+            for filename in filenames:
+                test_path = f"{FileProvider.tests_path}\\{filename}"
+
+                with open(test_path, 'r', encoding='utf-8') as f:
+                    json_data = json.load(f)
+
+                test_name = json_data['test_name']
+
+                if test_name == wanted_test_name:
+                    return test_path
+            break

@@ -46,7 +46,7 @@ class DeleteQuestionWindow:
             return
         number = int(question_number)
 
-        if number < 1 or number >= len(self.questions_storage.questions):
+        if number < 1 or number > len(self.questions_storage.test.questions):
             messagebox.showwarning(title="Предупреждение",
                                    message="Номер вопроса выходит за границу количества вопросов.")
             return
@@ -57,13 +57,13 @@ class DeleteQuestionWindow:
 
     def _save_changes_btn_click(self):
         """Обработчик нажатия кнопки save_changes_btn - сохраняет текущие вопросы, ничего не возвращает."""
-        FileProvider.save_test(self.questions_storage.questions, self.questions_storage.test_name)
+        FileProvider.save_test_changes(self.questions_storage.test, self.questions_storage.test_path)
         messagebox.showinfo(title="Уведомление", message="Изменения сохранены.")
 
     def _print_questions(self):
         """Отображает текущие вопросы."""
         self.questions_editor.delete('1.0', END)
-        questions = self.questions_storage.questions
+        questions = self.questions_storage.test.questions
         count = 1
         for q in questions:
             self.questions_editor.insert(END, "№{i} {question}\n".format(i=count, question=q.text))

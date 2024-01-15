@@ -25,17 +25,15 @@ class MenuWindow:
         """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
         self.user = user
 
-        self.questions_storage = QuestionsStorage("Tests\\base_questions.json")
+        self.questions_storage = QuestionsStorage("Tests/base_test.json")
         self.menu_window = Tk()
         self.menu_window.title("Меню")
         self.menu_window.geometry('400x300')
         self.menu_window.resizable(False, False)
 
-        self.tests = FileProvider.get_tests()
-        for i in range(0, len(self.tests)):
-            self.tests[i] = self.tests[i].replace('.json', '')
+        self.tests = FileProvider.get_test_names()
 
-        self.test_var = StringVar(self.menu_window, value="base_questions")
+        self.test_var = StringVar(self.menu_window, value="base_test")
 
         self.tests_combobox = ttk.Combobox(self.menu_window, textvariable=self.test_var, values=self.tests,
                                            state="readonly")
@@ -72,11 +70,10 @@ class MenuWindow:
 
     def _selected_test(self, event):
         """Обработчик выбранного теста, запускает выбранный тест."""
-        test_name = f'{self.test_var.get()}.json'
-        tests_folder_path = os.path.abspath('Tests')
-        test_path = f'{tests_folder_path}\\{test_name}'
+        test_name = self.test_var.get()
+        test_path = FileProvider.find_test_path(test_name)
 
-        self.questions_storage.update_questions(test_path)
+        self.questions_storage.update_test(test_path)
 
 
     @staticmethod
@@ -94,7 +91,7 @@ class MenuWindow:
 
     def _test_menu_btn_clicked(self):
         """Обработчик нажатия кнопки test_menu_btn - при наличии вопросов в тесте создаёт объект класса TestWindow."""
-        if len(self.questions_storage.questions) == 0:
+        if len(self.questions_storage.test.questions) == 0:
             messagebox.showwarning(title="Предупреждение", message="В тесте нет вопросов. Сначала добавьте их.")
             return
 

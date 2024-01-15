@@ -36,7 +36,7 @@ class TestWindow:
 
         self.diagnoses = DiagnosesStorage()
 
-        questions = self.qs.questions
+        questions = self.qs.test.questions
         self.questions = self.qs.shuffle(questions)
         self.questionId = 0
 

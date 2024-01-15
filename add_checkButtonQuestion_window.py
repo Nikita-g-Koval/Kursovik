@@ -111,7 +111,7 @@ class AddCheckButtonQuestion:
 
     def _save_changes_btn_click(self):
         """Обработчик нажатия кнопки save_changes_btn - сохраняет текущие вопросы, ничего не возвращает."""
-        FileProvider.save_test(self.questions_storage.questions, self.questions_storage.test_name)
+        FileProvider.save_test_changes(self.questions_storage.test, self.questions_storage.test_path)
         messagebox.showinfo(title="Успешно", message="Изменения сохранены.")
 
     def _init_checkbuttons(self):

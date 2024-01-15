@@ -1,34 +1,23 @@
-import os
 from random import randint
-from question import Question
-from question_radioButton import QuestionRadioButton
-from question_checkButton import QuestionCheckButton
-from answer import Answer
 from fileProvider import FileProvider
+from test import Test
 
 
 class QuestionsStorage:
     """Класс QuestionsStorage, описывающий хранилище вопросов."""
-    questions = []
 
     def __init__(self, test_path: str):
         """Устанавливает все необходимые атрибуты для объекта QuestionsStorage."""
-        self.test_path: str = test_path
-
-        self.questions = FileProvider.get_questions(self.test_path)
-
-    @property
-    def test_name(self):
-        """Getter свойства test_name, возвращает название теста."""
-        return os.path.basename(self.test_path).split('.')[0]
+        self.test: Test = FileProvider.get_test(test_path)
+        self.test_path = test_path
 
     def add_question(self, question):
         """Добавляет вопрос в хранилище."""
-        self.questions.append(question)
+        self.test.questions.append(question)
 
     def remove_question(self, question_number):
         """Удаляет вопрос по индексу из хранилища."""
-        del self.questions[question_number - 1]
+        del self.test.questions[question_number - 1]
 
     @staticmethod
     def shuffle(mas: []):
@@ -42,12 +31,11 @@ class QuestionsStorage:
             result[index_aleatory] = temp
         return result
 
-    def update_questions(self, test_path: str):
-        """Обновляет вопросы хранилища по указанному пути и сохраняет путь, по которому были обновлены вопросы."""
-        self.questions.clear()
-        self.questions = FileProvider.get_questions(test_path)
+    def update_test(self, test_path: str):
+        """Обновляет тест по указанному пути и сохраняет путь, по которому был обновлён тест."""
+        self.test = FileProvider.get_test(test_path)
         self.test_path = test_path
 
-    def save_questions(self):
-        """Сохраняет вопросы по пути текущего теста."""
-        FileProvider.save_test(self.questions, self.test_name())
+    def save_changes(self):
+        """Сохраняет изменения по пути текущего теста."""
+        FileProvider.save_test_changes(self.test, self.test_path)
