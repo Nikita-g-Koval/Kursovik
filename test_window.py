@@ -9,7 +9,7 @@ from user import User
 from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
-import os
+from test import Test
 
 
 font_header = ('Arial', 15)
@@ -36,11 +36,8 @@ class TestWindow:
 
         self.diagnoses = DiagnosesStorage()
 
-        questions = self.qs.test.questions
-        self.questions = self.qs.shuffle(questions)
-        self.questionId = 0
-
-        self.shuffled_answers = self.qs.shuffle(self.current_answers)
+        self.test = self.qs.test
+        self.test.start_test()
 
         self.test_label = Label(self.test_window, font=font_entry,
                                 justify=CENTER, **header_padding)
@@ -70,21 +67,11 @@ class TestWindow:
         FileProvider.save_test_result(self.test_result)
         messagebox.showinfo(title="Сообщение", message="Результаты успешно сохранены.")
 
-    @property
-    def current_question(self):
-        """Getter свойства current_question возвращает текущий вопрос."""
-        return self.questions[self.questionId]
-
-    @property
-    def current_answers(self):
-        """Getter свойства current_answers возвращает ответы на текущий вопрос."""
-        return self.current_question.answers
-
     def _show_answers(self):
         """Отображает ответы на текущий вопрос."""
         self._clear_answers()
 
-        match self.current_question.get_type:
+        match self.test.get_current_question.get_type:
             case QuestionType.base:
                 self.answer_entry = Entry(self.test_window, bg='#fff', fg='#444', font=font_entry)
                 self.answer_entry.pack(**base_padding)
@@ -95,76 +82,63 @@ class TestWindow:
 
     def _get_answer_from_radiobutton(self):
         """Возвращает выбранный ответ из radiobuttons."""
-        answer: Answer = self.shuffled_answers[self.selected_id.get()]
+        answer: Answer = self.test.get_current_answers[self.selected_id.get()]
         return answer
 
     def _accept_answer_btn_clicked(self):
         """Принимает ответ пользователя и начисляет ему соответствующее количество очков."""
-        match self.current_question.get_type:
+        match self.test.get_current_question.get_type:
             case QuestionType.base:
-                if self.answer_entry.get() == self.current_answers[0].text:
-                    self.rightAnswersCount += 1
+                self.test.accept_answer_base(self.answer_entry.get())
             case QuestionType.radio_button:
-                if self._get_answer_from_radiobutton().is_correct:
-                    self.rightAnswersCount += 1
+                self.test.accept_answer_radio(self._get_answer_from_radiobutton())
             case QuestionType.check_button:
-                attempts = 0
-                successful_attempts = 0
+                answers = []
                 for btn in self.selected_buttons:
-                    if btn.get() > len(self.shuffled_answers):
+                    if btn.get() >= len(self.test.get_current_answers):
                         continue
-                    attempts += 1
+                    answers.append(self.test.get_current_answers[btn.get()])
 
-                    if self.shuffled_answers[btn.get()].is_correct:
-                        successful_attempts += 1
+                self.test.accept_answer_check(answers)
 
-                if attempts == 0:
-                    successful_percentage = 0
-                else:
-                    successful_percentage = successful_attempts/attempts * 100
+        self.test.next_question()
 
-                if successful_percentage > 50:
-                    self.rightAnswersCount += 1
-
-        if self.questionId >= len(self.questions)-1:
-            diagnosis = self.diagnoses.calculate_diagnose(len(self.questions), self.rightAnswersCount)
+        if self.test.is_finished:
+            diagnosis = self.test.summarise()
             self.test_result = TestResult(self.user, self.rightAnswersCount, diagnosis, datetime.now())
+
             self.acceptAnswer_btn.config(state=DISABLED)
+
             messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name,
                                                                                               diagnosis.grade))
             return
 
-        self.questionId += 1
         self._show_next_question()
 
     def _show_next_question(self):
         """Отображает следующий вопрос."""
-        self.test_label.config(text="Вопрос №{0}:".format(self.questionId+1) + self.current_question.text)
+        self.test_label.config(text=self.test.print_current_question())
         self._show_answers()
 
     def _init_radiobuttons(self):
         """Инициализирует radiobuttons."""
-        self.shuffled_answers = self.qs.shuffle(self.current_answers)
-
         self.selected_id.set(0)
 
-        for i in range(len(self.shuffled_answers)):
-            answer_btn = ttk.Radiobutton(self.test_window, text=self.shuffled_answers[i].text, value=i,
+        for i in range(len(self.test.get_current_answers)):
+            answer_btn = ttk.Radiobutton(self.test_window, text=self.test.get_current_answers[i].text, value=i,
                                          variable=self.selected_id)
             answer_btn.pack(**base_padding)
             self.radio_buttons.append(answer_btn)
 
     def _init_checkbuttons(self):
         """Инициализирует checkbuttons."""
-        self.shuffled_answers = self.qs.shuffle(self.current_answers)
-
-        for i in range(len(self.shuffled_answers)):
+        for i in range(len(self.test.get_current_answers)):
             selected_id = IntVar(self.test_window)
-            selected_id.set(len(self.shuffled_answers) + 1)
+            selected_id.set(len(self.test.get_current_answers) + 1)
             self.selected_buttons.append(selected_id)
 
-            answer_btn = ttk.Checkbutton(self.test_window, text=self.shuffled_answers[i].text,
-                                         offvalue=len(self.shuffled_answers) + 1,
+            answer_btn = ttk.Checkbutton(self.test_window, text=self.test.get_current_answers[i].text,
+                                         offvalue=len(self.test.get_current_answers) + 1,
                                          onvalue=i,
                                          variable=selected_id)
             answer_btn.pack(**base_padding)

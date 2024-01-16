@@ -1,4 +1,3 @@
-from random import randint
 from fileProvider import FileProvider
 from test import Test
 
@@ -18,18 +17,6 @@ class QuestionsStorage:
     def remove_question(self, question_number):
         """Удаляет вопрос по индексу из хранилища."""
         del self.test.questions[question_number - 1]
-
-    @staticmethod
-    def shuffle(mas: []):
-        """Перемешивает переданный список и возвращает его."""
-        result = mas
-        list_length = len(result)
-        for i in range(list_length):
-            index_aleatory = randint(0, list_length - 1)
-            temp = result[i]
-            result[i] = result[index_aleatory]
-            result[index_aleatory] = temp
-        return result
 
     def update_test(self, test_path: str):
         """Обновляет тест по указанному пути и сохраняет путь, по которому был обновлён тест."""
