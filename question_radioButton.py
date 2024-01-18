@@ -26,3 +26,12 @@ class QuestionRadioButton(Question):
                 raise Exception('В классе QuestionRadioButton возможен только один правильный ответ.')
 
         self._answers = answers
+
+    def varify_answers(self, user_answers: List[Answer]):
+        """Проверяет список ответов пользователя, возвращает True, если есть правильный ответ, False - нет."""
+        for answer in self.answers:
+            for user_answer in user_answers:
+                if answer == user_answer and answer.is_correct:
+                    return True
+
+        return False

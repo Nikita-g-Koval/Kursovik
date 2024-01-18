@@ -9,6 +9,7 @@ from user import User
 from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from diagnosesStorage import DiagnosesStorage
+from typing import List
 from test import Test
 
 
@@ -87,19 +88,22 @@ class TestWindow:
 
     def _accept_answer_btn_clicked(self):
         """Принимает ответ пользователя и начисляет ему соответствующее количество очков."""
+        user_answers: List[Answer] = []
         match self.test.get_current_question.get_type:
             case QuestionType.base:
-                self.test.accept_answer_base(self.answer_entry.get())
+                answer = Answer(text=self.answer_entry.get())
+                user_answers.append(answer)
             case QuestionType.radio_button:
-                self.test.accept_answer_radio(self._get_answer_from_radiobutton())
+                answer = self._get_answer_from_radiobutton()
+                user_answers.append(answer)
             case QuestionType.check_button:
-                answers = []
                 for btn in self.selected_buttons:
                     if btn.get() >= len(self.test.get_current_answers):
                         continue
-                    answers.append(self.test.get_current_answers[btn.get()])
+                    answer = self.test.get_current_answers[btn.get()]
+                    user_answers.append(answer)
 
-                self.test.accept_answer_check(answers)
+        self.test.accept_answers(user_answers)
 
         self.test.next_question()
 

@@ -92,44 +92,13 @@ class Test:
 
         self.shuffle_answers()
 
-    def accept_answer_base(self, answer: str):
+    def accept_answers(self, user_answers: List[Answer]):
         """Проверяет ответ на базовый вопрос и увеличивает счёт, если ответ правильный. Ничего не возвращает."""
-        if self.get_current_question.get_type != QuestionType.base:
-            raise Exception(f"Текущий вопрос имеет тип {self.get_current_question.get_type}, а не {QuestionType.base}")
+        if self.get_current_question.varify_answers(user_answers):
+            self._increase_score()
 
-        if answer == self.get_current_answers[0].text:
-            self.score += 1
-
-    def accept_answer_radio(self, answer: Answer):
-        """Проверяет ответ на вопрос с единственным выбором и увеличивает счёт, если ответ правильный."""
-        if self.get_current_question.get_type != QuestionType.radio_button:
-            raise Exception(
-                f"Текущий вопрос имеет тип {self.get_current_question.get_type}, а не {QuestionType.radio_button}")
-
-        if answer.is_correct:
-            self.score += 1
-
-    def accept_answer_check(self, answers: List[Answer]):
-        """Проверяет ответ на вопрос с множественным выбором и увеличивает счёт, если ответы правильные."""
-        if self.get_current_question.get_type != QuestionType.check_button:
-            raise Exception(
-                f"Текущий вопрос имеет тип {self.get_current_question.get_type}, а не {QuestionType.check_button}")
-
-        attempts = 0
-        successful_attempts = 0
-
-        for answer in answers:
-            attempts += 1
-            if answer.is_correct:
-                successful_attempts += 1
-
-        if attempts == 0:
-            successful_percentage = 0
-        else:
-            successful_percentage = successful_attempts / attempts * 100
-
-        if successful_percentage > 50:
-            self.score += 1
+    def _increase_score(self):
+        self.score += 1
 
     def summarise(self):
         """Возвращает диагноз соответствующий результату теста."""

@@ -26,3 +26,13 @@ class Question:
     def get_type(self):
         """Getter свойства get_type, возвращает тип вопроса."""
         return QuestionType.base
+
+    def varify_answers(self, user_answers: List[Answer]):
+        """Проверяет переданный ответ, возвращает True или False."""
+        for answer in self.answers:
+            for user_answer in user_answers:
+                if answer.is_correct and answer.text == user_answer.text:
+                    return True
+
+        return False
+
