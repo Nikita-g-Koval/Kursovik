@@ -22,7 +22,8 @@ class AuthorisationWindow:
         self.main_window.title("Авторизация")
         self.main_window.geometry('450x230')
         self.main_window.resizable(False, False)
-        self.main_label = Label(self.main_window, text='Авторизация', font=font_header, justify=CENTER, **header_padding)
+        self.main_label = Label(self.main_window, text='Авторизация', font=font_header, justify=CENTER,
+                                **header_padding)
         self.main_label.pack()
 
         self.username_entry = Entry(self.main_window, bg='#fff', fg='#444', font=font_entry)

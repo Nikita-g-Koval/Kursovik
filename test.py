@@ -98,6 +98,7 @@ class Test:
             self._increase_score()
 
     def _increase_score(self):
+        """Увеличивает счёт, ничего не возвращает."""
         self.score += 1
 
     def summarise(self):

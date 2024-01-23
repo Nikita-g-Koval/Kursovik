@@ -20,6 +20,3 @@ class Validation:
         if len(answer) > 1:
             return True
         return False
-
-
-

@@ -190,6 +190,7 @@ class FileProvider:
 
     @staticmethod
     def find_test_path(wanted_test_name: str):
+        """Находит путь к тесту по его имени, возвращает путь."""
         for (dirpath, dirnames, filenames) in walk(FileProvider.tests_path):
             for filename in filenames:
                 test_path = f"{FileProvider.tests_path}\\{filename}"
