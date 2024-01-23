@@ -12,19 +12,13 @@
 \caption*{Продолжение таблицы \ref{class:table}}\\
 \hline \centrow 1 & \centrow 2 & \centrow 3 & \centrow 4\\ \hline
 \finishhead
-Test & Модуль теста & Test – класс, характеризующий тест и имеющий методы для его прохождения . & @propertydef get current question(self) - возвращает текущий вопрос, @property def get current answers(self) - возвращает ответы текущего вопроса,
+Test & Модуль теста & Test – класс, характеризующий тест и имеющий методы для его прохождения . & def nextquestion(self): Делает инкремент id текущего вопроса и перемешивает его ответы, ничего не возвращает.
 def print current question(self) - возвращает номер вопроса и его текст,
-@property def is finished(self) - возвращает статус завершения теста,
-@staticmethod def shuffle(mas: []) - веремешивает переданный список и возвращает его,
-def shuffle questions(self) - перемешивает вопросы текущего теста, ничего не возвращает,
-def shuffle answers(self) - перемешивает ответы текущего вопроса, ничего не возвращает,
-def start test(self) - запускает тест, обнуляет счёт и устанавливает id текущего вопроса, ничего не возвращает,
-def next question(self) - делает инкремент id текущего вопроса и перемешивает его ответы, ничего не возвращает,
-def accept answers(self, user answers: List[Answer]) - проверяет ответ на базовый вопрос и увеличивает счёт, если ответ правильный. Ничего не возвращает,
-def  increase score(self) - увеличивает счёт, ничего не возвращает,
+@staticmethod def shuffle(mas: []) - веремешивает переданный список и возвращает его
+def start test(self) - запускает тест, обнуляет счёт и устанавливает id текущего вопроса, ничего не возвращает
 def summarise(self) - Возвращает диагноз соответствующий результату теста\\
 \hline FileProvider & Модуль для работы с файловой системой & FileProvider – Класс для работы с файлами & @staticmethod def savetestresult(testresult: TestResult): Сохраняет переданный результат теста, ничего не возвращает, @staticmethod
-def getresults(): Получает результаты тестов из файла, возвращает список результатов,  @staticmethod def cleartestresults(): Удаляет все результаты тестов,  @staticmethod def savetest(test: Test): Сохраняет переданные вопросы под переданным именем. Ничего не возвращает, @staticmethod def gettest(testpath: str): Получает тест по переданному пути, возвращает полученный тест, @staticmethod def savetestchanges(test: Test, testpath: str): Сохраняет переданные вопросы под переданным именем. Ничего не возвращает, @staticmethod def gettestnames(): Получает все сохранённые тесты, возвращает список названий тестов, @staticmethod def findtestpath(wantedtestname: str): Находит путь к тесту по его имени, возвращает путь.
+def getresults(): Получает результаты тестов из файла, возвращает список результатов,  @staticmethod def cleartestresults(): Удаляет все результаты тестов
 \end{xltabular}
 \renewcommand{\arraystretch}{1.0} % восстановление сетки
 
