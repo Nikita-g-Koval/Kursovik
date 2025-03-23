@@ -16,9 +16,45 @@ import json
 
 class FileProvider:
     """Класс FileProvider служит для работы с файловой системой."""
+    usersFileName = "users.json"
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
     tests_path = os.path.abspath("Tests")
+
+    @staticmethod
+    def save_user(user: User):
+        json_data = {'users': []}
+
+        if os.path.exists(FileProvider.usersFileName):
+            users = FileProvider.get_users()
+            for old_user in users:
+                json_data['users'].append({
+                    'name': old_user.name,
+                    'password': old_user.password
+                })
+
+        json_data['users'].append({
+            'name': user.name,
+            'password': user.password
+        })
+
+        with open(FileProvider.usersFileName, 'w') as outfile:
+            json.dump(json_data, outfile, indent=4)
+
+    @staticmethod
+    def get_users():
+        users = []
+
+        if os.path.exists(FileProvider.usersFileName):
+            with open(FileProvider.usersFileName) as json_file:
+                json_data = json.load(json_file)
+
+            for user in json_data['users']:
+                new_user = User(user['name'], user['password'])
+                users.append(new_user)
+
+        return users
+
 
     @staticmethod
     def save_test_result(test_result: TestResult):
