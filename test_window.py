@@ -8,7 +8,6 @@ from answer import Answer
 from user import User
 from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
-from diagnosesStorage import DiagnosesStorage
 from typing import List
 from test import Test
 
@@ -34,8 +33,6 @@ class TestWindow:
         self.test_window.title("Тест")
         self.test_window.geometry('800x300')
         self.test_window.resizable(True, True)
-
-        self.diagnoses = DiagnosesStorage()
 
         self.test = self.qs.test
         self.test.start_test()
@@ -108,13 +105,14 @@ class TestWindow:
         self.test.next_question()
 
         if self.test.is_finished:
-            diagnosis = self.test.summarise()
-            self.test_result = TestResult(self.user, self.rightAnswersCount, diagnosis, datetime.now())
+            right_answers_percentage = self.test.summarise()
+            self.test_result = TestResult(self.user.name, self.test.score, right_answers_percentage, datetime.now())
 
             self.acceptAnswer_btn.config(state=DISABLED)
 
-            messagebox.showinfo(title="Тест завершён", message="{0}, ваш диагноз: {1}".format(self.user.name,
-                                                                                              diagnosis.grade))
+            messagebox.showinfo(title="Тест завершён",
+                                message="{0}, процент правильных ответов: {1}".format(self.user.name,
+                                                                                              right_answers_percentage))
             return
 
         self._show_next_question()

@@ -18,21 +18,21 @@ class ResultsWindow:
         for result in test_results:
             self.tuple_results.append(
                 (
-                    result.user.name,
+                    result.name,
                     result.right_answers_count,
-                    result.diagnose.grade,
+                    result.right_answers_percentage,
                     result.completion_time
                 )
             )
 
-        self.columns = ("name", "rightAnswersCount", "diagnose", "completion_time")
+        self.columns = ("name", "rightAnswersCount", "right_answers_percentage", "completion_time")
 
         self.results_tree = ttk.Treeview(self.results_window, columns=self.columns, show="headings")
         self.results_tree.pack(expand=True, fill=BOTH)
 
         self.results_tree.heading("name", text="Имя", anchor=W)
         self.results_tree.heading("rightAnswersCount", text="Кол-во правильных ответов", anchor=W)
-        self.results_tree.heading("diagnose", text="Диагноз", anchor=W)
+        self.results_tree.heading("right_answers_percentage", text="Процент правильных ответов", anchor=W)
         self.results_tree.heading("completion_time", text="Время завершения", anchor=W)
 
         self.results_tree.column("#1", stretch=NO, width=120)

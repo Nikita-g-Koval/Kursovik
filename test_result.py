@@ -1,18 +1,17 @@
 from user import User
-from diagnosis import Diagnosis
 from datetime import datetime
 
 
 class TestResult:
     """Класс TestResult описывает результат теста."""
-    user: User
+    name: str
     right_answers_count: int
-    diagnose: Diagnosis
+    right_answers_percentage: float
     completion_time: datetime
 
-    def __init__(self, user: User, right_answers_count: int, diagnose: Diagnosis, completion_time: datetime):
+    def __init__(self, name, right_answers_count: int, right_answers_percentage: float, completion_time: datetime):
         """Устанавливает все необходимые атрибуты для объекта TestResult."""
-        self.user = user
+        self.name = name
         self.right_answers_count = right_answers_count
-        self.diagnose = diagnose
+        self.right_answers_percentage = right_answers_percentage
         self.completion_time = completion_time

@@ -5,7 +5,6 @@ from question_radioButton import QuestionRadioButton
 from question_checkButton import QuestionCheckButton
 from question_type import QuestionType
 from answer import Answer
-from diagnosis import Diagnosis
 from test_result import TestResult
 from datetime import datetime
 from typing import List
@@ -65,16 +64,16 @@ class FileProvider:
             results = FileProvider.get_results()
             for result in results:
                 json_data['results'].append({
-                    'name': result.user.name,
+                    'name': result.name,
                     'rightAnswersCount': result.right_answers_count,
-                    'diagnose': result.diagnose.grade,
+                    'right_answers_percentage': result.right_answers_percentage,
                     'completion_time': result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
                 })
 
         json_data['results'].append({
-            'name': test_result.user.name,
+            'name': test_result.name,
             'rightAnswersCount': test_result.right_answers_count,
-            'diagnose': test_result.diagnose.grade,
+            'right_answers_percentage': test_result.right_answers_percentage,
             'completion_time': test_result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
         })
 
@@ -91,11 +90,11 @@ class FileProvider:
             test_results = []
 
             for result in json_data['results']:
-                user = User(result['name'])
+                username = result['name']
                 test_results.append(TestResult(
-                    user=user,
+                    name=username,
                     right_answers_count=result['rightAnswersCount'],
-                    diagnose=Diagnosis(result['diagnose']),
+                    right_answers_percentage=result['right_answers_percentage'],
                     completion_time=datetime.strptime(result['completion_time'], '%Y-%m-%d %H:%M:%S')
                 ))
 

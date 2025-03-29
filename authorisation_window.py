@@ -6,46 +6,53 @@ from user import User
 from menu_window import MenuWindow
 from registration_window import RegistrationWindow
 import os
-
-font_header = ('Arial', 15)
-font_entry = ('Arial', 12)
-lable_font = ('Arial', 11)
-base_padding = {'padx': 10, 'pady': 8}
-header_padding = {'padx': 10, 'pady': 12}
+import customtkinter
 
 
-class AuthorisationWindow:
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+
+class AuthorisationWindow(customtkinter.CTk):
     """Класс AuthorisationWindow - инициализирует окно авторизации пользователя."""
     def __init__(self):
         """Устанавливает все необходимые атрибуты для объекта AuthorisationWindow."""
-        self._create_tests_folder()
+        super().__init__()
 
-        self.main_window = Tk()
-        self.main_window.title("Авторизация")
-        self.main_window.geometry('450x230')
-        self.main_window.resizable(False, False)
+        self.title("Авторизация")
+        self.geometry("1200x800")
+        self.resizable(False, False)
 
-        self.username_label = Label(self.main_window, text='Имя', font=font_header, justify=CENTER,
-                                    **header_padding)
-        self.username_label.pack()
+        self.grid_columnconfigure(0, weight=1)
 
-        self.username_entry = Entry(self.main_window, bg='#fff', fg='#444', font=font_entry)
-        self.username_entry.pack()
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10,0), sticky="nw")
 
-        self.password_label = Label(self.main_window, text='Пароль', font=font_header, justify=CENTER,
-                                    **header_padding)
-        self.password_label.pack()
+        self.username_label = customtkinter.CTkLabel(self.inputs_frame, text='Имя', justify=CENTER)
+        self.username_label.grid(row=0, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.password_entry = Entry(self.main_window, bg='#fff', fg='#444', font=font_entry)
-        self.password_entry.pack()
+        self.username_entry = customtkinter.CTkEntry(self.inputs_frame)
+        self.username_entry.grid(row=1, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.send_btn = Button(self.main_window, text='Перейти в меню', command=self._send_btn_click)
-        self.send_btn.pack(**base_padding)
+        self.password_label = customtkinter.CTkLabel(self.inputs_frame, text='Пароль', justify=CENTER)
+        self.password_label.grid(row=2, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.registration_btn = Button(self.main_window, text='Зарегистрироваться', command=self._registration_btn_click)
-        self.registration_btn.pack(**base_padding)
+        self.password_entry = customtkinter.CTkEntry(self.inputs_frame)
+        self.password_entry.grid(row=3, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.main_window.mainloop()
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.grid(row=3, column=0, padx=10, pady=(10, 0), sticky="nw")
+
+        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Перейти в меню', command=self._send_btn_click)
+        self.send_btn.grid(row=0, column=0, padx=10, pady=(10,10), sticky="nw")
+
+        self.registration_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', command=self._registration_btn_click)
+        self.registration_btn.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nw")
+
+        self.mainloop()
 
     def _send_btn_click(self):
         """Обработчик нажатия кнопки send_btn - проверяет имя пользователя, если оно корректно, запускает окно Меню."""
@@ -57,7 +64,7 @@ class AuthorisationWindow:
         for old_user in users:
             if input_name == old_user.name and input_password == old_user.password:
                 user = User(input_name, input_password)
-                self.main_window.withdraw()
+                self.withdraw()
                 MenuWindow(user)
                 return
 

@@ -3,8 +3,6 @@ from answer import Answer
 from question import Question
 from question_type import QuestionType
 from random import randint
-from diagnosis import Diagnosis
-from diagnosesStorage import DiagnosesStorage
 from test_result import TestResult
 
 
@@ -17,9 +15,7 @@ class Test:
         """Устанавливает все необходимые атрибуты для объекта Test."""
         self.name = name
         self.questions = questions
-
-        self.diagnosesStorage = DiagnosesStorage()
-
+        self.questions_count = len(questions)
         self.score = 0
         self.is_started = False
 
@@ -50,7 +46,7 @@ class Test:
     @property
     def is_finished(self):
         """Возвращает статус завершения теста."""
-        if self._current_question_id >= len(self.questions):
+        if self._current_question_id >= self.questions_count:
             return True
 
         return False
@@ -101,11 +97,18 @@ class Test:
         """Увеличивает счёт, ничего не возвращает."""
         self.score += 1
 
+    @staticmethod
+    def calculate_right_answers_percentage(questions_count, right_answers_count):
+        """Расчитывает отношение правильных ответов к количеству вопросов, возвращает процентное соотношение."""
+        right_answers_percentage = right_answers_count * 100 / questions_count
+
+        return right_answers_percentage
+
     def summarise(self):
         """Возвращает диагноз соответствующий результату теста."""
         if not self.is_finished:
             raise Exception("Чтобы подвести итог, пройдите тест до конца.")
 
-        diagnosis = self.diagnosesStorage.calculate_diagnose(len(self.questions), self.score)
+        right_answers_percentage = self.calculate_right_answers_percentage(len(self.questions), self.score)
 
-        return diagnosis
+        return right_answers_percentage
