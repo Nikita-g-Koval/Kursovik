@@ -18,54 +18,60 @@ customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 
-class MenuWindow:
+class MenuWindow(customtkinter.CTk):
     """Класс MenuWindow - инициализирует окно меню."""
     def __init__(self, user: User):
         """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
+        super().__init__()
         self.user = user
 
         self.questions_storage = QuestionsStorage("Tests/base_test.json")
-        self.menu_window = Tk()
-        self.menu_window.title("Меню")
-        self.menu_window.geometry('400x300')
-        self.menu_window.resizable(False, False)
+        self.title("Меню")
+        self.geometry('800x400')
+        self.resizable(False, False)
 
         self.tests = FileProvider.get_test_names()
 
-        self.test_var = StringVar(self.menu_window, value="base_test")
+        self.test_var = StringVar(self, value="base_test")
 
-        self.tests_combobox = ttk.Combobox(self.menu_window, textvariable=self.test_var, values=self.tests,
+        self.tests_combobox = customtkinter.CTkComboBox(self, variable=self.test_var, values=self.tests,
                                            state="readonly")
         self.tests_combobox.pack(anchor=NW, padx=6, pady=6)
         self.tests_combobox.bind("<<ComboboxSelected>>", self._selected_test)
 
-        self.create_newtest_btn = Button(self.menu_window, text='Создать новый тест',
-                                         command=self._create_newtest_btn_click, width=15)
-        self.create_newtest_btn.pack(**base_padding)
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.pack(padx=10, pady=(10, 0))
 
-        self.addQuestion_btn = Button(self.menu_window, text='Добавить вопрос', command=self._add_question_btn_clicked,
-                                      width=15)
-        self.addQuestion_btn.pack(**base_padding)
+        self.create_newtest_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать новый тест',
+                                                          command=self._create_newtest_btn_click, height=40, width=150)
+        self.create_newtest_btn.pack(padx=10, pady=(10, 0))
 
-        self.deleteQuestion_btn = Button(self.menu_window, text='Удалить вопрос',
-                                         command=self._delete_question_btn_clicked, width=15)
-        self.deleteQuestion_btn.pack(**base_padding)
+        self.addQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text='Добавить вопрос',
+                                                       command=self._add_question_btn_clicked, height=40, width=150)
+        self.addQuestion_btn.pack(padx=10, pady=(10, 0))
 
-        self.test_btn = Button(self.menu_window, text='Начать тест',
-                               command=self._test_menu_btn_clicked, width=15)
-        self.test_btn.pack(**base_padding)
+        self.deleteQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text='Удалить вопрос',
+                                                          command=self._delete_question_btn_clicked, height=40, width=150)
+        self.deleteQuestion_btn.pack(padx=10, pady=(10, 0))
 
-        self.show_results_btn = Button(self.menu_window, text="Результаты", command=self._show_results_btn_click,
-                                       width=15)
-        self.show_results_btn.pack(**base_padding)
+        self.test_btn = customtkinter.CTkButton(self.buttons_frame, text='Начать тест',
+                                                command=self._test_menu_btn_clicked, height=40, width=150)
+        self.test_btn.pack(padx=10, pady=(10, 0))
 
-        self.menu_window.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.show_results_btn = customtkinter.CTkButton(self.buttons_frame, text="Результаты",
+                                                        command=self._show_results_btn_click, height=40, width=150)
+        self.show_results_btn.pack(padx=10, pady=(10, 10))
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        self.mainloop()
 
     def _create_newtest_btn_click(self):
         """Обработчик нажатия кнопки create_newtest_btn - создаёт объект класса CreateNewTestWindow."""
-        self.menu_window.withdraw()
+        self.withdraw()
         CreateNewTestWindow(self.user, self.questions_storage)
-        self.menu_window.destroy()
+        self.destroy()
 
     def _selected_test(self, event):
         """Обработчик выбранного теста, запускает выбранный тест."""

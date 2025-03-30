@@ -23,7 +23,6 @@ class RegistrationWindow(customtkinter.CTk):
         self.geometry('340x240')
         self.resizable(False, False)
 
-        self.grid_columnconfigure(0, weight=1)
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)

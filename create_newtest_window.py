@@ -7,44 +7,58 @@ from test import Test
 from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
 import menu_window
+import customtkinter
 
 
-base_padding = {'padx': 10, 'pady': 8}
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
 
-class CreateNewTestWindow:
+class CreateNewTestWindow(customtkinter.CTk):
     """Класс CreateNewTestWindow - инициализирует окно для создания нового теста."""
     path = None
 
     def __init__(self, user: User, question_storage: QuestionsStorage):
         """Устанавливает все необходимые атрибуты для объекта CreateNewTestWindow."""
+        super().__init__()
         self.user = user
         self.qs = question_storage
 
-        self.create_newtest_window = Tk()
-        self.create_newtest_window.title("Меню")
-        self.create_newtest_window.geometry('200x250')
-        self.create_newtest_window.resizable(False, False)
+        self.title("Меню")
+        self.geometry('350x230')
+        self.resizable(False, False)
 
-        self.testname_label = Label(self.create_newtest_window, text='Название теста')
-        self.testname_label.pack(**base_padding)
 
-        self.testname_entry = Entry(self.create_newtest_window, width=30)
-        self.testname_entry.pack(**base_padding)
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.pack(padx=10, pady=(10, 0))
 
-        self.create_newtest_btn = Button(self.create_newtest_window, text='Создать тест',
-                                         command=self.create_newtest_btn_click, width=20)
-        self.create_newtest_btn.pack(**base_padding)
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.pack(padx=10, pady=(10, 10))
 
-        self.create_base_test_btn = Button(self.create_newtest_window, text='Создать базовый тест',
-                                           command=self.create_base_test_btn_click, width=20)
-        self.create_base_test_btn.pack(**base_padding)
+        self.testname_label = customtkinter.CTkLabel(self.inputs_frame, text='Название теста')
+        self.testname_label.pack(padx=10, pady=(10, 0))
 
-        self.back_to_menu_btn = Button(self.create_newtest_window, text='Вернуться в меню',
-                                       command=self.back_to_menu_btn_click, width=20)
-        self.back_to_menu_btn.pack(**base_padding)
+        self.testname_entry = customtkinter.CTkEntry(self.inputs_frame, width=310)
+        self.testname_entry.pack(padx=10, pady=(10, 10))
 
-        self.create_newtest_window.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.create_newtest_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать тест',
+                                         command=self.create_newtest_btn_click, height=40, width=150)
+        self.create_newtest_btn.grid(row=0, column=0, padx=(10,0), pady=(10, 10), sticky="nsw")
+
+        self.create_base_test_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать базовый тест',
+                                           command=self.create_base_test_btn_click, height=40, width=150)
+        self.create_base_test_btn.grid(row=0, column=1, padx=(10,10), pady=(10, 10), sticky="nsw")
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self, text='Вернуться в меню',
+                                       command=self.back_to_menu_btn_click, width=70)
+        self.back_to_menu_btn.pack(padx=10, pady=(10, 10), anchor="se")
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        self.mainloop()
 
     def create_base_test_btn_click(self):
         """Обработчик нажатия кнопки create_base_test_btn - создаёт тест с базовым набором вопросов."""
@@ -76,9 +90,9 @@ class CreateNewTestWindow:
 
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
-        self.create_newtest_window.withdraw()
+        self.withdraw()
         menu_window.MenuWindow(self.user)
-        self.create_newtest_window.destroy()
+        self.destroy()
 
     @staticmethod
     def on_closing():
