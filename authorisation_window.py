@@ -21,35 +21,35 @@ class AuthorisationWindow(customtkinter.CTk):
         super().__init__()
 
         self.title("Авторизация")
-        self.geometry("1200x800")
+        self.geometry("340x280")
         self.resizable(False, False)
 
         self.grid_columnconfigure(0, weight=1)
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
-        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10,0), sticky="nw")
+        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10,0), sticky="nsw")
 
         self.username_label = customtkinter.CTkLabel(self.inputs_frame, text='Имя', justify=CENTER)
         self.username_label.grid(row=0, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.username_entry = customtkinter.CTkEntry(self.inputs_frame)
+        self.username_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
         self.username_entry.grid(row=1, column=0, padx=10, pady=(0,10), sticky="w")
 
         self.password_label = customtkinter.CTkLabel(self.inputs_frame, text='Пароль', justify=CENTER)
         self.password_label.grid(row=2, column=0, padx=10, pady=(0,10), sticky="w")
 
-        self.password_entry = customtkinter.CTkEntry(self.inputs_frame)
+        self.password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300, show='*')
         self.password_entry.grid(row=3, column=0, padx=10, pady=(0,10), sticky="w")
 
         # Создание рамки для кнопок
         self.buttons_frame = customtkinter.CTkFrame(self)
-        self.buttons_frame.grid(row=3, column=0, padx=10, pady=(10, 0), sticky="nw")
+        self.buttons_frame.grid(row=3, column=0, padx=10, pady=(10, 10), sticky="nw")
 
-        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Перейти в меню', command=self._send_btn_click)
+        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Перейти в меню', width=300, command=self._send_btn_click)
         self.send_btn.grid(row=0, column=0, padx=10, pady=(10,10), sticky="nw")
 
-        self.registration_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', command=self._registration_btn_click)
+        self.registration_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', width=300 , command=self._registration_btn_click)
         self.registration_btn.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nw")
 
         self.mainloop()

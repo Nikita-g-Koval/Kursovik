@@ -10,13 +10,12 @@ from results_window import ResultsWindow
 from fileProvider import FileProvider
 from create_newtest_window import CreateNewTestWindow
 import os
+import customtkinter
 
 
-font_header = ('Arial', 15)
-font_entry = ('Arial', 12)
-lable_font = ('Arial', 11)
-base_padding = {'padx': 10, 'pady': 8}
-header_padding = {'padx': 10, 'pady': 12}
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
 
 class MenuWindow:

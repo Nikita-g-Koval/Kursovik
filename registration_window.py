@@ -5,40 +5,50 @@ from user import User
 from menu_window import MenuWindow
 from fileProvider import FileProvider
 import os
-
-font_header = ('Arial', 15)
-font_entry = ('Arial', 12)
-lable_font = ('Arial', 11)
-base_padding = {'padx': 10, 'pady': 8}
-header_padding = {'padx': 10, 'pady': 12}
+import customtkinter
 
 
-class RegistrationWindow:
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+
+class RegistrationWindow(customtkinter.CTk):
     """Класс RegistrationWindow - инициализирует окно регистрации пользователя."""
     def __init__(self):
         """Устанавливает все необходимые атрибуты для объекта RegistrationWindow."""
+        super().__init__()
 
-        self.registration_window = Tk()
-        self.registration_window.title("Регистрация")
-        self.registration_window.geometry('450x230')
-        self.registration_window.resizable(False, False)
+        self.title("Регистрация")
+        self.geometry('340x240')
+        self.resizable(False, False)
 
-        self.username_label = Label(self.registration_window, text='Имя', font=font_header, justify=CENTER,
-                                    **header_padding)
-        self.username_label.pack()
+        self.grid_columnconfigure(0, weight=1)
 
-        self.username_entry = Entry(self.registration_window, bg='#fff', fg='#444', font=font_entry)
-        self.username_entry.pack()
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.pack(padx=10, pady=(10,0))
 
-        self.password_label = Label(self.registration_window, text='Пароль', font=font_header, justify=CENTER,
-                                    **header_padding)
-        self.password_label.pack()
+        self.username_label = customtkinter.CTkLabel(self.inputs_frame, text='Имя')
+        self.username_label.pack(padx=10, pady=(10,0), anchor="nw")
 
-        self.password_entry = Entry(self.registration_window, bg='#fff', fg='#444', font=font_entry)
-        self.password_entry.pack()
+        self.username_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
+        self.username_entry.pack(padx=10, pady=(4,0), anchor="nw")
 
-        self.send_btn = Button(self.registration_window, text='Зарегистрироваться', command=self._send_btn_click)
-        self.send_btn.pack(**base_padding)
+        self.password_label = customtkinter.CTkLabel(self.inputs_frame, text='Пароль')
+        self.password_label.pack(padx=10, pady=(10,0), anchor="nw")
+
+        self.password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
+        self.password_entry.pack(padx=10, pady=(4,10), anchor="nw")
+
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.pack(padx=10, pady=(10,10))
+
+        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', height=40, width=300, command=self._send_btn_click)
+        self.send_btn.pack(padx=10, pady=10)
+
+        self.mainloop()
 
     def _send_btn_click(self):
         """Обработчик нажатия кнопки send_btn - проверяет имя пользователя и пароль."""
