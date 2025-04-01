@@ -7,55 +7,82 @@ from fileProvider import FileProvider
 from question import Question
 from answer import Answer
 from question_checkButton import QuestionCheckButton
+import customtkinter
 
 
-class AddCheckButtonQuestion:
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+
+class AddCheckButtonQuestion(customtkinter.CTk):
     """Класс AddCheckButtonQuestion - инициализирует окно для добавления вопроса с множественным выбором."""
     new_question: Question
 
     def __init__(self, questions_storage: QuestionsStorage):
         """Устанавливает все необходимые атрибуты для объекта AddCheckButtonQuestion."""
+        super().__init__()
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
-        self.add_checkButtonQuestion_window = Tk()
-        self.add_checkButtonQuestion_window.title('Добавление вопроса с множественным выбором')
-        self.add_checkButtonQuestion_window.geometry('900x200')
-        self.add_checkButtonQuestion_window.resizable(False, True)
+        self.title('Добавление вопроса с множественным выбором')
+        self.geometry('800x420')
+        self.resizable(False, True)
         self.check_buttons = []
         self.selections: List[IntVar] = []
 
-        self.selected_true = BooleanVar(self.add_checkButtonQuestion_window)
+        self.selected_true = BooleanVar(self)
         self.selected_true.set(False)
 
-        Label(self.add_checkButtonQuestion_window, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
-        self.questionText_entry = Entry(self.add_checkButtonQuestion_window, width=30)
-        self.questionText_entry.grid(row=0, column=1, sticky=EW)
+        self.grid_columnconfigure(0, weight=1)
 
-        Label(self.add_checkButtonQuestion_window, text="Ответ на вопрос:",
-              justify=LEFT).grid(row=1, column=0, sticky=W)
-        self.answer_entry = Entry(self.add_checkButtonQuestion_window, width=30)
-        self.answer_entry.grid(row=1, column=1, sticky=EW)
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.grid(row=0, column=0, padx=(10,0), pady=(10, 0), sticky="nsw")
 
-        self.answer_is_correct_checkBtn = Checkbutton(self.add_checkButtonQuestion_window,
+        # Создание рамки для кнопок добавления ответов
+        self.buttons_a_frame = customtkinter.CTkFrame(self)
+        self.buttons_a_frame.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nsw")
+
+        # Создание рамки для кнопок вопроса
+        self.buttons_q_frame = customtkinter.CTkFrame(self)
+        self.buttons_q_frame.grid(row=3, column=0, padx=10, pady=(0, 10), sticky="nsw")
+
+        # Создание рамки для чекбоксов ответов
+        self.buttons_ch_frame = customtkinter.CTkFrame(self, width=250)
+        self.buttons_ch_frame.grid(row=0, column=1, padx=(10,10), pady=(10,0), sticky="ns")
+
+        customtkinter.CTkLabel(self.inputs_frame, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W,
+                                                                                            padx=10, pady=(10,0))
+        self.questionText_entry = customtkinter.CTkEntry(self.inputs_frame, height=70, width=500, justify=LEFT)
+        self.questionText_entry.grid(row=1, column=0, sticky=EW, padx=10, pady=(10, 0))
+
+        customtkinter.CTkLabel(self.inputs_frame, text="Ответ на вопрос:", justify=LEFT).grid(row=2, column=0, sticky=W,
+                                                                             padx=10, pady=(10,0))
+        self.answer_entry = customtkinter.CTkEntry(self.inputs_frame, height=70, width=500, justify=LEFT)
+        self.answer_entry.grid(row=3, column=0, sticky=EW, padx=10, pady=(10, 0))
+
+        self.answer_is_correct_checkBtn = customtkinter.CTkCheckBox(self.inputs_frame,
                                                       text="Ответ верный",
                                                       variable=self.selected_true)
-        self.answer_is_correct_checkBtn.grid(row=1, column=2)
+        self.answer_is_correct_checkBtn.grid(row=4, column=0, sticky=EW, padx=10, pady=(10, 10))
 
-        self.add_answer_btn = Button(self.add_checkButtonQuestion_window, text="Добавить ответ",
-                                     command=self._add_answer_btn_click)
-        self.add_answer_btn.grid(row=2, column=0)
+        self.add_answer_btn = customtkinter.CTkButton(self.buttons_a_frame, text="Добавить ответ",
+                                     command=self._add_answer_btn_click, width=160)
+        self.add_answer_btn.grid(row=0, column=0, padx=(10, 0), pady=10)
 
-        self.remove_answer_btn = Button(self.add_checkButtonQuestion_window, text="Удалить ответ",
-                                        command=self._remove_answer_btn_click)
-        self.remove_answer_btn.grid(row=2, column=1)
+        self.remove_answer_btn = customtkinter.CTkButton(self.buttons_a_frame, text="Удалить ответ",
+                                        command=self._remove_answer_btn_click, width=160)
+        self.remove_answer_btn.grid(row=0, column=1, padx=(10,10), pady=10)
 
-        self.add_question_btn = Button(self.add_checkButtonQuestion_window, text="Добавить вопрос",
-                                       command=self._add_question_btn_click)
-        self.add_question_btn.grid(row=3, column=0)
+        self.add_question_btn = customtkinter.CTkButton(self.buttons_q_frame, text="Добавить вопрос",
+                                       command=self._add_question_btn_click, width=160)
+        self.add_question_btn.grid(row=0, column=0, padx=(10,0), pady=10)
 
-        self.save_changes_btn = Button(self.add_checkButtonQuestion_window, text="Сохранить изменения",
-                                       command=self._save_changes_btn_click)
-        self.save_changes_btn.grid(row=4, column=0)
+        self.save_changes_btn = customtkinter.CTkButton(self.buttons_q_frame, text="Сохранить изменения",
+                                       command=self._save_changes_btn_click, width=160)
+        self.save_changes_btn.grid(row=0, column=1, padx=10, pady=10)
+
+        self.mainloop()
 
     def _add_answer_btn_click(self):
         """Обработчик нажатия кнопки add_answer_btn - добавляет новый ответ, ничего не возвращает."""
@@ -119,11 +146,11 @@ class AddCheckButtonQuestion:
         self._clear_checkbuttons()
 
         for i in range(len(self.answers)):
-            selected_id = IntVar(self.add_checkButtonQuestion_window)
+            selected_id = IntVar(self)
             selected_id.set(len(self.answers) + 1)
             self.selections.append(selected_id)
 
-            answer_btn = Checkbutton(self.add_checkButtonQuestion_window, text=self.answers[i].text,
+            answer_btn = customtkinter.CTkCheckBox(self.buttons_ch_frame, text=self.answers[i].text,
                                      offvalue=len(self.answers) + 1,
                                      onvalue=i,
                                      variable=selected_id)
@@ -131,7 +158,7 @@ class AddCheckButtonQuestion:
             if self.answers[i].is_correct:
                 answer_btn["fg"] = "green"
 
-            answer_btn.grid(row=i+2, column=2)
+            answer_btn.grid(row=i, column=0, sticky="w", padx=10, pady=(10,0))
             self.check_buttons.append(answer_btn)
 
     def _clear_checkbuttons(self):
