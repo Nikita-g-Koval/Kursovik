@@ -1,42 +1,63 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter.scrolledtext import ScrolledText
 from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
+from user import User
+import menu_window
+import customtkinter
 
 
-font_header = ('Arial', 15)
-font_entry = ('Arial', 12)
-lable_font = ('Arial', 11)
-base_padding = {'padx': 10, 'pady': 8}
-header_padding = {'padx': 10, 'pady': 12}
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
 
-class DeleteQuestionWindow:
+class DeleteQuestionWindow(customtkinter.CTk):
     """Класс DeleteQuestionWindow - инициализирует окно для удаления вопроса."""
-    def __init__(self, questions_storage: QuestionsStorage):
+    def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта DeleteQuestionWindow."""
+        super().__init__()
         self.questions_storage = questions_storage
-        self.deleteQuestion_window = Tk()
-        self.deleteQuestion_window.title('Удаление вопроса')
-        self.deleteQuestion_window.geometry('600x700')
-        self.deleteQuestion_window.resizable(True, True)
+        self.user = user
+        self.title('Удаление вопроса')
+        self.geometry('600x350')
+        self.resizable(True, True)
 
-        self.questions_editor = ScrolledText(self.deleteQuestion_window, wrap="word")
-        self.questions_editor.pack(fill=BOTH, expand=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        # Создание рамки для текстбокса
+        self.textbox_frame = customtkinter.CTkFrame(self)
+        self.textbox_frame.grid_columnconfigure(0, weight=1)
+        self.textbox_frame.grid(row=0, column=0, padx=10, pady=(10, 10), sticky="nsew", columnspan=2)
+
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.grid_columnconfigure(1, weight=1)
+        self.inputs_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="nsew", columnspan=2)
+
+        self.questions_editor = customtkinter.CTkTextbox(self.textbox_frame, wrap="word")
+        self.questions_editor.grid(row=0, column=0, padx=10, pady=(10, 10), sticky="nsew")
 
         self._print_questions()
 
-        self.questionNumber_entry = Entry(self.deleteQuestion_window, bg='#fff', fg='#444', font=font_entry)
-        self.questionNumber_entry.pack()
+        self.questionNumber_entry = customtkinter.CTkEntry(self.inputs_frame)
+        self.questionNumber_entry.grid(row=0, column=0, padx=10, pady=(10, 10), sticky="nsew")
 
-        self.delete_question_btn = Button(self.deleteQuestion_window,
+        self.delete_question_btn = customtkinter.CTkButton(self.inputs_frame,
                                           text='Удалить вопрос', command=self._delete_question_btn_click)
-        self.delete_question_btn.pack()
+        self.delete_question_btn.grid(row=0, column=1, padx=(0, 10), pady=(10, 10), sticky=E)
 
-        self.save_changes_btn = Button(self.deleteQuestion_window,
+        self.save_changes_btn = customtkinter.CTkButton(self.inputs_frame,
                                        text='Сохранить изменения', command=self._save_changes_btn_click)
-        self.save_changes_btn.pack()
+        self.save_changes_btn.grid(row=0, column=2, padx=(0, 10), pady=(10, 10), sticky=E)
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click, width=70)
+        self.back_to_menu_btn.grid(row=2, column=1, padx=10, pady=10)
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        self.mainloop()
 
     def _delete_question_btn_click(self):
         """Обработчик нажатия кнопки delete_question_btn - удаляет вопрос по введённому пользователем индексу."""
@@ -68,3 +89,14 @@ class DeleteQuestionWindow:
         for q in questions:
             self.questions_editor.insert(END, "№{i} {question}\n".format(i=count, question=q.text))
             count += 1
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.MenuWindow(self.user)
+        self.destroy()
+
+    @staticmethod
+    def on_closing():
+        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
+        exit()
