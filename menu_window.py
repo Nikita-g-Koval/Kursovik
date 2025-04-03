@@ -88,7 +88,9 @@ class MenuWindow(customtkinter.CTk):
 
     def _add_question_btn_clicked(self):
         """Обработчик нажатия кнопки add_question_btn - создаёт объект класса AddQuestionWindow."""
-        AddQuestionWindow(self.questions_storage)
+        self.withdraw()
+        AddQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
 
     def _delete_question_btn_clicked(self):
         """Обработчик нажатия кнопки delete_question_btn - создаёт объект класса DeleteQuestionWindow."""

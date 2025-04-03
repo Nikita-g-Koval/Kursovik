@@ -5,6 +5,8 @@ from answer import Answer
 from add_baseQuestion_window import AddBaseQuestionWindow
 from add_radioButtonQuestion_window import AddRadioButtonQuestion
 from add_checkButtonQuestion_window import AddCheckButtonQuestion
+from user import User
+import menu_window
 import customtkinter
 
 
@@ -15,13 +17,14 @@ customtkinter.set_default_color_theme("blue")
 
 class AddQuestionWindow(customtkinter.CTk):
     """Класс AddQuestionWindow - инициализирует окно с выбором типа вопроса, который нужно добавить."""
-    def __init__(self, questions_storage: QuestionsStorage):
+    def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddQuestionWindow."""
         super().__init__()
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
+        self.user = user
         self.title('Добавление вопроса')
-        self.geometry('250x250')
+        self.geometry('250x290')
         self.resizable(False, True)
 
         # Создание рамки для кнопок
@@ -41,16 +44,39 @@ class AddQuestionWindow(customtkinter.CTk):
                                                   command=self._add_checkbutton_question_btn_click, height=60, width=190)
         self.add_checkButtonQuestion_btn.pack(padx=10, pady=(10, 10))
 
+        self.back_to_menu_btn = customtkinter.CTkButton(self, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click, width=70)
+        self.back_to_menu_btn.pack(padx=20, pady=(10, 10), anchor="se")
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
         self.mainloop()
 
     def _add_base_question_btn_click(self):
         """Обработчик нажатия кнопки add_base_question_btn - создаёт объект класса AddBaseQuestionWindow."""
-        AddBaseQuestionWindow(self.questions_storage)
+        self.withdraw()
+        AddBaseQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
 
     def _add_radiobutton_question_btn_click(self):
         """Обработчик нажатия кнопки add_radiobutton_question_btn - создаёт объект класса AddRadioButtonQuestion."""
-        AddRadioButtonQuestion(self.questions_storage)
+        self.withdraw()
+        AddRadioButtonQuestion(self.questions_storage, self.user)
+        self.destroy()
 
     def _add_checkbutton_question_btn_click(self):
         """Обработчик нажатия кнопки add_checkbutton_question_btn - создаёт объект класса AddCheckButtonQuestion."""
-        AddCheckButtonQuestion(self.questions_storage)
+        self.withdraw()
+        AddCheckButtonQuestion(self.questions_storage, self.user)
+        self.destroy()
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.MenuWindow(self.user)
+        self.destroy()
+
+    @staticmethod
+    def on_closing():
+        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
+        exit()

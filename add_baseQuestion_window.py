@@ -5,6 +5,9 @@ from validation import Validation
 from fileProvider import FileProvider
 from question import Question
 from answer import Answer
+from user import User
+import addQuestion_window
+import menu_window
 import customtkinter
 
 
@@ -15,24 +18,22 @@ customtkinter.set_default_color_theme("blue")
 
 class AddBaseQuestionWindow(customtkinter.CTk):
     """Класс AddBaseQuestionWindow - инициализирует окно для добавления базового вопроса."""
-    def __init__(self, questions_storage: QuestionsStorage):
+    def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddBaseQuestionWindow."""
         super().__init__()
 
         self.questions_storage = questions_storage
+        self.user = user
         self.title('Добавление вопроса')
-        self.geometry('540x350')
+        self.geometry('540x380')
         self.resizable(False, True)
 
         self.grid_columnconfigure(0, weight=1)
 
+
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
-        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
-
-        # Создание рамки для кнопок
-        self.buttons_frame = customtkinter.CTkFrame(self)
-        self.buttons_frame.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nsw")
+        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 0), columnspan=2)
 
         customtkinter.CTkLabel(self.inputs_frame, text="Текст вопроса:").grid(row=0, column=0, padx=10,
                                                                               pady=(10, 0), sticky="nw")
@@ -44,13 +45,34 @@ class AddBaseQuestionWindow(customtkinter.CTk):
         self.answer_entry = customtkinter.CTkEntry(self.inputs_frame, height=70, width=500)
         self.answer_entry.grid(row=3, column=0, padx=10, pady=(10, 10), sticky="nw")
 
+
+        # Создание рамки для кнопок добавления вопроса
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.grid(row=1, column=0, padx=10, pady=(10, 10), sticky=NW)
+
         self.add_question_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить вопрос",
-                                       command=self._add_question_btn_click, height=40)
+                                       command=self._add_question_btn_click, height=66)
         self.add_question_btn.grid(row=0, column=0, padx=10, pady=(10, 10))
 
         self.save_changes_btn = customtkinter.CTkButton(self.buttons_frame, text="Сохранить изменения",
-                                       command=self._save_changes_btn_click, height=40)
+                                       command=self._save_changes_btn_click, height=66)
         self.save_changes_btn.grid(row=0, column=1, padx=(0,10), pady=(10, 10))
+
+
+        # Создание рамки для кнопок возврата в меню или назад
+        self.return_buttons_frame = customtkinter.CTkFrame(self)
+        self.return_buttons_frame.grid(row=1, column=1, padx=10, pady=(10, 10))
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self.return_buttons_frame, text='Назад',
+                                                        command=self.return_btn_click)
+        self.back_to_menu_btn.grid(row=0, column=0, padx=10, pady=(10, 10))
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self.return_buttons_frame, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click)
+        self.back_to_menu_btn.grid(row=1, column=0, padx=10, pady=(0, 10))
+
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -77,3 +99,20 @@ class AddBaseQuestionWindow(customtkinter.CTk):
         """Обработчик нажатия кнопки save_changes_btn - сохраняет текущие вопросы, ничего не возвращает."""
         FileProvider.save_test_changes(self.questions_storage.test, self.questions_storage.test_path)
         messagebox.showinfo(title="Оповещение", message="Изменения сохранены.")
+
+    def return_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        addQuestion_window.AddQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.MenuWindow(self.user)
+        self.destroy()
+
+    @staticmethod
+    def on_closing():
+        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
+        exit()

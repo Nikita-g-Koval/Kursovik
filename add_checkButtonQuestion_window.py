@@ -1,12 +1,16 @@
 from tkinter import *
 from tkinter import messagebox
 from typing import List
+
+import addQuestion_window
+import menu_window
 from questionsStrorage import QuestionsStorage
 from validation import Validation
 from fileProvider import FileProvider
 from question import Question
 from answer import Answer
 from question_checkButton import QuestionCheckButton
+from user import User
 import customtkinter
 
 
@@ -19,11 +23,12 @@ class AddCheckButtonQuestion(customtkinter.CTk):
     """Класс AddCheckButtonQuestion - инициализирует окно для добавления вопроса с множественным выбором."""
     new_question: Question
 
-    def __init__(self, questions_storage: QuestionsStorage):
+    def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddCheckButtonQuestion."""
         super().__init__()
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
+        self.user = user
         self.title('Добавление вопроса с множественным выбором')
         self.geometry('800x420')
         self.resizable(False, True)
@@ -34,21 +39,14 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.selected_true.set(False)
 
 
-        # Создание рамки для строк ввода
-        self.inputs_frame = customtkinter.CTkFrame(self)
-        self.inputs_frame.grid(row=0, column=0, padx=(10,0), pady=(10, 0), sticky="nsw")
-
-        # Создание рамки для кнопок добавления ответов
-        self.buttons_a_frame = customtkinter.CTkFrame(self)
-        self.buttons_a_frame.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nsw")
-
-        # Создание рамки для кнопок вопроса
-        self.buttons_q_frame = customtkinter.CTkFrame(self)
-        self.buttons_q_frame.grid(row=3, column=0, padx=10, pady=(0, 10), sticky="nsw")
-
         # Создание рамки для чекбоксов ответов
         self.checkboxes_frame = customtkinter.CTkFrame(self, width=250)
         self.checkboxes_frame.grid(row=0, column=1, padx=(10, 10), pady=(10, 0), sticky="ns")
+
+
+        # Создание рамки для строк ввода
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.grid(row=0, column=0, padx=(10,0), pady=(10, 0), sticky="nsw")
 
         customtkinter.CTkLabel(self.inputs_frame, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W,
                                                                                             padx=10, pady=(10,0))
@@ -65,13 +63,23 @@ class AddCheckButtonQuestion(customtkinter.CTk):
                                                       variable=self.selected_true)
         self.answer_is_correct_checkBtn.grid(row=4, column=0, sticky=EW, padx=10, pady=(10, 10))
 
+
+        # Создание рамки для кнопок добавления ответов
+        self.buttons_a_frame = customtkinter.CTkFrame(self)
+        self.buttons_a_frame.grid(row=1, column=0, padx=10, pady=(10, 10), sticky="nsw")
+
         self.add_answer_btn = customtkinter.CTkButton(self.buttons_a_frame, text="Добавить ответ",
                                      command=self._add_answer_btn_click, width=160)
-        self.add_answer_btn.grid(row=0, column=0, padx=(10, 0), pady=10)
+        self.add_answer_btn.grid(row=0, column=0, padx=(10, 0), pady=10, sticky="nsw")
 
         self.remove_answer_btn = customtkinter.CTkButton(self.buttons_a_frame, text="Удалить ответ",
                                         command=self._remove_answer_btn_click, width=160)
         self.remove_answer_btn.grid(row=0, column=1, padx=(10,10), pady=10)
+
+
+        # Создание рамки для кнопок вопроса
+        self.buttons_q_frame = customtkinter.CTkFrame(self)
+        self.buttons_q_frame.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsw")
 
         self.add_question_btn = customtkinter.CTkButton(self.buttons_q_frame, text="Добавить вопрос",
                                        command=self._add_question_btn_click, width=160)
@@ -80,6 +88,22 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.save_changes_btn = customtkinter.CTkButton(self.buttons_q_frame, text="Сохранить изменения",
                                        command=self._save_changes_btn_click, width=160)
         self.save_changes_btn.grid(row=0, column=1, padx=10, pady=10)
+
+
+        # Создание рамки для кнопок возврата в меню или назад
+        self.return_buttons_frame = customtkinter.CTkFrame(self)
+        self.return_buttons_frame.grid(row=1, column=1, padx=10, pady=(10, 10), rowspan=2, sticky="se")
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self.return_buttons_frame, text='Назад',
+                                                        command=self.return_btn_click)
+        self.back_to_menu_btn.grid(row=0, column=0, padx=10, pady=(10, 10), sticky=E)
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self.return_buttons_frame, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click)
+        self.back_to_menu_btn.grid(row=1, column=0, padx=10, pady=(0, 10), sticky=E)
+
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -166,3 +190,20 @@ class AddCheckButtonQuestion(customtkinter.CTk):
             btn.destroy()
         self.check_buttons.clear()
         self.selections.clear()
+
+    def return_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        addQuestion_window.AddQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.MenuWindow(self.user)
+        self.destroy()
+
+    @staticmethod
+    def on_closing():
+        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
+        exit()

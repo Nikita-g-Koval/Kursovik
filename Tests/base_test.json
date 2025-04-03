@@ -54,6 +54,28 @@
                     "is_correct": false
                 }
             ]
+        },
+        {
+            "type": 1,
+            "text": "\u0413\u043e\u0440\u0435\u043b\u043e 5 \u0441\u0432\u0435\u0447\u0435\u0439, \u0434\u0432\u0435 \u043f\u043e\u0442\u0443\u0448\u0438\u043b\u0438. \u0421\u043a\u043e\u043b\u044c\u043a\u043e \u0441\u0432\u0435\u0447\u0435\u0439 \u043e\u0441\u0442\u0430\u043b\u043e\u0441\u044c?",
+            "answers": [
+                {
+                    "text": "5",
+                    "is_correct": true
+                },
+                {
+                    "text": "3",
+                    "is_correct": false
+                },
+                {
+                    "text": "0",
+                    "is_correct": false
+                },
+                {
+                    "text": "2",
+                    "is_correct": false
+                }
+            ]
         }
     ]
 }

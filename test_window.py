@@ -10,51 +10,58 @@ from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from typing import List
 from test import Test
+import customtkinter
 
 
-font_header = ('Arial', 15)
-font_entry = ('Arial', 12)
-lable_font = ('Arial', 11)
-base_padding = {'padx': 10, 'pady': 8}
-header_padding = {'padx': 10, 'pady': 12}
-position = {'anchor': S}
+# Настройка внешнего вида и темы GUI-окна
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
 
-class TestWindow:
+class TestWindow(customtkinter.CTk):
     """Класс TestWindow - инициализирует окно теста."""
     def __init__(self, user: User, questions_storage: QuestionsStorage, test_name: str):
         """Устанавливает все необходимые атрибуты для объекта TestWindow."""
+        super().__init__()
         self.user = user
         self.rightAnswersCount = 0
         self.test_result = None
 
         self.qs = questions_storage
-        self.test_window = Tk()
-        self.test_window.title("Тест")
-        self.test_window.geometry('800x300')
-        self.test_window.resizable(True, True)
+        self.title("Тест")
+        self.geometry('800x400')
+        self.resizable(True, True)
 
         self.test = self.qs.test
         self.test.start_test()
 
-        self.test_label = Label(self.test_window, font=font_entry,
-                                justify=CENTER, **header_padding)
+        # Создание рамки для вопросов
+        self.inputs_frame = customtkinter.CTkFrame(self)
+        self.inputs_frame.pack(padx=10, pady=(10, 10))
+
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.pack(padx=10, pady=(0, 10))
+
+        self.test_label = customtkinter.CTkLabel(self.inputs_frame, justify=CENTER)
         self.test_label.pack()
 
-        self.selected_id = IntVar(self.test_window)
-        self.answer_entry = Entry(self.test_window)
+        self.selected_id = IntVar(self)
+        self.answer_entry = Entry(self)
         self.radio_buttons = []
         self.check_buttons = []
         self.selected_buttons = []
 
-        self.save_results_btn = Button(self.test_window, text='Сохранить результаты',
+        self.save_results_btn = customtkinter.CTkButton(self.buttons_frame, text='Сохранить результаты',
                                        command=self._save_results_btn_click)
-        self.save_results_btn.pack(pady=10, side=BOTTOM)
+        self.save_results_btn.pack(padx=10, pady=10, side=BOTTOM)
 
-        self.acceptAnswer_btn = Button(self.test_window, text='Ответить', command=self._accept_answer_btn_clicked)
-        self.acceptAnswer_btn.pack(side=BOTTOM)
+        self.acceptAnswer_btn = customtkinter.CTkButton(self.buttons_frame, text='Ответить', command=self._accept_answer_btn_clicked)
+        self.acceptAnswer_btn.pack(padx=10, pady=10, side=BOTTOM)
 
         self._show_next_question()
+
+        self.mainloop()
 
     def _save_results_btn_click(self):
         """Обработчик нажатия кнопки save_results_btn - сохраняет результаты теста."""
@@ -71,8 +78,8 @@ class TestWindow:
 
         match self.test.get_current_question.get_type:
             case QuestionType.base:
-                self.answer_entry = Entry(self.test_window, bg='#fff', fg='#444', font=font_entry)
-                self.answer_entry.pack(**base_padding)
+                self.answer_entry = customtkinter.CTkEntry(self.inputs_frame)
+                self.answer_entry.pack(padx=10, pady=10)
             case QuestionType.radio_button:
                 self._init_radiobuttons()
             case QuestionType.check_button:
@@ -108,7 +115,7 @@ class TestWindow:
             right_answers_percentage = self.test.summarise()
             self.test_result = TestResult(self.user.name, self.test.score, right_answers_percentage, datetime.now())
 
-            self.acceptAnswer_btn.config(state=DISABLED)
+            self.acceptAnswer_btn.configure(state=DISABLED)
 
             messagebox.showinfo(title="Тест завершён",
                                 message="{0}, процент правильных ответов: {1}".format(self.user.name,
@@ -119,7 +126,7 @@ class TestWindow:
 
     def _show_next_question(self):
         """Отображает следующий вопрос."""
-        self.test_label.config(text=self.test.print_current_question())
+        self.test_label.configure(text=self.test.print_current_question())
         self._show_answers()
 
     def _init_radiobuttons(self):
@@ -127,23 +134,23 @@ class TestWindow:
         self.selected_id.set(0)
 
         for i in range(len(self.test.get_current_answers)):
-            answer_btn = ttk.Radiobutton(self.test_window, text=self.test.get_current_answers[i].text, value=i,
+            answer_btn = customtkinter.CTkRadioButton(self.inputs_frame, text=self.test.get_current_answers[i].text, value=i,
                                          variable=self.selected_id)
-            answer_btn.pack(**base_padding)
+            answer_btn.pack(padx=10, pady=10)
             self.radio_buttons.append(answer_btn)
 
     def _init_checkbuttons(self):
         """Инициализирует checkbuttons."""
         for i in range(len(self.test.get_current_answers)):
-            selected_id = IntVar(self.test_window)
+            selected_id = IntVar(self)
             selected_id.set(len(self.test.get_current_answers) + 1)
             self.selected_buttons.append(selected_id)
 
-            answer_btn = ttk.Checkbutton(self.test_window, text=self.test.get_current_answers[i].text,
+            answer_btn = customtkinter.CTkCheckBox(self.inputs_frame, text=self.test.get_current_answers[i].text,
                                          offvalue=len(self.test.get_current_answers) + 1,
                                          onvalue=i,
                                          variable=selected_id)
-            answer_btn.pack(**base_padding)
+            answer_btn.pack(padx=10, pady=10)
             self.check_buttons.append(answer_btn)
 
     def _clear_answers(self):
