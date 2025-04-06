@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
 from typing import List
-
 import addQuestion_window
 import menu_window
 from questionsStrorage import QuestionsStorage
@@ -11,15 +10,11 @@ from question import Question
 from answer import Answer
 from question_checkButton import QuestionCheckButton
 from user import User
+from window import Window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class AddCheckButtonQuestion(customtkinter.CTk):
+class AddCheckButtonQuestion(Window):
     """Класс AddCheckButtonQuestion - инициализирует окно для добавления вопроса с множественным выбором."""
     new_question: Question
 
@@ -29,9 +24,13 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
         self.user = user
+
+        self.geometry("800x420")
         self.title('Добавление вопроса с множественным выбором')
-        self.geometry('800x420')
         self.resizable(False, True)
+
+        self._place()
+
         self.check_buttons = []
         self.selections: List[IntVar] = []
 
@@ -103,7 +102,7 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.back_to_menu_btn.grid(row=1, column=0, padx=10, pady=(0, 10), sticky=E)
 
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
         self.mainloop()
 
@@ -191,6 +190,7 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.check_buttons.clear()
         self.selections.clear()
 
+
     def return_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
@@ -202,8 +202,3 @@ class AddCheckButtonQuestion(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

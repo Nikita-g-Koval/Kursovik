@@ -1,7 +1,7 @@
 from tkinter import *
-from tkinter import ttk
 from tkinter import messagebox
 from datetime import datetime
+import menu_window
 from question_type import QuestionType
 from test_result import TestResult
 from answer import Answer
@@ -9,42 +9,42 @@ from user import User
 from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from typing import List
-from test import Test
+from window import Window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class TestWindow(customtkinter.CTk):
+class TestWindow(Window):
     """Класс TestWindow - инициализирует окно теста."""
-    def __init__(self, user: User, questions_storage: QuestionsStorage, test_name: str):
+    def __init__(self, user: User, questions_storage: QuestionsStorage):
         """Устанавливает все необходимые атрибуты для объекта TestWindow."""
         super().__init__()
+
         self.user = user
         self.rightAnswersCount = 0
         self.test_result = None
-
         self.qs = questions_storage
+
+        self.width = 800
+        self.height = 500
         self.title("Тест")
-        self.geometry('800x400')
         self.resizable(True, True)
+
+        self._place()
 
         self.test = self.qs.test
         self.test.start_test()
 
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+
         # Создание рамки для вопросов
         self.inputs_frame = customtkinter.CTkFrame(self)
-        self.inputs_frame.pack(padx=10, pady=(10, 10))
-
-        # Создание рамки для кнопок
-        self.buttons_frame = customtkinter.CTkFrame(self)
-        self.buttons_frame.pack(padx=10, pady=(0, 10))
+        self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 10), columnspan=2, sticky=NSEW)
 
         self.test_label = customtkinter.CTkLabel(self.inputs_frame, justify=CENTER)
-        self.test_label.pack()
+        self.test_label.pack(padx=10, pady=(10, 10))
 
         self.selected_id = IntVar(self)
         self.answer_entry = Entry(self)
@@ -52,14 +52,25 @@ class TestWindow(customtkinter.CTk):
         self.check_buttons = []
         self.selected_buttons = []
 
+
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky=SW)
+
         self.save_results_btn = customtkinter.CTkButton(self.buttons_frame, text='Сохранить результаты',
                                        command=self._save_results_btn_click)
         self.save_results_btn.pack(padx=10, pady=10, side=BOTTOM)
 
-        self.acceptAnswer_btn = customtkinter.CTkButton(self.buttons_frame, text='Ответить', command=self._accept_answer_btn_clicked)
+        self.acceptAnswer_btn = customtkinter.CTkButton(self.buttons_frame, text='Ответить',
+                                                        command=self._accept_answer_btn_clicked)
         self.acceptAnswer_btn.pack(padx=10, pady=10, side=BOTTOM)
 
         self._show_next_question()
+
+        self.back_to_menu_btn = customtkinter.CTkButton(self, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click)
+        self.back_to_menu_btn.grid(row=1, column=1, padx=10, pady=(0, 10), sticky=SE)
+
 
         self.mainloop()
 
@@ -134,8 +145,9 @@ class TestWindow(customtkinter.CTk):
         self.selected_id.set(0)
 
         for i in range(len(self.test.get_current_answers)):
-            answer_btn = customtkinter.CTkRadioButton(self.inputs_frame, text=self.test.get_current_answers[i].text, value=i,
-                                         variable=self.selected_id)
+            answer_btn = customtkinter.CTkRadioButton(self.inputs_frame,
+                                                      text=self.test.get_current_answers[i].text, value=i,
+                                                      variable=self.selected_id)
             answer_btn.pack(padx=10, pady=10)
             self.radio_buttons.append(answer_btn)
 
@@ -165,3 +177,9 @@ class TestWindow(customtkinter.CTk):
         self.radio_buttons.clear()
         self.check_buttons.clear()
         self.selected_buttons.clear()
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.MenuWindow(self.user)
+        self.destroy()

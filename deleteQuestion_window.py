@@ -3,25 +3,26 @@ from tkinter import messagebox
 from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
 from user import User
+from window import Window
 import menu_window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class DeleteQuestionWindow(customtkinter.CTk):
+class DeleteQuestionWindow(Window):
     """Класс DeleteQuestionWindow - инициализирует окно для удаления вопроса."""
     def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта DeleteQuestionWindow."""
         super().__init__()
+
         self.questions_storage = questions_storage
         self.user = user
+
         self.title('Удаление вопроса')
-        self.geometry('600x350')
+        self.width = 600
+        self.height = 350
         self.resizable(True, True)
+
+        self._place()
 
         self.grid_columnconfigure(0, weight=1)
 
@@ -55,7 +56,6 @@ class DeleteQuestionWindow(customtkinter.CTk):
                                                         command=self.back_to_menu_btn_click, width=70)
         self.back_to_menu_btn.grid(row=2, column=1, padx=10, pady=10)
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -95,8 +95,3 @@ class DeleteQuestionWindow(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

@@ -6,26 +6,27 @@ from add_baseQuestion_window import AddBaseQuestionWindow
 from add_radioButtonQuestion_window import AddRadioButtonQuestion
 from add_checkButtonQuestion_window import AddCheckButtonQuestion
 from user import User
+from window import Window
 import menu_window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class AddQuestionWindow(customtkinter.CTk):
+class AddQuestionWindow(Window):
     """Класс AddQuestionWindow - инициализирует окно с выбором типа вопроса, который нужно добавить."""
     def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddQuestionWindow."""
         super().__init__()
+
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
         self.user = user
+
         self.title('Добавление вопроса')
-        self.geometry('250x290')
+        self.width = 240
+        self.height = 290
         self.resizable(False, True)
+
+        self._place()
 
         # Создание рамки для кнопок
         self.buttons_frame = customtkinter.CTkFrame(self)
@@ -48,7 +49,6 @@ class AddQuestionWindow(customtkinter.CTk):
                                                         command=self.back_to_menu_btn_click, width=70)
         self.back_to_menu_btn.pack(padx=20, pady=(10, 10), anchor="se")
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -75,8 +75,3 @@ class AddQuestionWindow(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

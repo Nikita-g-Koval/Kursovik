@@ -1,4 +1,3 @@
-from tkinter import *
 from tkinter import messagebox
 from typing import List
 from question import Question
@@ -6,16 +5,12 @@ from user import User
 from test import Test
 from questionsStrorage import QuestionsStorage
 from fileProvider import FileProvider
+from window import Window
 import menu_window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class CreateNewTestWindow(customtkinter.CTk):
+class CreateNewTestWindow(Window):
     """Класс CreateNewTestWindow - инициализирует окно для создания нового теста."""
     path = None
 
@@ -26,9 +21,11 @@ class CreateNewTestWindow(customtkinter.CTk):
         self.qs = question_storage
 
         self.title("Меню")
-        self.geometry('350x230')
+        self.width = 350
+        self.height = 230
         self.resizable(False, False)
 
+        self._place()
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
@@ -56,7 +53,6 @@ class CreateNewTestWindow(customtkinter.CTk):
                                        command=self.back_to_menu_btn_click, width=70)
         self.back_to_menu_btn.pack(padx=10, pady=(10, 10), anchor="se")
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -93,8 +89,3 @@ class CreateNewTestWindow(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

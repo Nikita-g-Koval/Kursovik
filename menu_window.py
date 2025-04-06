@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 from user import User
 from questionsStrorage import QuestionsStorage
 from addQuestion_window import AddQuestionWindow
@@ -9,26 +8,25 @@ from test_window import TestWindow
 from results_window import ResultsWindow
 from fileProvider import FileProvider
 from create_newtest_window import CreateNewTestWindow
-import os
+from window import Window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class MenuWindow(customtkinter.CTk):
+class MenuWindow(Window):
     """Класс MenuWindow - инициализирует окно меню."""
     def __init__(self, user: User):
         """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
         super().__init__()
-        self.user = user
 
+        self.user = user
         self.questions_storage = QuestionsStorage("Tests/base_test.json")
+
         self.title("Меню")
-        self.geometry('800x400')
+        self.width = 800
+        self.height = 400
         self.resizable(False, False)
+
+        self._place()
 
         self.tests = FileProvider.get_test_names()
 
@@ -63,7 +61,6 @@ class MenuWindow(customtkinter.CTk):
                                                         command=self._show_results_btn_click, height=40, width=150)
         self.show_results_btn.pack(padx=10, pady=(10, 10))
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -81,10 +78,9 @@ class MenuWindow(customtkinter.CTk):
         self.questions_storage.update_test(test_path)
 
 
-    @staticmethod
-    def _show_results_btn_click():
+    def _show_results_btn_click(self):
         """Обработчик нажатия кнопки show_results_btn - создаёт объект класса ResultsWindow."""
-        ResultsWindow()
+        ResultsWindow(self.user)
 
     def _add_question_btn_clicked(self):
         """Обработчик нажатия кнопки add_question_btn - создаёт объект класса AddQuestionWindow."""
@@ -105,9 +101,7 @@ class MenuWindow(customtkinter.CTk):
             return
 
         selected_name = f'{self.test_var.get()}.json'
-        TestWindow(self.user, self.questions_storage, selected_name)
 
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()
+        self.withdraw()
+        TestWindow(self.user, self.questions_storage)
+        self.destroy()

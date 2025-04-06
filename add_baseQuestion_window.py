@@ -6,17 +6,13 @@ from fileProvider import FileProvider
 from question import Question
 from answer import Answer
 from user import User
+from window import Window
 import addQuestion_window
 import menu_window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class AddBaseQuestionWindow(customtkinter.CTk):
+class AddBaseQuestionWindow(Window):
     """Класс AddBaseQuestionWindow - инициализирует окно для добавления базового вопроса."""
     def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddBaseQuestionWindow."""
@@ -24,9 +20,10 @@ class AddBaseQuestionWindow(customtkinter.CTk):
 
         self.questions_storage = questions_storage
         self.user = user
+
         self.title('Добавление вопроса')
-        self.geometry('540x380')
         self.resizable(False, True)
+
 
         self.grid_columnconfigure(0, weight=1)
 
@@ -71,8 +68,8 @@ class AddBaseQuestionWindow(customtkinter.CTk):
                                                         command=self.back_to_menu_btn_click)
         self.back_to_menu_btn.grid(row=1, column=0, padx=10, pady=(0, 10))
 
+        self._place()
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -111,8 +108,3 @@ class AddBaseQuestionWindow(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

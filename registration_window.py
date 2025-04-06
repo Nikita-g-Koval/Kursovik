@@ -1,28 +1,25 @@
-from tkinter import *
 from tkinter import messagebox
 from validation import Validation
 from user import User
-from menu_window import MenuWindow
 from fileProvider import FileProvider
-import os
+from window import Window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class RegistrationWindow(customtkinter.CTk):
+class RegistrationWindow(Window):
     """Класс RegistrationWindow - инициализирует окно регистрации пользователя."""
-    def __init__(self):
+    def __init__(self, authorisation_window):
         """Устанавливает все необходимые атрибуты для объекта RegistrationWindow."""
         super().__init__()
 
+        self.authorisation_deiconify = authorisation_window
+
+        self.width = 270
+        self.height = 300
         self.title("Регистрация")
-        self.geometry('340x240')
         self.resizable(False, False)
 
+        self._place()
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
@@ -46,6 +43,10 @@ class RegistrationWindow(customtkinter.CTk):
 
         self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', height=40, width=300, command=self._send_btn_click)
         self.send_btn.pack(padx=10, pady=10)
+
+        self.return_to_auth = customtkinter.CTkButton(self.buttons_frame, text='Вернуться в меню', height=40, width=300,
+                                                      command=self.return_to_auth_btn_click)
+        self.return_to_auth.pack(padx=10, pady=10)
 
         self.mainloop()
 
@@ -71,3 +72,8 @@ class RegistrationWindow(customtkinter.CTk):
 
         FileProvider.save_user(user)
         messagebox.showinfo(title="Инфо", message="Вы успешно зарегистрированы.")
+
+    def return_to_auth_btn_click(self):
+        """Обработчик нажатия кнопки return_to_auth_btn_click - возвращает пользователя в окно авторизации."""
+        self.withdraw()
+        self.authorisation_deiconify()

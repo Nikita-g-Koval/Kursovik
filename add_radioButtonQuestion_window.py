@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 from typing import List
 import addQuestion_window
 import menu_window
@@ -11,29 +10,29 @@ from question import Question
 from answer import Answer
 from question_radioButton import QuestionRadioButton
 from user import User
+from window import Window
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class AddRadioButtonQuestion(customtkinter.CTk):
+class AddRadioButtonQuestion(Window):
     """Класс AddRadioButtonQuestion - инициализирует окно для добавления вопроса с единственным выбором."""
     new_question: Question
 
     def __init__(self, questions_storage: QuestionsStorage, user: User):
         """Устанавливает все необходимые атрибуты для объекта AddRadioButtonQuestion."""
         super().__init__()
+
         self.answers: List[Answer] = []
         self.questions_storage = questions_storage
         self.user = user
+
         self.title('Добавление вопроса с выбором')
         self.geometry('810x410')
         self.resizable(False, True)
         self.selected_id = IntVar(self)
         self.radio_buttons = []
+
+        self._place()
 
         self.selected_true = BooleanVar(self)
         self.selected_true.set(False)
@@ -100,8 +99,6 @@ class AddRadioButtonQuestion(customtkinter.CTk):
                                                         command=self.back_to_menu_btn_click)
         self.back_to_menu_btn.grid(row=1, column=0, padx=10, pady=(0, 10), sticky=E)
 
-
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.mainloop()
 
@@ -201,8 +198,3 @@ class AddRadioButtonQuestion(customtkinter.CTk):
         self.withdraw()
         menu_window.MenuWindow(self.user)
         self.destroy()
-
-    @staticmethod
-    def on_closing():
-        """Используется в протоколе окна, закрывает приложение при закрытии окна."""
-        exit()

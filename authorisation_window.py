@@ -1,28 +1,26 @@
 from tkinter import *
 from tkinter import messagebox
-from validation import Validation
 from fileProvider import FileProvider
 from user import User
 from menu_window import MenuWindow
 from registration_window import RegistrationWindow
+from window import Window
 import os
 import customtkinter
 
 
-# Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-
-class AuthorisationWindow(customtkinter.CTk):
+class AuthorisationWindow(Window):
     """Класс AuthorisationWindow - инициализирует окно авторизации пользователя."""
     def __init__(self):
         """Устанавливает все необходимые атрибуты для объекта AuthorisationWindow."""
         super().__init__()
 
+        self.width = 340
+        self.height = 280
         self.title("Авторизация")
-        self.geometry("340x280")
         self.resizable(False, False)
+
+        self._place()
 
         self.grid_columnconfigure(0, weight=1)
 
@@ -70,11 +68,12 @@ class AuthorisationWindow(customtkinter.CTk):
 
         messagebox.showinfo(title="Неверный ввод", message="Имя пользователя или пароль неверны.")
 
+    def _registration_btn_click(self):
+        self.withdraw()
+        RegistrationWindow(self._deiconify)
 
-
-    @staticmethod
-    def _registration_btn_click():
-        RegistrationWindow()
+    def _deiconify(self):
+        self.deiconify()
 
     @staticmethod
     def _create_tests_folder():
