@@ -1,5 +1,9 @@
+from idlelib.pyshell import restart_line
 from tkinter import *
 from tkinter import ttk
+
+from matplotlib import pyplot as plt
+
 from fileProvider import FileProvider
 from user import User
 from window import Window
@@ -20,10 +24,10 @@ class ResultsWindow(Window):
 
         self._place()
 
-        test_results = FileProvider.get_results()
+        self.test_results = FileProvider.get_results()
 
         self.tuple_results = []
-        for result in test_results:
+        for result in self.test_results:
             self.tuple_results.append(
                 (
                     result.name,
@@ -32,6 +36,9 @@ class ResultsWindow(Window):
                     result.completion_time
                 )
             )
+
+        self.diagram_button = customtkinter.CTkButton(self, text="Диаграмма", command=self.diagram_button_click)
+        self.diagram_button.pack()
 
         self.columns = ("name", "rightAnswersCount", "right_answers_percentage", "completion_time")
 
@@ -56,4 +63,41 @@ class ResultsWindow(Window):
         self.results_tree.configure(yscrollcommand=self.scrollbar.set)
         self.results_tree.pack()
 
+        self.protocol("WM_DELETE_WINDOW", self.destroy)
+
         self.mainloop()
+
+    def diagram_button_click(self):
+        vals = []
+        labels = []
+
+        for result in self.test_results:
+            name = result.name
+            if name not in labels:
+                labels.append(name)
+                best_result = self.find_best_result_for(name)
+                vals.append(best_result)
+
+        plt.bar(labels, vals, label='Лучший результат')
+
+        for i in range(len(vals)):
+            plt.text(i, vals[i], vals[i], ha='center')  # Aligning text at center
+
+        plt.xlabel('Имя')
+        plt.ylabel('Процент правильных ответов')
+        plt.title('Столбчатая диаграмма прошедших тесты')
+        plt.legend()
+        plt.show()
+
+    def find_best_result_for(self, user_name: str):
+        best_result = 0
+
+        for result in self.test_results:
+            if result.name != user_name:
+                continue
+
+            if result.right_answers_percentage >= best_result:
+                best_result = result.right_answers_percentage
+
+        return best_result
+
