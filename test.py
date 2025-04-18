@@ -15,9 +15,13 @@ class Test:
         """Устанавливает все необходимые атрибуты для объекта Test."""
         self.name = name
         self.questions = questions
-        self.questions_count = len(questions)
         self.score = 0
         self.is_started = False
+
+    @property
+    def questions_count(self):
+        """Возвращает количество вопросов."""
+        return len(self.questions)
 
     @property
     def get_current_question(self):

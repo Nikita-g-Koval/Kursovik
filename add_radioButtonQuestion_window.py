@@ -170,7 +170,7 @@ class AddRadioButtonQuestion(Window):
             if self.answers[i].is_correct:
                 answer_btn.configure(text_color="green")
 
-            answer_btn.grid(row=i, column=0)
+            answer_btn.grid(row=i, column=0, padx=10, pady=(10,10))
             self.radio_buttons.append(answer_btn)
 
     def _clear_radiobuttons(self):

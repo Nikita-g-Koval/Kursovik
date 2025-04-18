@@ -14,12 +14,12 @@ import customtkinter
 
 class MenuWindow(Window):
     """Класс MenuWindow - инициализирует окно меню."""
-    def __init__(self, user: User):
+    def __init__(self, user: User, question_storage: QuestionsStorage = QuestionsStorage("base_test")):
         """Устанавливает все необходимые атрибуты для объекта MenuWindow."""
         super().__init__()
 
         self.user = user
-        self.questions_storage = QuestionsStorage("Tests/base_test.json")
+        self.questions_storage = question_storage
 
         self.title("Меню")
         self.width = 800
@@ -30,12 +30,12 @@ class MenuWindow(Window):
 
         self.tests = FileProvider.get_test_names()
 
-        self.test_var = StringVar(self, value="base_test")
+        self.test_var = StringVar(self, value=self.questions_storage.test.name)
 
         self.tests_combobox = customtkinter.CTkComboBox(self, variable=self.test_var, values=self.tests,
-                                           state="readonly")
+                                           state="readonly", command=self._selected_test)
         self.tests_combobox.pack(anchor=NW, padx=6, pady=6)
-        self.tests_combobox.bind("<<ComboboxSelected>>", self._selected_test)
+
 
         # Создание рамки для кнопок
         self.buttons_frame = customtkinter.CTkFrame(self)
@@ -68,11 +68,14 @@ class MenuWindow(Window):
         """Обработчик нажатия кнопки create_newtest_btn - создаёт объект класса CreateNewTestWindow."""
         self.withdraw()
         CreateNewTestWindow(self.user, self.questions_storage)
-        self.destroy()
 
     def _selected_test(self, event):
         """Обработчик выбранного теста, запускает выбранный тест."""
-        test_name = self.test_var.get()
+        selected_test_name = self.test_var.get()
+        self._select_test(selected_test_name)
+
+    def _select_test(self, test_name):
+        """Обновляет список вопросов по переданному имени теста."""
         test_path = FileProvider.find_test_path(test_name)
 
         self.questions_storage.update_test(test_path)

@@ -21,7 +21,7 @@ class CreateNewTestWindow(Window):
         self.qs = question_storage
 
         self.title("Меню")
-        self.width = 350
+        self.width = 420
         self.height = 230
         self.resizable(False, False)
 
@@ -38,14 +38,14 @@ class CreateNewTestWindow(Window):
         self.testname_label = customtkinter.CTkLabel(self.inputs_frame, text='Название теста')
         self.testname_label.pack(padx=10, pady=(10, 0))
 
-        self.testname_entry = customtkinter.CTkEntry(self.inputs_frame, width=310)
+        self.testname_entry = customtkinter.CTkEntry(self.inputs_frame, width=390, height=30)
         self.testname_entry.pack(padx=10, pady=(10, 10))
 
         self.create_newtest_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать тест',
                                          command=self.create_newtest_btn_click, height=40, width=150)
         self.create_newtest_btn.grid(row=0, column=0, padx=(10,0), pady=(10, 10), sticky="nsw")
 
-        self.create_base_test_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать базовый тест',
+        self.create_base_test_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать тест на основе текущего',
                                            command=self.create_base_test_btn_click, height=40, width=150)
         self.create_base_test_btn.grid(row=0, column=1, padx=(10,10), pady=(10, 10), sticky="nsw")
 

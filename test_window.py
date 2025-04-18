@@ -44,7 +44,7 @@ class TestWindow(Window):
         self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 10), columnspan=2, sticky=NSEW)
 
         self.test_label = customtkinter.CTkLabel(self.inputs_frame, justify=CENTER)
-        self.test_label.pack(padx=10, pady=(10, 10))
+        self.test_label.pack(padx=10, pady=(10, 10), anchor=W)
 
         self.selected_id = IntVar(self)
         self.answer_entry = Entry(self)
@@ -90,7 +90,7 @@ class TestWindow(Window):
         match self.test.get_current_question.get_type:
             case QuestionType.base:
                 self.answer_entry = customtkinter.CTkEntry(self.inputs_frame)
-                self.answer_entry.pack(padx=10, pady=10)
+                self.answer_entry.pack(padx=10, pady=10, anchor=W)
             case QuestionType.radio_button:
                 self._init_radiobuttons()
             case QuestionType.check_button:
@@ -148,7 +148,7 @@ class TestWindow(Window):
             answer_btn = customtkinter.CTkRadioButton(self.inputs_frame,
                                                       text=self.test.get_current_answers[i].text, value=i,
                                                       variable=self.selected_id)
-            answer_btn.pack(padx=10, pady=10)
+            answer_btn.pack(padx=10, pady=10, anchor=W)
             self.radio_buttons.append(answer_btn)
 
     def _init_checkbuttons(self):
@@ -159,10 +159,10 @@ class TestWindow(Window):
             self.selected_buttons.append(selected_id)
 
             answer_btn = customtkinter.CTkCheckBox(self.inputs_frame, text=self.test.get_current_answers[i].text,
-                                         offvalue=len(self.test.get_current_answers) + 1,
-                                         onvalue=i,
-                                         variable=selected_id)
-            answer_btn.pack(padx=10, pady=10)
+                                                   offvalue=len(self.test.get_current_answers) + 1,
+                                                   onvalue=i,
+                                                   variable=selected_id)
+            answer_btn.pack(padx=10, pady=10, anchor=W)
             self.check_buttons.append(answer_btn)
 
     def _clear_answers(self):
