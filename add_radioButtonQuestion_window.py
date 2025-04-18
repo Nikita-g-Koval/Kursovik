@@ -27,7 +27,8 @@ class AddRadioButtonQuestion(Window):
         self.user = user
 
         self.title('Добавление вопроса с выбором')
-        self.geometry('810x410')
+        self.width = 800
+        self.height = 420
         self.resizable(False, True)
         self.selected_id = IntVar(self)
         self.radio_buttons = []
@@ -46,7 +47,8 @@ class AddRadioButtonQuestion(Window):
         self.inputs_frame = customtkinter.CTkFrame(self)
         self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
 
-        customtkinter.CTkLabel(self.inputs_frame, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
+        (customtkinter.CTkLabel(self.inputs_frame, text="Текст вопроса:", justify=LEFT)
+         .grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw"))
         self.questionText_entry = customtkinter.CTkEntry(self.inputs_frame, height=70, width=500, justify=LEFT)
         self.questionText_entry.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="nsw")
 

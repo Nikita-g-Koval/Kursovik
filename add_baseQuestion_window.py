@@ -21,9 +21,12 @@ class AddBaseQuestionWindow(Window):
         self.questions_storage = questions_storage
         self.user = user
 
+        self.width = 540
+        self.height = 380
         self.title('Добавление вопроса')
         self.resizable(False, True)
 
+        self._place()
 
         self.grid_columnconfigure(0, weight=1)
 

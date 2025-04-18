@@ -25,7 +25,8 @@ class AddCheckButtonQuestion(Window):
         self.questions_storage = questions_storage
         self.user = user
 
-        self.geometry("800x420")
+        self.width = 800
+        self.height = 420
         self.title('Добавление вопроса с множественным выбором')
         self.resizable(False, True)
 
