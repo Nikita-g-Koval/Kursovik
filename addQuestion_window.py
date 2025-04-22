@@ -7,7 +7,7 @@ from add_radioButtonQuestion_window import AddRadioButtonQuestion
 from add_checkButtonQuestion_window import AddCheckButtonQuestion
 from user import User
 from window import Window
-import menu_window
+import admin_menu_window
 import customtkinter
 
 
@@ -73,5 +73,5 @@ class AddQuestionWindow(Window):
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
-        menu_window.MenuWindow(self.user)
+        menu_window.AdminMenuWindow(self.user)
         self.destroy()

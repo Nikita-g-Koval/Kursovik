@@ -3,21 +3,22 @@ from validation import Validation
 from user import User
 from fileProvider import FileProvider
 from window import Window
+import user_authorisation_window
 import customtkinter
 
 
 class RegistrationWindow(Window):
     """Класс RegistrationWindow - инициализирует окно регистрации пользователя."""
-    def __init__(self, authorisation_window):
+    def __init__(self):
         """Устанавливает все необходимые атрибуты для объекта RegistrationWindow."""
         super().__init__()
-
-        self.authorisation_deiconify = authorisation_window
 
         self.width = 270
         self.height = 300
         self.title("Регистрация")
         self.resizable(False, False)
+
+        self.users = FileProvider.get_users()
 
         self._place()
 
@@ -41,10 +42,12 @@ class RegistrationWindow(Window):
         self.buttons_frame = customtkinter.CTkFrame(self)
         self.buttons_frame.pack(padx=10, pady=(10,10))
 
-        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться', height=40, width=300, command=self._send_btn_click)
+        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться',
+                                                height=40, width=300, command=self._send_btn_click)
         self.send_btn.pack(padx=10, pady=10)
 
-        self.return_to_auth = customtkinter.CTkButton(self.buttons_frame, text='Вернуться в меню', height=40, width=300,
+        self.return_to_auth = customtkinter.CTkButton(self.buttons_frame, text='Вернуться к авторизации',
+                                                      height=40, width=300,
                                                       command=self.return_to_auth_btn_click)
         self.return_to_auth.pack(padx=10, pady=10)
 
@@ -54,6 +57,13 @@ class RegistrationWindow(Window):
         """Обработчик нажатия кнопки send_btn - проверяет имя пользователя и пароль."""
         input_name = self.username_entry.get()
         input_password = self.password_entry.get()
+
+        for user in self.users:
+            if input_name == user.name or input_name == "Администратор":
+                messagebox.showwarning(
+                    title="Предупреждение",
+                    message="Введённое имя занято.")
+                return
 
         if not Validation.validate_user_name(username=input_name):
             messagebox.showwarning(
@@ -76,4 +86,5 @@ class RegistrationWindow(Window):
     def return_to_auth_btn_click(self):
         """Обработчик нажатия кнопки return_to_auth_btn_click - возвращает пользователя в окно авторизации."""
         self.withdraw()
-        self.authorisation_deiconify()
+        user_authorisation_window.UserAuthorisationWindow()
+        self.destroy()

@@ -1,4 +1,4 @@
-from authorisation_window import AuthorisationWindow
+from user_authorisation_window import UserAuthorisationWindow
 
 
-authorisation_window = AuthorisationWindow()
+user_authorisation_window = UserAuthorisationWindow()

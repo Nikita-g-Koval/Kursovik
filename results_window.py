@@ -1,4 +1,3 @@
-from idlelib.pyshell import restart_line
 from tkinter import *
 from tkinter import ttk
 
@@ -27,18 +26,33 @@ class ResultsWindow(Window):
         self.test_results = FileProvider.get_results()
 
         self.tuple_results = []
-        for result in self.test_results:
-            self.tuple_results.append(
-                (
-                    result.name,
-                    result.right_answers_count,
-                    result.right_answers_percentage,
-                    result.completion_time
-                )
-            )
 
-        self.diagram_button = customtkinter.CTkButton(self, text="Диаграмма", command=self.diagram_button_click)
-        self.diagram_button.pack()
+        if self.user.name == "Администратор":
+
+            self.diagram_button = customtkinter.CTkButton(self, text="Диаграмма", command=self.diagram_button_click)
+            self.diagram_button.pack()
+
+            for result in self.test_results:
+                self.tuple_results.append(
+                    (
+                        result.name,
+                        result.right_answers_count,
+                        result.right_answers_percentage,
+                        result.completion_time
+                    )
+                )
+        else:
+            for result in self.test_results:
+                if result.name == user.name:
+                    self.tuple_results.append(
+                        (
+                            result.name,
+                            result.right_answers_count,
+                            result.right_answers_percentage,
+                            result.completion_time
+                        )
+                    )
+
 
         self.columns = ("name", "rightAnswersCount", "right_answers_percentage", "completion_time")
 

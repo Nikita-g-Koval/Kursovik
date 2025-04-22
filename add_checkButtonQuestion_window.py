@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from typing import List
 import addQuestion_window
-import menu_window
+import admin_menu_window
 from questionsStrorage import QuestionsStorage
 from validation import Validation
 from fileProvider import FileProvider
@@ -201,5 +201,5 @@ class AddCheckButtonQuestion(Window):
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
-        menu_window.MenuWindow(self.user)
+        menu_window.AdminMenuWindow(self.user)
         self.destroy()

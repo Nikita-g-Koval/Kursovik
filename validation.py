@@ -5,6 +5,7 @@ class Validation:
         """Проверяет имя пользователя, возвращает True, если имя подходит условиям, иначе - False."""
         if len(username) < 2 or not str.isalpha(username):
             return False
+
         return True
 
     @staticmethod

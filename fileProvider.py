@@ -18,7 +18,29 @@ class FileProvider:
     usersFileName = "users.json"
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
+    adminFileName = "admin.json"
     tests_path = os.path.abspath("Tests")
+
+    @staticmethod
+    def get_admin_password():
+        password = None
+        if os.path.exists(FileProvider.adminFileName):
+            with open(FileProvider.adminFileName, "r") as json_file:
+                json_data = json.load(json_file)
+                password = json_data['password']
+
+        return password
+
+    @staticmethod
+    def set_admin_password(new_password):
+        if os.path.exists(FileProvider.adminFileName):
+            with open(FileProvider.adminFileName, "r") as json_file:
+                json_data = json.load(json_file)
+
+            json_data['password'] = new_password
+
+            with open(FileProvider.adminFileName, "w") as json_file:
+                json.dump(json_data, json_file, indent=4)
 
     @staticmethod
     def save_user(user: User):

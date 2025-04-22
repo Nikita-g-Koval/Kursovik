@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from datetime import datetime
-import menu_window
+import admin_menu_window
 from question_type import QuestionType
 from test_result import TestResult
 from answer import Answer
@@ -10,6 +10,7 @@ from fileProvider import FileProvider
 from questionsStrorage import QuestionsStorage
 from typing import List
 from window import Window
+import user_menu_window
 import customtkinter
 
 
@@ -57,9 +58,10 @@ class TestWindow(Window):
         self.buttons_frame = customtkinter.CTkFrame(self)
         self.buttons_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky=SW)
 
-        self.save_results_btn = customtkinter.CTkButton(self.buttons_frame, text='Сохранить результаты',
-                                       command=self._save_results_btn_click)
-        self.save_results_btn.pack(padx=10, pady=10, side=BOTTOM)
+        if self.user.name == "Администратор":
+            self.save_results_btn = customtkinter.CTkButton(self.buttons_frame, text='Сохранить результаты',
+                                           command=self._save_results_btn_click)
+            self.save_results_btn.pack(padx=10, pady=10, side=BOTTOM)
 
         self.acceptAnswer_btn = customtkinter.CTkButton(self.buttons_frame, text='Ответить',
                                                         command=self._accept_answer_btn_clicked)
@@ -131,6 +133,9 @@ class TestWindow(Window):
             messagebox.showinfo(title="Тест завершён",
                                 message="{0}, процент правильных ответов: {1}".format(self.user.name,
                                                                                               right_answers_percentage))
+            if self.user.name != "Администратор":
+                FileProvider.save_test_result(self.test_result)
+
             return
 
         self._show_next_question()
@@ -181,5 +186,7 @@ class TestWindow(Window):
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
-        menu_window.MenuWindow(self.user)
+        if self.user.name == "Администратор":
+            admin_menu_window.AdminMenuWindow(self.user)
+        else: user_menu_window.UserMenuWindow(self.user)
         self.destroy()
