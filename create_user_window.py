@@ -2,25 +2,26 @@ from tkinter import messagebox
 from validation import Validation
 from user import User
 from fileProvider import FileProvider
-from window import Window
-import user_authorisation_window
 import customtkinter
 
 
-class RegistrationWindow(Window):
-    """Класс RegistrationWindow - инициализирует окно регистрации пользователя."""
-    def __init__(self):
-        """Устанавливает все необходимые атрибуты для объекта RegistrationWindow."""
-        super().__init__()
+class CreateUserWindow(customtkinter.CTkToplevel):
+    """Класс CreateUserWindow - инициализирует окно создания пользователя."""
+    def __init__(self, parent_window):
+        """Устанавливает все необходимые атрибуты для объекта CreateUserWindow."""
+        super().__init__(parent_window)
+
+        self.parent_window = parent_window
 
         self.width = 270
-        self.height = 300
-        self.title("Регистрация")
+        self.height = 250
+        self.title("Создать пользователя")
         self.resizable(False, False)
 
         self.users = FileProvider.get_users()
 
         self._place()
+
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
@@ -42,14 +43,13 @@ class RegistrationWindow(Window):
         self.buttons_frame = customtkinter.CTkFrame(self)
         self.buttons_frame.pack(padx=10, pady=(10,10))
 
-        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Зарегистрироваться',
+        self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Создать',
                                                 height=40, width=300, command=self._send_btn_click)
         self.send_btn.pack(padx=10, pady=10)
 
-        self.return_to_auth = customtkinter.CTkButton(self.buttons_frame, text='Вернуться к авторизации',
-                                                      height=40, width=300,
-                                                      command=self.return_to_auth_btn_click)
-        self.return_to_auth.pack(padx=10, pady=10)
+        self.grab_set()
+
+        self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
         self.mainloop()
 
@@ -81,10 +81,21 @@ class RegistrationWindow(Window):
         user = User(name=input_name, password=input_password)
 
         FileProvider.save_user(user)
-        messagebox.showinfo(title="Инфо", message="Вы успешно зарегистрированы.")
+        messagebox.showinfo(title="Инфо", message="Пользователь успешно создан.")
 
-    def return_to_auth_btn_click(self):
-        """Обработчик нажатия кнопки return_to_auth_btn_click - возвращает пользователя в окно авторизации."""
-        self.withdraw()
-        user_authorisation_window.UserAuthorisationWindow()
+    def _on_closing(self):
+        self.parent_window.show_users()
         self.destroy()
+
+    def _place(self):
+        # get screen width and height
+        ws = self.winfo_screenwidth()  # width of the screen
+        hs = self.winfo_screenheight()  # height of the screen
+
+        # calculate x and y coordinates for the Tk root window
+        x = (ws / 2) - (self.width / 2)
+        y = (hs / 2) - (self.height / 2)
+
+        # set the dimensions of the screen
+        # and where it is placed
+        self.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y))

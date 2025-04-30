@@ -1,8 +1,5 @@
-from tkinter import *
 from tkinter import ttk, messagebox
-from matplotlib import pyplot as plt
 from fileProvider import FileProvider
-from user import User
 import admin_authorisation_window
 import customtkinter
 
@@ -27,18 +24,18 @@ class SetPasswordWindow(customtkinter.CTk):
 
         customtkinter.CTkLabel(self.inputs_frame, text='Старый пароль').pack(padx=10, pady=(10, 0), anchor="nw")
 
-        self.old_password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
+        self.old_password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300, show='*')
         self.old_password_entry.pack(padx=10, pady=(4, 0), anchor="nw")
 
         customtkinter.CTkLabel(self.inputs_frame, text='Новый пароль').pack(padx=10, pady=(10, 0), anchor="nw")
 
-        self.new_password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
+        self.new_password_entry = customtkinter.CTkEntry(self.inputs_frame, width=300, show='*')
         self.new_password_entry.pack(padx=10, pady=(4, 10), anchor="nw")
 
         (customtkinter.CTkLabel(self.inputs_frame, text='Повторный ввод нового пароля')
          .pack(padx=10, pady=(10, 0), anchor="nw"))
 
-        self.new_password_re_entry = customtkinter.CTkEntry(self.inputs_frame, width=300)
+        self.new_password_re_entry = customtkinter.CTkEntry(self.inputs_frame, width=300, show='*')
         self.new_password_re_entry.pack(padx=10, pady=(4, 10), anchor="nw")
 
         # Создание рамки для кнопок

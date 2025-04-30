@@ -63,6 +63,25 @@ class FileProvider:
             json.dump(json_data, outfile, indent=4)
 
     @staticmethod
+    def delete_user(user_name: str):
+        json_data = {'users': []}
+
+        users = FileProvider.get_users()
+        for user in users:
+            if user.name == user_name:
+                users.remove(user)
+
+        if os.path.exists(FileProvider.usersFileName):
+            for old_user in users:
+                json_data['users'].append({
+                    'name': old_user.name,
+                    'password': old_user.password
+                })
+
+        with open(FileProvider.usersFileName, 'w') as outfile:
+            json.dump(json_data, outfile, indent=4)
+
+    @staticmethod
     def get_users():
         users = []
 

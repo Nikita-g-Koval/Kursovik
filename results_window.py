@@ -75,6 +75,7 @@ class ResultsWindow(Window):
 
         self.scrollbar = ttk.Scrollbar(self, orient=VERTICAL, command=self.results_tree.yview)
         self.results_tree.configure(yscrollcommand=self.scrollbar.set)
+        self.results_tree.bind("<Double-1>", self.OnDoubleClick)
         self.results_tree.pack()
 
         self.protocol("WM_DELETE_WINDOW", self.destroy)
@@ -115,3 +116,6 @@ class ResultsWindow(Window):
 
         return best_result
 
+    def OnDoubleClick(self, event):
+        item = self.results_tree.selection()[0]
+        print("you clicked on", self.results_tree.item(item, "values"))

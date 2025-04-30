@@ -8,6 +8,7 @@ from results_window import ResultsWindow
 from fileProvider import FileProvider
 from create_newtest_window import CreateNewTestWindow
 from window import Window
+from users_window import UsersWindow
 import admin_authorisation_window
 import test_window
 import customtkinter
@@ -24,7 +25,7 @@ class AdminMenuWindow(Window):
 
         self.title("Меню")
         self.width = 800
-        self.height = 400
+        self.height = 460
         self.resizable(False, False)
 
         self._place()
@@ -61,6 +62,10 @@ class AdminMenuWindow(Window):
         self.show_results_btn = customtkinter.CTkButton(self.buttons_frame, text="Результаты",
                                                         command=self._show_results_btn_click, height=40, width=150)
         self.show_results_btn.pack(padx=10, pady=(10, 10))
+
+        self.show_results_btn = customtkinter.CTkButton(self.buttons_frame, text="Управление\nпользователями",
+                                                        command=self._show_users_btn_clicked, height=50, width=150)
+        self.show_results_btn.pack(padx=10, pady=(0, 10))
 
         self.show_results_btn = customtkinter.CTkButton(self, text="Вернуться к авторизации",
                                                         command=self._revert_btn_click, height=40, width=150)
@@ -105,6 +110,12 @@ class AdminMenuWindow(Window):
         """Обработчик нажатия кнопки delete_question_btn - создаёт объект класса DeleteQuestionWindow."""
         self.withdraw()
         DeleteQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
+
+    def _show_users_btn_clicked(self):
+        """Обработчик нажатия кнопки show_users_btn - создаёт объект класса UsersWindow."""
+        self.withdraw()
+        UsersWindow(self.user).launch()
         self.destroy()
 
     def _test_menu_btn_clicked(self):
