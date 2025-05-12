@@ -46,6 +46,13 @@
 }
 \newcommand\large{\@setfontsize\large\@xviipt{22}} % большой шрифт
 \newcommand\tiny{\@setfontsize\tiny\@vipt{6pt}} % мелкий шрифт
+\newcommand\small{\@setfontsize\small\@xipt{13.6}}%
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\Large{\@setfontsize\Large\@xviipt{22}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xxpt{25}}
+\newcommand\huge{\@setfontsize\huge\@xxvpt{30}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+
 
 % Параграфы
 \renewcommand\baselinestretch{\interval} % полуторный интервал
@@ -436,7 +443,7 @@
 \renewcommand\p@enumii{\theenumi}
 \renewcommand\p@enumiii{\theenumi(\theenumii)}
 \renewcommand\p@enumiv{\p@enumiii\theenumiii}
-\newcommand\labelitemi{-}
+\newcommand\labelitemi{--}
 \newcommand\labelitemii{\normalfont\bfseries \textendash}
 \newcommand\labelitemiii{\textasteriskcentered}
 \newcommand\labelitemiv{\textperiodcentered}
@@ -566,9 +573,9 @@
     }
 
 \newcommand*\l@section{\@dottedtocline{1}{0pt}{1.3em}}
-\newcommand*\l@subsection{\@dottedtocline{2}{0pt}{1.6em}}
-\newcommand*\l@subsubsection{\@dottedtocline{3}{0pt}{2.6em}}
-\newcommand*\l@paragraph{\@dottedtocline{4}{0pt}{3.3em}}
+\newcommand*\l@subsection{\@dottedtocline{2}{0pt}{2.0em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{0pt}{2.8em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{0pt}{3.6em}}
 
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
@@ -638,7 +645,7 @@
 
 \def\добавитьПлакат#1#2{% добавляет в aux команду записи в lop файл
   \immediate\write\@auxout
-      {\string\@writefile{lop}{\печатьПлакат{Лист #1. #2}}}
+      {\string\@writefile{lop}{\печатьПлакат{Лист #1. #2.}}}
 }
 
 \def\добавитьПлакатСодержание#1#2{% добавляет в aux команду записи в lop файл
