@@ -20,7 +20,7 @@ class CreateNewTestWindow(Window):
         self.user = user
         self.qs = question_storage
 
-        self.title("Меню")
+        self.title("Создание теста")
         self.width = 420
         self.height = 230
         self.resizable(False, False)
@@ -87,5 +87,5 @@ class CreateNewTestWindow(Window):
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
-        menu_window.AdminMenuWindow(self.user)
+        admin_menu_window.AdminMenuWindow(self.user)
         self.destroy()

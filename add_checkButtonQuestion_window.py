@@ -38,11 +38,11 @@ class AddCheckButtonQuestion(Window):
         self.selected_true = BooleanVar(self)
         self.selected_true.set(False)
 
+        self.grid_columnconfigure(1, weight=1)
 
         # Создание рамки для чекбоксов ответов
-        self.checkboxes_frame = customtkinter.CTkFrame(self, width=250)
-        self.checkboxes_frame.grid(row=0, column=1, padx=(10, 10), pady=(10, 0), sticky="ns")
-
+        self.checkboxes_frame = customtkinter.CTkFrame(self)
+        self.checkboxes_frame.grid(row=0, column=1, padx=(10, 10), pady=(10, 0), sticky=NSEW)
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
@@ -176,12 +176,13 @@ class AddCheckButtonQuestion(Window):
             answer_btn = customtkinter.CTkCheckBox(self.checkboxes_frame, text=self.answers[i].text,
                                                    offvalue=len(self.answers) + 1,
                                                    onvalue=i,
-                                                   variable=selected_id)
+                                                   variable=selected_id,
+                                                   )
 
             if self.answers[i].is_correct:
                 answer_btn.configure(text_color="green")
 
-            answer_btn.grid(row=i, column=0, sticky="w", padx=10, pady=(10,0))
+            answer_btn.pack(padx=10, pady=10, anchor=W)
             self.check_buttons.append(answer_btn)
 
     def _clear_checkbuttons(self):

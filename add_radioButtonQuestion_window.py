@@ -38,10 +38,11 @@ class AddRadioButtonQuestion(Window):
         self.selected_true = BooleanVar(self)
         self.selected_true.set(False)
 
+        self.grid_columnconfigure(1, weight=1)
 
         # Создание рамки для радио-кнопок
-        self.radiobuttons_frame = customtkinter.CTkFrame(self, width=250)
-        self.radiobuttons_frame.grid(row=0, column=1, padx=(0, 10), pady=(10, 0), sticky="ns")
+        self.radiobuttons_frame = customtkinter.CTkFrame(self)
+        self.radiobuttons_frame.grid(row=0, column=1, padx=(0, 10), pady=(10, 0), sticky=NSEW)
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
@@ -170,7 +171,7 @@ class AddRadioButtonQuestion(Window):
             if self.answers[i].is_correct:
                 answer_btn.configure(text_color="green")
 
-            answer_btn.grid(row=i, column=0, padx=10, pady=(10,10))
+            answer_btn.pack(padx=10, pady=(10,10), anchor=W)
             self.radio_buttons.append(answer_btn)
 
     def _clear_radiobuttons(self):

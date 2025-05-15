@@ -73,5 +73,5 @@ class AddQuestionWindow(Window):
     def back_to_menu_btn_click(self):
         """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
         self.withdraw()
-        menu_window.AdminMenuWindow(self.user)
+        admin_menu_window.AdminMenuWindow(self.user)
         self.destroy()
