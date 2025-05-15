@@ -1,51 +1,28 @@
-import os
-from random import randint
-from question import Question
 from fileProvider import FileProvider
+from test import Test
 
 
 class QuestionsStorage:
-    questions = []
-    def __init__(self):
-        if os.path.exists(FileProvider.questionsFileName):
-            self.update_questions()
-            return
+    """Класс QuestionsStorage, описывающий хранилище вопросов."""
 
-        self.questions = [
-            Question("Сколько будет два плюс два умноженное на два?", 6),
-            Question("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?", 9),
-            Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
-            Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?", 60),
-            Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 5)
-        ]
-
-
+    def __init__(self, test_name: str):
+        """Устанавливает все необходимые атрибуты для объекта QuestionsStorage."""
+        self.test_path = FileProvider.find_test_path(test_name)
+        self.test: Test = FileProvider.get_test(self.test_path)
 
     def add_question(self, question):
-        self.questions.append(question)
+        """Добавляет вопрос в хранилище."""
+        self.test.questions.append(question)
 
-    def remove_question(self, id):
-        del self.questions[id - 1]
+    def remove_question(self, question_number):
+        """Удаляет вопрос по индексу из хранилища."""
+        del self.test.questions[question_number - 1]
 
-    def shuffle(self):
-        result = self.questions
-        list_length = len(result)
-        for i in range(list_length):
-            index_aleatory = randint(0, list_length - 1)
-            temp = result[i]
-            result[i] = result[index_aleatory]
-            result[index_aleatory] = temp
-        return result
+    def update_test(self, test_path: str):
+        """Обновляет тест по указанному пути и сохраняет путь, по которому был обновлён тест."""
+        self.test = FileProvider.get_test(test_path)
+        self.test_path = test_path
 
-    def update_questions(self):
-        if not os.path.exists(FileProvider.questionsFileName):
-            return
-
-        self.questions.clear()
-        questions = FileProvider.get_questions()
-
-        for q in questions['questions']:
-            self.questions.append(Question(q["question_text"], q["answer"]))
-
-
-
+    def save_changes(self):
+        """Сохраняет изменения по пути текущего теста."""
+        FileProvider.save_test_changes(self.test, self.test_path)

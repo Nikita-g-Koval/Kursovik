@@ -1,0 +1,31 @@
+\appendix{Фрагменты исходного кода программы}
+
+main.tex
+\lstinputlisting[language=Tex, frame=none]{main.tex}
+
+ТехПроект.tex
+\lstinputlisting[language=Tex, frame=none]{ТехПроект.tex}
+
+\ifВКР{
+\newpage
+\addcontentsline{toc}{section}{На отдельных листах (CD-RW в прикрепленном конверте)}
+\noindent
+\begin{tabular}{p{5.8cm}C{4.8cm}C{4.8cm}}
+   Автор ВКР & \lhrulefill{\fill} & \fillcenter\Автор \\
+            \setarstrut{\footnotesize}
+           & \footnotesize{(подпись, дата)} & \\
+            \restorearstrut
+   Руководитель ВКР & \lhrulefill{\fill} & \fillcenter\Руководитель \\
+            \setarstrut{\footnotesize}
+           & \footnotesize{(подпись, дата)} & \\
+            \restorearstrut
+   Нормоконтроль & \lhrulefill{\fill} & \fillcenter\Нормоконтроль \\
+            \setarstrut{\footnotesize}
+           & \footnotesize{(подпись, дата)} & \\
+            \restorearstrut
+\end{tabular}
+\vskip 2cm
+\begin{center}
+\textbf{Место для диска}
+\end{center}
+}\fi

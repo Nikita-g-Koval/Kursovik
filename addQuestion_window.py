@@ -1,54 +1,77 @@
 from tkinter import *
-from tkinter import messagebox
+from typing import List
 from questionsStrorage import QuestionsStorage
-from validation import Validation
-from fileProvider import FileProvider
-from question import Question
+from answer import Answer
+from add_baseQuestion_window import AddBaseQuestionWindow
+from add_radioButtonQuestion_window import AddRadioButtonQuestion
+from add_checkButtonQuestion_window import AddCheckButtonQuestion
+from user import User
+from window import Window
+import admin_menu_window
+import customtkinter
 
 
-class AddQuestionWindow:
-    def __init__(self, questions_storage: QuestionsStorage):
-        self.new_question = None
+class AddQuestionWindow(Window):
+    """Класс AddQuestionWindow - инициализирует окно с выбором типа вопроса, который нужно добавить."""
+    def __init__(self, questions_storage: QuestionsStorage, user: User):
+        """Устанавливает все необходимые атрибуты для объекта AddQuestionWindow."""
+        super().__init__()
+
+        self.answers: List[Answer] = []
         self.questions_storage = questions_storage
-        self.addQuestion_window = Tk()
-        self.addQuestion_window.title('Добавление вопроса')
-        self.addQuestion_window.geometry('400x100')
-        self.addQuestion_window.resizable(False, False)
+        self.user = user
 
-        Label(self.addQuestion_window, text="Текст вопроса:", justify=LEFT).grid(row=0, column=0, sticky=W)
-        self.questionText_entry = Entry(self.addQuestion_window, width=30)
-        self.questionText_entry.grid(row=0, column=1, sticky=EW)
+        self.title('Добавление вопроса')
+        self.width = 240
+        self.height = 290
+        self.resizable(False, True)
 
-        Label(self.addQuestion_window, text="Ответ на вопрос:", justify=LEFT).grid(row=1, column=0, sticky=W)
-        self.answer_entry = Entry(self.addQuestion_window, width=30)
-        self.answer_entry.grid(row=1, column=1, sticky=EW)
+        self._place()
 
-        self.add_question_btn = Button(self.addQuestion_window, text='Добавить вопрос',
-                                       command=self.add_question_btn_click)
-        self.add_question_btn.grid(row=2, sticky=W+E)
+        # Создание рамки для кнопок
+        self.buttons_frame = customtkinter.CTkFrame(self)
+        self.buttons_frame.pack(padx=10, pady=(10, 10))
 
-        self.save_changes_btn = Button(self.addQuestion_window, text='Сохранить изменения',
-                                       command=self.save_changes_btn_click)
-        self.save_changes_btn.grid(row=3, sticky=W+E)
+        self.add_baseQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить базовый вопрос",
+                                           command=self._add_base_question_btn_click, height=60, width=190)
+        self.add_baseQuestion_btn.pack(padx=10, pady=(10, 0))
 
-    def add_question_btn_click(self):
-        question_text = self.questionText_entry.get()
-        answer = self.answer_entry.get()
+        self.add_radioButtonQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить вопрос с выбором",
+                                                  command=self._add_radiobutton_question_btn_click, height=60, width=190)
+        self.add_radioButtonQuestion_btn.pack(padx=10, pady=(10, 0))
 
-        if not Validation.ValidateQuestion(question_text):
-            messagebox.showwarning(title="Предупреждение",
-                                   message="Введены некорректные данные! Введите текст вопроса.")
-            return
+        self.add_checkButtonQuestion_btn = customtkinter.CTkButton(self.buttons_frame,
+                                                  text="Добавить вопрос \n с множественным выбором",
+                                                  command=self._add_checkbutton_question_btn_click, height=60, width=190)
+        self.add_checkButtonQuestion_btn.pack(padx=10, pady=(10, 10))
 
-        if not Validation.ValidateAnswer(answer):
-            messagebox.showwarning(title="Предупреждение",
-                                   message="Введены некорректные данные! Введите целочисленный ответ на вопрос.")
-            return
+        self.back_to_menu_btn = customtkinter.CTkButton(self, text='Вернуться в меню',
+                                                        command=self.back_to_menu_btn_click, width=70)
+        self.back_to_menu_btn.pack(padx=20, pady=(10, 10), anchor="se")
 
-        self.new_question = Question(question_text, answer)
-        self.questions_storage.add_question(self.new_question)
-        messagebox.showinfo(title="Успешно", message="Вопрос добавлен.")
 
-    def save_changes_btn_click(self):
-        FileProvider.save_questions(self.questions_storage.questions)
-        messagebox.showinfo(title="Успешно", message="Изменения сохранены.")
+        self.mainloop()
+
+    def _add_base_question_btn_click(self):
+        """Обработчик нажатия кнопки add_base_question_btn - создаёт объект класса AddBaseQuestionWindow."""
+        self.withdraw()
+        AddBaseQuestionWindow(self.questions_storage, self.user)
+        self.destroy()
+
+    def _add_radiobutton_question_btn_click(self):
+        """Обработчик нажатия кнопки add_radiobutton_question_btn - создаёт объект класса AddRadioButtonQuestion."""
+        self.withdraw()
+        AddRadioButtonQuestion(self.questions_storage, self.user)
+        self.destroy()
+
+    def _add_checkbutton_question_btn_click(self):
+        """Обработчик нажатия кнопки add_checkbutton_question_btn - создаёт объект класса AddCheckButtonQuestion."""
+        self.withdraw()
+        AddCheckButtonQuestion(self.questions_storage, self.user)
+        self.destroy()
+
+    def back_to_menu_btn_click(self):
+        """Обработчик нажатия кнопки back_to_menu_btn - удаляет данное окно и создаёт объект MenuWindow."""
+        self.withdraw()
+        menu_window.AdminMenuWindow(self.user)
+        self.destroy()
