@@ -1,0 +1,36 @@
+\babel@toc {russian}{}\relax 
+\contentsline {section}{\numberline {1}Анализ предметной области}{5}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Системы тестирования и оценки знаний, основные цели и задачи}{5}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Классификация систем тестирования знаний}{6}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Основные компоненты системы тестирования знаний}{7}{subsubsection.1.2.1}%
+\contentsline {paragraph}{\numberline {1.2.1.1}Модуль управления пользователями}{7}{paragraph.1.2.1.1}%
+\contentsline {paragraph}{\numberline {1.2.1.2}Модуль создания и редактирования тестов}{7}{paragraph.1.2.1.2}%
+\contentsline {paragraph}{\numberline {1.2.1.3}Модуль проведения тестирования}{8}{paragraph.1.2.1.3}%
+\contentsline {paragraph}{\numberline {1.2.1.4}Модуль автоматической проверки}{9}{paragraph.1.2.1.4}%
+\contentsline {subsection}{\numberline {1.3}История развития систем тестирования знаний}{9}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Техническое задание}{12}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Основание для разработки}{12}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Цель и назначение разработки}{12}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Требования к данным программной системы}{12}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Функциональные требования к программной системе}{13}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Моделирование вариантов использования}{13}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Описание вариантов использования}{18}{subsubsection.2.5.1}%
+\contentsline {paragraph}{\numberline {2.5.1.1}Вариант использования <<Регистрация>>}{20}{paragraph.2.5.1.1}%
+\contentsline {paragraph}{\numberline {2.5.1.2}Вариант использования <<Авторизация>>}{20}{paragraph.2.5.1.2}%
+\contentsline {paragraph}{\numberline {2.5.1.3}Вариант использования <<Тестирование>>}{21}{paragraph.2.5.1.3}%
+\contentsline {paragraph}{\numberline {2.5.1.4}Вариант использования <<Создание нового теста>>}{21}{paragraph.2.5.1.4}%
+\contentsline {subsection}{\numberline {2.6}Требования пользователя к интерфейсу приложения}{22}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Требования к оформлению документации}{24}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Технический проект}{25}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Общая характеристика организации решения задачи}{25}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Обоснование выбора технологии проектирования}{25}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Описание используемых технологий и языков программирования}{25}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Язык программирования Python}{25}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Библиотека Tkinter}{25}{subsubsection.3.2.3}%
+\contentsline {paragraph}{\numberline {3.2.3.1}Достоинства языка Python}{26}{paragraph.3.2.3.1}%
+\contentsline {paragraph}{\numberline {3.2.3.2}Недостатки языка Python}{26}{paragraph.3.2.3.2}%
+\contentsline {paragraph}{\numberline {3.2.3.3}Сравнение языков разметки JSON и XML}{26}{paragraph.3.2.3.3}%
+\contentsline {subsection}{\numberline {3.3}Диаграмма компонентов и схема обмена данными между файлами}{27}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Содержание информационных блоков. Основные классы}{29}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Проектирование пользовательского интерфейса}{32}{subsection.3.5}%
+\contentsline {section}{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}{36}{figure.caption.10}%

@@ -1,0 +1,40 @@
+{
+    "results": [
+        {
+            "name": "asd",
+            "rightAnswersCount": 5,
+            "right_answers_percentage": 50.0,
+            "completion_time": "2025-04-08 11:05:18"
+        },
+        {
+            "name": "Semen",
+            "rightAnswersCount": 5,
+            "right_answers_percentage": 14.0,
+            "completion_time": "2025-04-08 11:05:18"
+        },
+        {
+            "name": "Petr",
+            "rightAnswersCount": 4,
+            "right_answers_percentage": 25.0,
+            "completion_time": "2025-04-08 11:05:18"
+        },
+        {
+            "name": "Grisha",
+            "rightAnswersCount": 5,
+            "right_answers_percentage": 100.0,
+            "completion_time": "2025-04-08 11:05:18"
+        },
+        {
+            "name": "Ivan",
+            "rightAnswersCount": 3,
+            "right_answers_percentage": 80.0,
+            "completion_time": "2025-04-08 11:05:18"
+        },
+        {
+            "name": "Nikita",
+            "rightAnswersCount": 4,
+            "right_answers_percentage": 70.0,
+            "completion_time": "2025-04-08 11:05:18"
+        }
+    ]
+}
