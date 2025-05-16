@@ -7,7 +7,7 @@ from test_result import TestResult
 from answer import Answer
 from user import User
 from fileProvider import FileProvider
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from typing import List
 from window import Window
 import user_menu_window

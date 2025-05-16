@@ -1,6 +1,6 @@
 from tkinter import *
 from user import User
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from addQuestion_window import AddQuestionWindow
 from deleteQuestion_window import DeleteQuestionWindow
 from test_window import TestWindow

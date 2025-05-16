@@ -1,0 +1,55 @@
+{
+    "test_name": "ОбщиеЗнания",
+    "questions": [
+        {
+            "type": 0,
+            "text": "Сколько дней в високосном году?",
+            "answers": [
+                {
+                    "text": "366",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "type": 2,
+            "text": "Что из перечисленного является фруктом?",
+            "answers": [
+                {
+                    "text": "Морковь",
+                    "is_correct": false
+                },
+                {
+                    "text": "Яблоко",
+                    "is_correct": true
+                },
+                {
+                    "text": "Банан",
+                    "is_correct": true
+                },
+                {
+                    "text": "Картофель",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "type": 1,
+            "text": "Какой океан самый большой?",
+            "answers": [
+                {
+                    "text": "Атлантический",
+                    "is_correct": false
+                },
+                {
+                    "text": "Индийский",
+                    "is_correct": false
+                },
+                {
+                    "text": "Тихий",
+                    "is_correct": true
+                }
+            ]
+        }
+    ]
+}

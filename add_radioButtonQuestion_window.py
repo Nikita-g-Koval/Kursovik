@@ -3,7 +3,7 @@ from tkinter import messagebox
 from typing import List
 import addQuestion_window
 import admin_menu_window
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from validation import Validation
 from fileProvider import FileProvider
 from question import Question

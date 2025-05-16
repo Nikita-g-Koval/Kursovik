@@ -3,7 +3,7 @@ from typing import List
 from question import Question
 from user import User
 from test import Test
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from fileProvider import FileProvider
 from window import Window
 import admin_menu_window

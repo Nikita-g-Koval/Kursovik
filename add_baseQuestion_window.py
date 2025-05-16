@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from validation import Validation
 from fileProvider import FileProvider
 from question import Question

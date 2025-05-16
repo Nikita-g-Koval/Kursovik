@@ -279,6 +279,38 @@
 	\label{test_window:image}
 \end{figure}
 
+\paragraph{Вариант использования <<Авторизация администратора>>}
+
+Заинтересованные лица и их требования: администратор желает создать новый тест и добавить в него вопрос.
+\newline Предусловие: открыто окно "<Авторизация пользователя">.
+\newline Постусловие: Авторизация администратора успешно выполнена. Открыт доступ к "<Меню администратора">.
+\newline Основной успешный сценарий:
+\begin{enumerate}
+	\item Администратор переходит в окно "<Авторизация администратора">.
+	\item Приложение отображает окно с двумя кнопками: "<Создать новый тест"> и "<Копировать текущий"> (см. рисунок ~\ref{admin_auth_window:image}).
+	\item Администратор вводит пароль и нажимает кнопку "<Перейти в меню"> (см. рисунок ~\ref{admin_password:image}).
+	\item Приложение проверяет введённый пароль, сообщает администратору об ошибке, если пароль неверный. Если пароль верный, открывает окно "<Меню администратора"> (см. рисунок ~\ref{admin_menu_1:image}).
+\end{enumerate}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{авторизация_администратора.png}
+	\caption{Окно "<Авторизация администратора">}
+	\label{admin_auth_window:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{ввод_пароля_админ.png}
+	\caption{Администратор вводит пароль}
+	\label{admin_password:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{меню_администратора.png}
+	\caption{Окно "<Меню администратора">}
+	\label{admin_menu_1:image}
+\end{figure}
+
 \paragraph{Вариант использования <<Создание нового теста>>}
 
 Заинтересованные лица и их требования: администратор желает создать новый тест и добавить в него вопрос.
@@ -312,7 +344,7 @@
 	\caption{Выбор созданного теста в окне "<Меню администратора">}
 	\label{menu_new_test_window:image}
 \end{figure}
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{выбор_типа_вопроса.png}
 	\caption{Выбор типа создаваемого вопроса в окне "<Выбор типа вопроса">}

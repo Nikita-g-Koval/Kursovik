@@ -1,6 +1,6 @@
 from tkinter import *
 from typing import List
-from questionsStrorage import QuestionsStorage
+from questionsStorage import QuestionsStorage
 from answer import Answer
 from add_baseQuestion_window import AddBaseQuestionWindow
 from add_radioButtonQuestion_window import AddRadioButtonQuestion
