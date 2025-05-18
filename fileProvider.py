@@ -105,14 +105,16 @@ class FileProvider:
             results = FileProvider.get_results()
             for result in results:
                 json_data['results'].append({
-                    'name': result.name,
+                    'user_name': result.user_name,
+                    'test_name': result.test_name,
                     'rightAnswersCount': result.right_answers_count,
                     'right_answers_percentage': result.right_answers_percentage,
                     'completion_time': result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
                 })
 
         json_data['results'].append({
-            'name': test_result.name,
+            'user_name': test_result.user_name,
+            'test_name': test_result.test_name,
             'rightAnswersCount': test_result.right_answers_count,
             'right_answers_percentage': test_result.right_answers_percentage,
             'completion_time': test_result.completion_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -131,9 +133,9 @@ class FileProvider:
             test_results = []
 
             for result in json_data['results']:
-                username = result['name']
                 test_results.append(TestResult(
-                    name=username,
+                    user_name=result['user_name'],
+                    test_name=result['test_name'],
                     right_answers_count=result['rightAnswersCount'],
                     right_answers_percentage=result['right_answers_percentage'],
                     completion_time=datetime.strptime(result['completion_time'], '%Y-%m-%d %H:%M:%S')

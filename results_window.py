@@ -16,7 +16,7 @@ class ResultsWindow(Window):
         super().__init__()
 
         self.user = user
-        self.title = "Результаты тестов"
+        self.title("Результаты тестов")
         self.width = 600
         self.height = 400
         self.resizable(True, True)
@@ -35,7 +35,8 @@ class ResultsWindow(Window):
             for result in self.test_results:
                 self.tuple_results.append(
                     (
-                        result.name,
+                        result.user_name,
+                        result.test_name,
                         result.right_answers_count,
                         result.right_answers_percentage,
                         result.completion_time
@@ -43,10 +44,11 @@ class ResultsWindow(Window):
                 )
         else:
             for result in self.test_results:
-                if result.name == user.name:
+                if result.user_name == user.name:
                     self.tuple_results.append(
                         (
-                            result.name,
+                            result.user_name,
+                            result.test_name,
                             result.right_answers_count,
                             result.right_answers_percentage,
                             result.completion_time
@@ -54,13 +56,14 @@ class ResultsWindow(Window):
                     )
 
 
-        self.columns = ("name", "rightAnswersCount", "right_answers_percentage", "completion_time")
+        self.columns = ("user_name", "test_name", "rightAnswersCount", "right_answers_percentage", "completion_time")
 
         self.results_tree = ttk.Treeview(self, columns=self.columns, show="headings")
-        self.results_tree.pack(expand=True, fill=BOTH)
+        self.results_tree.pack(expand=True, fill=BOTH, padx=10, pady=10)
 
 
-        self.results_tree.heading("name", text="Имя", anchor=W)
+        self.results_tree.heading("user_name", text="Пользователь", anchor=W)
+        self.results_tree.heading("test_name", text="Тест", anchor=W)
         self.results_tree.heading("rightAnswersCount", text="Кол-во правильных ответов", anchor=W)
         self.results_tree.heading("right_answers_percentage", text="Процент правильных ответов", anchor=W)
         self.results_tree.heading("completion_time", text="Время завершения", anchor=W)
@@ -87,10 +90,10 @@ class ResultsWindow(Window):
         labels = []
 
         for result in self.test_results:
-            name = result.name
-            if name not in labels:
-                labels.append(name)
-                best_result = self.find_best_result_for(name)
+            user_name = result.user_name
+            if user_name not in labels:
+                labels.append(user_name)
+                best_result = self.find_best_result_for(user_name)
                 vals.append(best_result)
 
         plt.bar(labels, vals, label='Лучший результат')
@@ -108,7 +111,7 @@ class ResultsWindow(Window):
         best_result = 0
 
         for result in self.test_results:
-            if result.name != user_name:
+            if result.user_name != user_name:
                 continue
 
             if result.right_answers_percentage >= best_result:

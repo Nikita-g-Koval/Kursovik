@@ -126,7 +126,7 @@ class TestWindow(Window):
 
         if self.test.is_finished:
             right_answers_percentage = self.test.summarise()
-            self.test_result = TestResult(self.user.name, self.test.score, right_answers_percentage, datetime.now())
+            self.test_result = TestResult(self.user.name, self.test.name, self.test.score, right_answers_percentage, datetime.now())
 
             self.acceptAnswer_btn.configure(state=DISABLED)
 
