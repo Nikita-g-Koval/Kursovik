@@ -13,9 +13,9 @@ class CreateUserWindow(customtkinter.CTkToplevel):
 
         self.parent_window = parent_window
 
-        self.width = 270
+        self.width = 310
         self.height = 250
-        self.title("Создать пользователя")
+        self.title("Создание пользователя")
         self.resizable(False, False)
 
         self.users = FileProvider.get_users()

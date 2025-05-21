@@ -363,6 +363,86 @@
 	\label{saving_chart:image}
 \end{figure}
 
+\paragraph{Вариант использования <<Удаление вопроса>>}
+
+Заинтересованные лица и их требования: администратор желает удалить вопрос из выбранного теста.
+\newline Предусловие: открыто окно "<Меню администратора">.
+\newline Постусловие: открыто окно "<Список вопросов">, отображены все вопросы выбранного теста, вопрос удалён.
+\newline Основной успешный сценарий:
+\begin{enumerate}
+	\item Администратор выбирает тест, из которого хочет удалить вопрос (см. рисунок ~\ref{select_test:image}).
+	\item Администратор переходит в окно "<Список вопросов">.
+	\item Приложение отображает соответствующее окно, где отображены все вопросы выбранного теста (см. рисунок ~\ref{questions_window:image}).
+	\item Администратор вводит номер удаляемого вопроса и нажимает кнопку "<Удалить вопрос"> (см. рисунок ~\ref{delete_question:image}).
+	\item Приложение удаляет вопрос, обновляет список вопросов, сообщает администратору об успешном удалении вопроса и напоминает сохранить изменения (см. рисунок ~\ref{deleting_complete:image}).
+	\item Администратор нажимает кнопку "<Сохранить изменения">.
+	\item Приложение уведомляет администратора об успешном сохранении изменений (см. рисунок ~\ref{save_notification:image}).
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{выбор_теста.png}
+	\caption{Выбор теста в окне "<Меню администратора">}
+	\label{select_test:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{вопросы.png}
+	\caption{Окно "<Список вопросов">}
+	\label{questions_window:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{сообщение_об_удалении_вопроса.png}
+	\caption{Уведомление об удалении вопроса}
+	\label{deleting_complete:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{сохранение_изменений_уд.png}
+	\caption{Уведомление об успешном сохранении изменений}
+	\label{save_notification:image}
+\end{figure}
+
+\paragraph{Вариант использования <<Создание пользователя администратором>>}
+
+Заинтересованные лица и их требования: администратор желает добавить нового пользователя.
+\newline Предусловие: открыто окно "<Меню администратора">.
+\newline Постусловие: открыто окно "<Управление пользователями">, отображены все зарегистрированные пользователи, добавлен новый пользователь.
+\newline Основной успешный сценарий:
+\begin{enumerate}
+	\item Администратор переходит в окно "<Управление пользователями">.
+	\item Приложение отображает соответствующее окно, где отображены все зарегистрированные пользователи. (см. рисунок ~\ref{users:image}).
+	\item Администратор нажимает кнопку "<Добавить пользователя">.
+	\item Приложение отображает окно "<Создание пользователя"> (см. рисунок ~\ref{create_user:image}).
+	\item Администратор заполняет имя и пароль нового пользователя и нажимает кнопку "<Создать"> (см. рисунок ~\ref{created_user:image}).
+	\item Приложение уведомляет администратора об успешном создании нового пользователя (см. рисунок ~\ref{notification_user_created:image}).
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{управление_пользователями.png}
+	\caption{Окне "<Управление пользователями">}
+	\label{users:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{создание_пользователя.png}
+	\caption{Окне "<Создание пользователя">}
+	\label{create_user:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{соз_нов_пол_заполнено.png}
+	\caption{Заполнение имени и пароля нового пользователя}
+	\label{created_user:image}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{пользователь_создан_уведомление.png}
+	\caption{Уведомление об успешном создании нового пользователя}
+	\label{notification_user_created:image}
+\end{figure}
 
 \paragraph{Вариант использования <<Создание нового теста>>}
 

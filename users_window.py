@@ -19,7 +19,7 @@ class UsersWindow(Window):
         self.user = user
         self.selected_item = None
 
-        self.title("Результаты тестов")
+        self.title("Управление пользователями")
         self.width = 640
         self.height = 400
         self.resizable(True, True)
@@ -50,12 +50,12 @@ class UsersWindow(Window):
         self.columns = "name"
 
         self.users_tree = ttk.Treeview(self, columns=self.columns, show="headings")
-        self.users_tree.pack(expand=True, fill=BOTH)
+        self.users_tree.pack(expand=True, fill=BOTH, padx=10, pady=(0, 10))
 
 
         self.users_tree.heading("name", text="Имя", anchor=W)
 
-        self.users_tree.column("#1", stretch=YES, width=120)
+        self.users_tree.column("#1", stretch=YES, width=200)
 
 
         self.show_users()
@@ -115,14 +115,7 @@ class UsersWindow(Window):
     def show_users(self):
         users = FileProvider.get_users()
 
-        tuple_users = []
-
-        for user in users:
-            tuple_users.append(
-                    user.name
-            )
-
         self.users_tree.delete(*self.users_tree.get_children())
 
-        for tuple_result in tuple_users:
-            self.users_tree.insert("", END, values=tuple_result)
+        for user in users:
+            self.users_tree.insert("", END, values=(user.name,))
