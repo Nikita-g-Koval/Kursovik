@@ -17,7 +17,7 @@ class ResultsWindow(Window):
 
         self.user = user
         self.title("Результаты тестов")
-        self.width = 600
+        self.width = 640
         self.height = 400
         self.resizable(True, True)
 
@@ -68,7 +68,7 @@ class ResultsWindow(Window):
         self.results_tree.heading("right_answers_percentage", text="Процент правильных ответов", anchor=W)
         self.results_tree.heading("completion_time", text="Время завершения", anchor=W)
 
-        self.results_tree.column("#1", stretch=YES, width=120)
+        self.results_tree.column("#1", stretch=YES, width=220)
         self.results_tree.column("#2", stretch=YES, width=170)
         self.results_tree.column("#3", stretch=YES, width=100)
         self.results_tree.column("#4", stretch=YES, width=140)
