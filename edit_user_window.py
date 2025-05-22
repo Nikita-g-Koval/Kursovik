@@ -16,9 +16,9 @@ class EditUserWindow(customtkinter.CTkToplevel):
         self.user = user
         self.users = FileProvider.get_users()
 
-        self.width = 270
+        self.width = 340
         self.height = 250
-        self.title("Изменить данные пользователя")
+        self.title("Редактирование пользователя")
         self.resizable(False, False)
 
         self._place()
@@ -75,7 +75,7 @@ class EditUserWindow(customtkinter.CTkToplevel):
         if not Validation.validate_user_name(username=input_name):
             messagebox.showwarning(
                 title="Предупреждение",
-                message="Введённое имя некорректно! Длина имени не меньше 2 символов. Разрешены только буквы.")
+                message="Введённое имя некорректно! Длина имени не меньше 2 символов.")
             return
 
         if len(input_password) == 0:

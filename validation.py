@@ -3,7 +3,7 @@ class Validation:
     @staticmethod
     def validate_user_name(username):
         """Проверяет имя пользователя, возвращает True, если имя подходит условиям, иначе - False."""
-        if len(username) < 2 or not str.isalpha(username):
+        if len(username) < 2:
             return False
 
         return True
