@@ -11,16 +11,17 @@ class SetPasswordWindow(customtkinter.CTk):
 
         super().__init__()
 
-        self.title = "Изменить пароль"
-        self.width = 600
-        self.height = 400
+        self.title("Изменение пароля")
+        self.width = 350
+        self.height = 385
         self.resizable(False, False)
+        self.configure(padx=20, pady=20)
 
         self._place()
 
         # Создание рамки для строк ввода
         self.inputs_frame = customtkinter.CTkFrame(self)
-        self.inputs_frame.pack(padx=10, pady=(10, 0))
+        self.inputs_frame.pack()
 
         customtkinter.CTkLabel(self.inputs_frame, text='Старый пароль').pack(padx=10, pady=(10, 0), anchor="nw")
 
@@ -40,7 +41,7 @@ class SetPasswordWindow(customtkinter.CTk):
 
         # Создание рамки для кнопок
         self.buttons_frame = customtkinter.CTkFrame(self)
-        self.buttons_frame.pack(padx=10, pady=(10, 10))
+        self.buttons_frame.pack()
 
         self.send_btn = customtkinter.CTkButton(self.buttons_frame, text='Изменить пароль', height=40, width=300,
                                                 command=self._send_btn_click)

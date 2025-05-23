@@ -22,26 +22,27 @@ class AddQuestionWindow(Window):
         self.user = user
 
         self.title('Добавление вопроса')
-        self.width = 240
-        self.height = 290
+        self.width = 300
+        self.height = 300
         self.resizable(False, True)
+        self.configure(padx=20, pady=20)
 
         self._place()
 
         # Создание рамки для кнопок
         self.buttons_frame = customtkinter.CTkFrame(self)
-        self.buttons_frame.pack(padx=10, pady=(10, 10))
+        self.buttons_frame.pack()
 
-        self.add_baseQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить базовый вопрос",
+        self.add_baseQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить вопрос\n с вводом ответа",
                                            command=self._add_base_question_btn_click, height=60, width=190)
         self.add_baseQuestion_btn.pack(padx=10, pady=(10, 0))
 
-        self.add_radioButtonQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить вопрос с выбором",
+        self.add_radioButtonQuestion_btn = customtkinter.CTkButton(self.buttons_frame, text="Добавить вопрос\n с единственным выбором",
                                                   command=self._add_radiobutton_question_btn_click, height=60, width=190)
         self.add_radioButtonQuestion_btn.pack(padx=10, pady=(10, 0))
 
         self.add_checkButtonQuestion_btn = customtkinter.CTkButton(self.buttons_frame,
-                                                  text="Добавить вопрос \n с множественным выбором",
+                                                  text="Добавить вопрос\n с множественным выбором",
                                                   command=self._add_checkbutton_question_btn_click, height=60, width=190)
         self.add_checkButtonQuestion_btn.pack(padx=10, pady=(10, 10))
 

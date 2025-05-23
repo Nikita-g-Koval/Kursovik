@@ -23,7 +23,7 @@ class AddBaseQuestionWindow(Window):
 
         self.width = 540
         self.height = 380
-        self.title('Добавление вопроса')
+        self.title('Добавление вопроса с вводом ответа')
         self.resizable(False, True)
 
         self._place()
