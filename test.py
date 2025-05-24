@@ -84,7 +84,7 @@ class Test:
         self.shuffle_answers()
 
     def next_question(self):
-        """Делает инкремент id текущего вопроса и перемешивает его ответы, ничего не возвращает."""
+        """Выполняет инкремент id текущего вопроса и перемешивает его ответы, ничего не возвращает."""
         self._current_question_id += 1
 
         if self.is_finished:
@@ -109,7 +109,7 @@ class Test:
         return right_answers_percentage
 
     def summarise(self):
-        """Возвращает диагноз соответствующий результату теста."""
+        """Возвращает процентное соотношение правильных ответов к общему количеству вопросов."""
         if not self.is_finished:
             raise Exception("Чтобы подвести итог, пройдите тест до конца.")
 
