@@ -80,40 +80,84 @@
 	save\_changes(self) & Сохраняет изменения по пути текущего теста. Ничего не возвращает.
 \end{xltabular}
 
-\subsection{Модульное тестирование разработанного web-сайта}
+\subsubsection{Класс Validation}
 
-\begin{figure}[ht]
+Данный класс содержит методы для проверки ввода пользователя. Методы класса Validation описаны в таблице \ref{validation_functions:table}.
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+	\caption{Таблица методов класса QuestionsStorage\label{validation_functions:table}} \hline
+	\centrow Метод & \centrow Описание метода \\ \hline
+	\endfirsthead
+	\continuecaption{Продолжение таблицы \ref{validation_functions:table}} 
+	\centrow Метод & \centrow Описание метода \\ \hline
+	\finishhead
+	validate\_user\_name (username: str) & Принимает и проверяет имя пользователя. Возвращает True, если имя не слишком короткое, иначе - False. \\ \hline 
+	check\_name\_ uniqueness(username) & Принимает и проверяет уникальность имени пользователя. Возвращает True, если имя уникально и не было найдено среди зарегистрированных пользователей, иначе возвращает False. \\ \hline
+	validate\_question(question) & Принимает и проверяет строку - текст вопроса. Возвращает True, если количество символов вопроса не меньше 4 и не больше 120, иначе возвращает False. \\ \hline
+	validate\_answer(answer) & Принимает и проверяет строку - ответ на вопрос. Возвращает True, если строка не пустая, иначе возвращает False
+\end{xltabular}
+\newpage
+
+\subsection{Модульное тестирование разработанного приложения}
+
+На рисунке \ref{unitTestValidation_code:image} представлен код модульного тестирования класса "<Validation">.
+
+\begin{figure}[H]
 \begin{lstlisting}[language=Python]
-from django.test import TestCase
-from .models import *
-User = get_user_model()
+import unittest
+import validation
+from validation import Validation
 
 
-class ShpoTestCases(TestCase):
+class TestValidation(unittest.TestCase):
+	def test_validate_user_name(self):
+		correct_user_name = "Fedor"
+		self.assertTrue(Validation.validate_user_name(correct_user_name))
+		incorrect_user_name = "F"
+		self.assertFalse(Validation.validate_user_name(incorrect_user_name))
+		with self.assertRaises(TypeError):
+			Validation.validate_user_name(1)
 
-    def setUp(self) -> None:
-        self.user = User.objects.create(username='testtestovich', password='testtestovich', first_name='Sad', last_name='')
+	def test_check_name_uniqueness(self):
+		correct_user_name = "Евлампий Евстрахович"
+		self.assertTrue(Validation.check_name_uniqueness(correct_user_name))
+		incorrect_user_name = "Администратор"
+		self.assertFalse(Validation.check_name_uniqueness(incorrect_user_name))
+			with self.assertRaises(TypeError):
+				Validation.check_name_uniqueness(21)
 
-    def test_2(self):
+	def test_validate_question(self):
+		correct_question = "Сколько будет 2+2*2?"
+		self.assertTrue(Validation.validate_question(correct_question))
+		incorrect_question = "33?"
+		self.assertFalse(Validation.validate_question(incorrect_question))
+			with self.assertRaises(TypeError):
+				Validation.validate_question(321)
 
-        self.assertEqual(self.user.first_name, 'Sad')
-        self.assertEqual(self.user.last_name, 'Cat')
-        print((self.user))
-        print((self.user.first_name))
-        print((self.user.last_name))
+	def test_validate_answer(self):
+		correct_answer = "6"
+		self.assertTrue(Validation.validate_answer(correct_answer))
+		incorrect_answer = ""
+		self.assertFalse(Validation.validate_answer(incorrect_answer))
+			with self.assertRaises(TypeError):
+				Validation.validate_answer(4315)
+
+if __name__ == "__main__":
+unittest.main()
 \end{lstlisting}  
-\caption{Модульный тест класса User}
-\label{unitUser:image}
+\caption{Код модульного теста класса "<Validation">}
+\label{unitTestValidation_code:image}
 \end{figure}
 
-\subsection{Системное тестирование разработанного web-сайта}
+Результат тестирования класса "<Validation"> представлен на рисунке \ref{unitTest_validation_result:image}
 
-На рисунке  представлена главная страница сайта «Русатом – Аддитивные технологии».
-\newpage % при необходимости можно переносить рисунок на новую страницу
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1\linewidth]{unitTest_validation.png}
+	\caption{Результат модульного тестирования класса "<Validation">}
+	\label{unitTest_validation_result:image}
+\end{figure}
 
+\subsection{Системное тестирование разработанного приложения}
 
-На рисунк представлен динамический вывод заголовков, включающий в себя искомые фразы при поиске фраз.
-
-
-На рисунк представлен ввод данных для публикации новости.
 
