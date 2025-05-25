@@ -1,4 +1,6 @@
 from tkinter import messagebox
+
+import validation
 from validation import Validation
 from user import User
 from fileProvider import FileProvider
@@ -59,7 +61,7 @@ class CreateUserWindow(customtkinter.CTkToplevel):
         input_password = self.password_entry.get()
 
         for user in self.users:
-            if input_name == user.name or input_name == "Администратор":
+            if validation.Validation.check_name_uniqueness(input_name):
                 messagebox.showwarning(
                     title="Предупреждение",
                     message="Введённое имя занято.")
