@@ -58,12 +58,11 @@ class RegistrationWindow(Window):
         input_name = self.username_entry.get()
         input_password = self.password_entry.get()
 
-        for user in self.users:
-            if input_name == user.name or input_name == "Администратор":
-                messagebox.showwarning(
-                    title="Предупреждение",
-                    message="Введённое имя занято.")
-                return
+        if Validation.check_name_uniqueness(input_name):
+            messagebox.showwarning(
+                title="Предупреждение",
+                message="Введённое имя занято.")
+            return
 
         if not Validation.validate_user_name(username=input_name):
             messagebox.showwarning(
