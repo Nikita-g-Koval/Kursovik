@@ -17,6 +17,9 @@ class Validation:
     @staticmethod
     def check_name_uniqueness(username):
         """Проверяет имя пользователя, возвращает True, если имя уникально, иначе - False."""
+        if not isinstance(username, str):
+            raise TypeError(f"Expected type \"str\", got {type(username)} instead")
+
         users = fileProvider.FileProvider.get_users()
         for user in users:
             if username == user.name or username == "Администратор":
@@ -27,6 +30,9 @@ class Validation:
     @staticmethod
     def validate_question(question):
         """Проверяет вопрос пользователя, возвращает True, если подходит условиям, иначе - False."""
+        if not isinstance(question, str):
+            raise TypeError(f"Expected type \"str\", got {type(question)} instead")
+
         if len(question) > 120 or len(question) < 4:
             return False
         return True
@@ -34,6 +40,9 @@ class Validation:
     @staticmethod
     def validate_answer(answer):
         """Проверяет ответ пользователя, возвращает True, если подходит условиям, иначе - False."""
+        if not isinstance(answer, str):
+            raise TypeError(f"Expected type \"str\", got {type(answer)} instead")
+
         if len(answer) == 0:
             return False
         return True
