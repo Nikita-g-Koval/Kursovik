@@ -1,8 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-
 from matplotlib import pyplot as plt
-
 from fileProvider import FileProvider
 from user import User
 from window import Window
@@ -101,9 +99,10 @@ class ResultsWindow(Window):
         for i in range(len(vals)):
             plt.text(i, vals[i], vals[i], ha='center')  # Aligning text at center
 
+        plt.get_current_fig_manager().set_window_title('Диаграмма лучших ответов')
         plt.xlabel('Имя')
         plt.ylabel('Процент правильных ответов')
-        plt.title('Столбчатая диаграмма прошедших тесты')
+        plt.title('Столбчатая диаграмма лучших ответов')
         plt.legend()
         plt.show()
 
