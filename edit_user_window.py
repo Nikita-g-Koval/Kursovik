@@ -3,7 +3,7 @@ from validation import Validation
 from user import User
 from fileProvider import FileProvider
 import customtkinter
-import users_window
+import users_managment_window
 
 
 class EditUserWindow(customtkinter.CTkToplevel):

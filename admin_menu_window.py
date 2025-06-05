@@ -8,7 +8,7 @@ from results_window import ResultsWindow
 from fileProvider import FileProvider
 from create_newtest_window import CreateNewTestWindow
 from window import Window
-from users_window import UsersWindow
+from users_managment_window import UsersManagmentWindow
 import admin_authorisation_window
 import test_window
 import customtkinter
@@ -115,7 +115,7 @@ class AdminMenuWindow(Window):
     def _show_users_btn_clicked(self):
         """Обработчик нажатия кнопки show_users_btn - создаёт объект класса UsersWindow."""
         self.withdraw()
-        UsersWindow(self.user).launch()
+        UsersManagmentWindow(self.user).launch()
         self.destroy()
 
     def _test_menu_btn_clicked(self):

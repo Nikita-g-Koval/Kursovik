@@ -26,12 +26,12 @@ class UserMenuWindow(Window):
 
         self._place()
 
-        self.tests = FileProvider.get_test_names()
+        self.tests_names = FileProvider.get_test_names()
 
         self.test_var = StringVar(self, value=self.questions_storage.test.name)
 
-        self.tests_combobox = customtkinter.CTkComboBox(self, variable=self.test_var, values=self.tests,
-                                           state="readonly", command=self._selected_test)
+        self.tests_combobox = customtkinter.CTkComboBox(self, variable=self.test_var, values=self.tests_names,
+                                                        state="readonly", command=self._selected_test)
         self.tests_combobox.pack(anchor=NW, padx=6, pady=6)
 
         # Создание рамки для кнопок
