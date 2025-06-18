@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import List
 import os
 from os import walk
+from cryptography.fernet import Fernet
 import json
 
 
@@ -19,28 +20,73 @@ class FileProvider:
     resultsFileName = "testResults.json"
     questionsFileName = "questions.json"
     adminFileName = "admin.json"
+    keyFileName = "key.key"
     tests_path = os.path.abspath("Tests")
+
+    @staticmethod
+    def generate_key():
+        key = Fernet.generate_key()
+        with open(FileProvider.keyFileName, 'wb') as file:
+            file.write(key)
+
+    @staticmethod
+    def get_key():
+        if not os.path.exists(FileProvider.keyFileName):
+            FileProvider.generate_key()
+
+        with open(FileProvider.keyFileName, 'rb') as file:
+            key = file.read()
+
+        return key
+
+    @staticmethod
+    def encrypt_file(filename: str):
+        key = FileProvider.get_key()
+
+        with open(filename, 'rb') as f:
+            data = f.read()
+
+        fernet = Fernet(key)
+        encrypted_data = fernet.encrypt(data)
+
+        with open(filename, 'wb') as f:
+            f.write(encrypted_data)
+
+    @staticmethod
+    def decrypt_file(filename: str):
+        key = FileProvider.get_key()
+
+        with open(filename, 'rb') as f:
+            encrypted_data = f.read()
+
+        fernet = Fernet(key)
+        decrypted_data = fernet.decrypt(encrypted_data)
+
+        with open(filename, 'wb') as f:
+            f.write(decrypted_data)
 
     @staticmethod
     def get_admin_password():
         password = None
         if os.path.exists(FileProvider.adminFileName):
+            FileProvider.decrypt_file(FileProvider.adminFileName)
             with open(FileProvider.adminFileName, "r") as json_file:
                 json_data = json.load(json_file)
                 password = json_data['password']
+            FileProvider.encrypt_file(FileProvider.adminFileName)
 
         return password
 
     @staticmethod
     def set_admin_password(new_password):
-        if os.path.exists(FileProvider.adminFileName):
-            with open(FileProvider.adminFileName, "r") as json_file:
-                json_data = json.load(json_file)
+        json_data = {
+            'password': new_password
+        }
 
-            json_data['password'] = new_password
+        with open(FileProvider.adminFileName, "w") as json_file:
+            json.dump(json_data, json_file, indent=4)
 
-            with open(FileProvider.adminFileName, "w") as json_file:
-                json.dump(json_data, json_file, indent=4)
+        FileProvider.encrypt_file(FileProvider.adminFileName)
 
     @staticmethod
     def save_user(user: User):
