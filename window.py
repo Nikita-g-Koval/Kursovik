@@ -2,7 +2,7 @@ import customtkinter
 
 
 # Настройка внешнего вида и темы GUI-окна
-customtkinter.set_appearance_mode("dark")
+customtkinter.set_appearance_mode("system")
 customtkinter.set_default_color_theme("blue")
 
 
@@ -28,6 +28,14 @@ class Window(customtkinter.CTk):
         # set the dimensions of the screen
         # and where it is placed
         self.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y))
+
+    @staticmethod
+    def set_light_theme():
+        customtkinter.set_appearance_mode("light")
+
+    @staticmethod
+    def set_dark_theme():
+        customtkinter.set_appearance_mode("dark")
 
     @staticmethod
     def _on_closing():

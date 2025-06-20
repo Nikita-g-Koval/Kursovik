@@ -107,6 +107,7 @@ class FileProvider:
 
         with open(FileProvider.usersFileName, 'w') as outfile:
             json.dump(json_data, outfile, indent=4)
+        FileProvider.encrypt_file(FileProvider.usersFileName)
 
     @staticmethod
     def delete_user(user_name: str):
@@ -126,14 +127,17 @@ class FileProvider:
 
         with open(FileProvider.usersFileName, 'w') as outfile:
             json.dump(json_data, outfile, indent=4)
+        FileProvider.encrypt_file(FileProvider.usersFileName)
 
     @staticmethod
     def get_users():
         users = []
 
         if os.path.exists(FileProvider.usersFileName):
+            FileProvider.decrypt_file(FileProvider.usersFileName)
             with open(FileProvider.usersFileName) as json_file:
                 json_data = json.load(json_file)
+            FileProvider.encrypt_file(FileProvider.usersFileName)
 
             for user in json_data['users']:
                 new_user = User(user['name'], user['password'])
@@ -168,13 +172,16 @@ class FileProvider:
 
         with open(FileProvider.resultsFileName, 'w') as outfile:
             json.dump(json_data, outfile, indent=4)
+        FileProvider.encrypt_file(FileProvider.resultsFileName)
 
     @staticmethod
     def get_results():
         """Получает результаты тестов из файла, возвращает список результатов."""
         if os.path.exists(FileProvider.resultsFileName):
+            FileProvider.decrypt_file(FileProvider.resultsFileName)
             with open(FileProvider.resultsFileName) as json_file:
                 json_data = json.load(json_file)
+            FileProvider.encrypt_file(FileProvider.resultsFileName)
 
             test_results = []
 
@@ -221,6 +228,7 @@ class FileProvider:
 
         with open(path, 'w') as outfile:
             json.dump(data, outfile, indent=4)
+        FileProvider.encrypt_file(path)
 
     @staticmethod
     def get_test(test_path: str):
@@ -228,8 +236,10 @@ class FileProvider:
         if not os.path.exists(test_path):
             return
 
+        FileProvider.decrypt_file(test_path)
         with open(test_path, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
+        FileProvider.encrypt_file(test_path)
 
         if len(json_data) == 0:
             return []
@@ -294,6 +304,7 @@ class FileProvider:
 
         with open(test_path, 'w') as outfile:
             json.dump(data, outfile, indent=4)
+        FileProvider.encrypt_file(test_path)
 
     @staticmethod
     def get_test_names():
@@ -303,8 +314,10 @@ class FileProvider:
             for filename in filenames:
                 test_path = f"{FileProvider.tests_path}\\{filename}"
 
+                FileProvider.decrypt_file(test_path)
                 with open(test_path, 'r', encoding='utf-8') as f:
                     json_data = json.load(f)
+                FileProvider.encrypt_file(test_path)
 
                 test_name = json_data['test_name']
                 test_names.append(test_name)
@@ -319,8 +332,10 @@ class FileProvider:
             for filename in filenames:
                 test_path = f"{FileProvider.tests_path}\\{filename}"
 
+                FileProvider.decrypt_file(test_path)
                 with open(test_path, 'r', encoding='utf-8') as f:
                     json_data = json.load(f)
+                FileProvider.encrypt_file(test_path)
 
                 test_name = json_data['test_name']
 

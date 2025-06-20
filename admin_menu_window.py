@@ -1,3 +1,5 @@
+import tkinter
+import tkinter.ttk
 from tkinter import *
 from tkinter import messagebox
 from user import User
@@ -34,9 +36,18 @@ class AdminMenuWindow(Window):
 
         self.test_var = StringVar(self, value=self.questions_storage.test.name)
 
-        self.tests_combobox = customtkinter.CTkComboBox(self, variable=self.test_var, values=self.tests,
+        # Создание рамки для выпадающего списка и кнопки смены темы
+        self.combobox_frame = customtkinter.CTkFrame(self)
+        self.combobox_frame.pack(anchor=NW, padx=10, pady=(10, 0))
+
+        self.tests_combobox = customtkinter.CTkComboBox(self.combobox_frame, variable=self.test_var, values=self.tests,
                                            state="readonly", command=self._selected_test)
-        self.tests_combobox.pack(anchor=NW, padx=6, pady=6)
+        self.tests_combobox.pack(side=tkinter.LEFT, anchor=NW, padx=6, pady=6)
+
+        self.toggle_theme_button = tkinter.Button(self.combobox_frame, text="Светлая тема", width=15, command=self.toggle_switch)
+        self.toggle_theme_button.pack(side=tkinter.LEFT, padx=6, pady=6, anchor="ne")
+        if customtkinter.get_appearance_mode() == "Dark":
+            self.toggle_theme_button.config(relief="sunken", text="Темная тема", bg="gray")
 
 
         # Создание рамки для кнопок
@@ -115,7 +126,7 @@ class AdminMenuWindow(Window):
     def _show_users_btn_clicked(self):
         """Обработчик нажатия кнопки show_users_btn - создаёт объект класса UsersWindow."""
         self.withdraw()
-        UsersManagmentWindow(self.user).launch()
+        UsersManagmentWindow(self.user)
         self.destroy()
 
     def _test_menu_btn_clicked(self):
@@ -129,3 +140,11 @@ class AdminMenuWindow(Window):
         self.withdraw()
         test_window.TestWindow(self.user, self.questions_storage)
         self.destroy()
+
+    def toggle_switch(self):
+        if self.toggle_theme_button.config('relief')[-1] == 'sunken':
+            self.toggle_theme_button.config(relief="raised", bg="SystemButtonFace", text="Светлая тема")
+            self.set_light_theme()
+        else:
+            self.toggle_theme_button.config(relief="sunken", bg="gray", text="Тёмная тема")
+            self.set_dark_theme()

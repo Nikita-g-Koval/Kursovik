@@ -58,7 +58,7 @@ class RegistrationWindow(Window):
         input_name = self.username_entry.get()
         input_password = self.password_entry.get()
 
-        if Validation.check_name_uniqueness(input_name):
+        if not Validation.check_name_uniqueness(input_name):
             messagebox.showwarning(
                 title="Предупреждение",
                 message="Введённое имя занято.")
