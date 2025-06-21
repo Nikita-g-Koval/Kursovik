@@ -27,7 +27,7 @@ class TestWindow(Window):
 
         self.width = 800
         self.height = 500
-        self.title("Тест")
+        self.title(f"Тест {self.qs.test.name}")
         self.resizable(True, True)
 
         self._place()
