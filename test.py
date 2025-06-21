@@ -106,7 +106,7 @@ class Test:
         """Расчитывает отношение правильных ответов к количеству вопросов, возвращает процентное соотношение."""
         right_answers_percentage = right_answers_count * 100 / questions_count
 
-        return right_answers_percentage
+        return round(right_answers_percentage, 2)
 
     def summarise(self):
         """Возвращает процентное соотношение правильных ответов к общему количеству вопросов."""
