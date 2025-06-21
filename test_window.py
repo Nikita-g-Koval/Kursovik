@@ -25,6 +25,7 @@ class TestWindow(Window):
         self.test_result = None
         self.qs = questions_storage
 
+
         self.width = 800
         self.height = 500
         self.title(f"Тест {self.qs.test.name}")
@@ -33,8 +34,7 @@ class TestWindow(Window):
         self._place()
 
         self.test = self.qs.test
-        self.test.start_test()
-
+        self.remaining_time = self.test.time
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -43,6 +43,14 @@ class TestWindow(Window):
         # Создание рамки для вопросов
         self.inputs_frame = customtkinter.CTkFrame(self)
         self.inputs_frame.grid(row=0, column=0, padx=10, pady=(10, 10), columnspan=2, sticky=NSEW)
+
+        # метка таймера
+        self.timer_label = customtkinter.CTkLabel(self, text="00:00", font=("Helvetica", 48))
+        self.timer_label.grid(row=0, column=1, padx=10, pady=(10, 10), columnspan=1, sticky=NE)
+
+        # Запуск теста и таймера
+        self.test.start_test()
+        self.start_timer()
 
         self.test_label = customtkinter.CTkLabel(self.inputs_frame, justify=CENTER)
         self.test_label.pack(padx=10, pady=(10, 10), anchor=W)
@@ -60,7 +68,7 @@ class TestWindow(Window):
 
         if self.user.name == "Администратор":
             self.save_results_btn = customtkinter.CTkButton(self.buttons_frame, text='Сохранить результаты',
-                                           command=self._save_results_btn_click)
+                                                            command=self._save_results_btn_click)
             self.save_results_btn.pack(padx=10, pady=10, side=BOTTOM)
 
         self.acceptAnswer_btn = customtkinter.CTkButton(self.buttons_frame, text='Ответить',
@@ -73,8 +81,35 @@ class TestWindow(Window):
                                                         command=self.back_to_menu_btn_click)
         self.back_to_menu_btn.grid(row=1, column=1, padx=10, pady=(0, 10), sticky=SE)
 
-
         self.mainloop()
+
+    # Функция для запуска таймера
+    def start_timer(self):
+        try:
+            self.update_timer()
+        except ValueError:
+            pass
+
+    # Функция для остановки таймера
+    def stop_timer(self):
+        self.remaining_time = 0
+        self.timer_label.config(text="00:00")
+
+    # Функция для обновления таймера
+    def update_timer(self):
+        if self.remaining_time > 0:
+            minutes = self.remaining_time // 60
+            seconds = self.remaining_time % 60
+            self.timer_label.configure(text=f"{minutes:02d}:{seconds:02d}")
+            self.remaining_time -= 1
+            self.after(1000, self.update_timer)  # Обновление каждые 1000 миллисекунд
+        else:
+            self.timer_label.configure(text="00:00")
+            self._finish_test()
+            messagebox.showinfo(title="Время истекло",
+                                message="{0}, процент правильных ответов: {1}".format(self.user.name,
+                                                                                      self.test.summarise()))
+
 
     def _save_results_btn_click(self):
         """Обработчик нажатия кнопки save_results_btn - сохраняет результаты теста."""
@@ -125,20 +160,23 @@ class TestWindow(Window):
         self.test.next_question()
 
         if self.test.is_finished:
-            right_answers_percentage = self.test.summarise()
-            self.test_result = TestResult(self.user.name, self.test.name, self.test.score, right_answers_percentage, datetime.now())
-
-            self.acceptAnswer_btn.configure(state=DISABLED)
-
+            self._finish_test()
             messagebox.showinfo(title="Тест завершён",
                                 message="{0}, процент правильных ответов: {1}".format(self.user.name,
-                                                                                              right_answers_percentage))
-            if self.user.name != "Администратор":
-                FileProvider.save_test_result(self.test_result)
-
+                                                                                      self.test.summarise()))
             return
 
         self._show_next_question()
+
+    def _finish_test(self):
+        right_answers_percentage = self.test.summarise()
+        self.test_result = TestResult(self.user.name, self.test.name, self.test.score, right_answers_percentage,
+                                      datetime.now())
+
+        self.acceptAnswer_btn.configure(state=DISABLED)
+
+        if self.user.name != "Администратор":
+            FileProvider.save_test_result(self.test_result)
 
     def _show_next_question(self):
         """Отображает следующий вопрос."""

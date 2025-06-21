@@ -1,5 +1,8 @@
+import tkinter
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
+from tkinter import messagebox
 from matplotlib import pyplot as plt
 from fileProvider import FileProvider
 from user import User
@@ -26,9 +29,15 @@ class ResultsWindow(Window):
         self.tuple_results = []
 
         if self.user.name == "Администратор":
+            # Создание рамки для кнопок
+            self.buttons_frame = customtkinter.CTkFrame(self)
+            self.buttons_frame.pack(padx=10, pady=(10, 0))
 
-            self.diagram_button = customtkinter.CTkButton(self, text="Диаграмма", command=self.diagram_button_click)
-            self.diagram_button.pack()
+            self.diagram_button = customtkinter.CTkButton(self.buttons_frame, text="Диаграмма", command=self.diagram_button_click)
+            self.diagram_button.pack(side=tkinter.LEFT, padx=10, pady=10)
+
+            self.report_button = customtkinter.CTkButton(self.buttons_frame, text="Выгрузить отчёт", command=self.report_button_click)
+            self.report_button.pack(side=tkinter.LEFT, padx=10, pady=10)
 
             for result in self.test_results:
                 self.tuple_results.append(
@@ -82,6 +91,13 @@ class ResultsWindow(Window):
         self.protocol("WM_DELETE_WINDOW", self.destroy)
 
         self.mainloop()
+
+    def report_button_click(self):
+        filepath = filedialog.asksaveasfilename(title="Выбор файла", initialdir="C:\\Users\\nikit\\PycharmProjects\\Kursovik", defaultextension=".xlsx", initialfile="результаты.xlsx")
+        if filepath == "":
+            messagebox.showwarning(title="Предупреждение", message="Указанная директория не найдена.")
+            return
+        FileProvider.create_report(filepath)
 
     def diagram_button_click(self):
         vals = []

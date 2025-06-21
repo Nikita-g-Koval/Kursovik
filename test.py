@@ -11,10 +11,11 @@ class Test:
     _current_question_id: int = None
     _current_answers: List[Answer] = None
 
-    def __init__(self, name: str, questions: List[Question]):
+    def __init__(self, name: str, questions: List[Question], time: int):
         """Устанавливает все необходимые атрибуты для объекта Test."""
         self.name = name
         self.questions = questions
+        self.time = time
         self.score = 0
         self.is_started = False
 
@@ -110,9 +111,6 @@ class Test:
 
     def summarise(self):
         """Возвращает процентное соотношение правильных ответов к общему количеству вопросов."""
-        if not self.is_finished:
-            raise Exception("Чтобы подвести итог, пройдите тест до конца.")
-
         right_answers_percentage = self.calculate_right_answers_percentage(len(self.questions), self.score)
 
         return right_answers_percentage

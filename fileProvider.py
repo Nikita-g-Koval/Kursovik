@@ -4,6 +4,8 @@ from test import Test
 from question_radioButton import QuestionRadioButton
 from question_checkButton import QuestionCheckButton
 from question_type import QuestionType
+from openpyxl import Workbook
+from openpyxl.utils.cell import get_column_letter
 from answer import Answer
 from test_result import TestResult
 from datetime import datetime
@@ -22,6 +24,31 @@ class FileProvider:
     adminFileName = "admin.json"
     keyFileName = "key.key"
     tests_path = os.path.abspath("Tests")
+
+    @staticmethod
+    def create_report(path: str):
+        data = [['Имя', 'Тест', 'Кол-во правильных ответов', 'Процент правильных ответов', 'Время завершения теста']]
+
+        results = FileProvider.get_results()
+        for result in results:
+            report = [result.user_name, result.test_name, result.right_answers_count, result.right_answers_percentage,
+                      f"{result.completion_time}"]
+            data.append(report)
+
+
+        wb = Workbook()
+        ws = wb.active
+
+        for row in data:
+            ws.append(row)
+
+        for i in range(1, ws.max_column + 1):
+            # преобразовываем индекс столбца в его букву
+            letter = get_column_letter(i)
+
+            ws.column_dimensions[letter].width = 25
+
+        wb.save(path)
 
     @staticmethod
     def generate_key():
@@ -207,6 +234,7 @@ class FileProvider:
         """Сохраняет переданные вопросы под переданным именем. Ничего не возвращает."""
         data = {
             'test_name': test.name,
+            'time': test.time,
             'questions': []
         }
 
@@ -246,6 +274,7 @@ class FileProvider:
 
         test_name = json_data['test_name']
         questions = []
+        time = json_data['time']
 
         for question in json_data['questions']:
             answers = []
@@ -276,7 +305,7 @@ class FileProvider:
 
             questions.append(current_question)
 
-        test = Test(test_name, questions)
+        test = Test(test_name, questions, time)
 
         return test
 
@@ -285,6 +314,7 @@ class FileProvider:
         """Сохраняет переданные вопросы под переданным именем. Ничего не возвращает."""
         data = {
             'test_name': test.name,
+            'time': test.time,
             'questions': []
         }
 
